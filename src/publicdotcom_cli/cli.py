@@ -7,6 +7,7 @@ from typing import Annotated, Any
 
 import typer
 
+from publicdotcom_cli import __version__
 from publicdotcom_cli.client import ApiClient, ApiError, MissingTokenError
 from publicdotcom_cli.config import (
     ACCOUNT_ID_ENV_VAR,
@@ -192,9 +193,24 @@ def _confirm(action: str, yes: bool, *, warning: str | None = None) -> None:
         raise typer.Abort()
 
 
+def _version_callback(value: bool) -> None:
+    if value:
+        console.print(f"publicdotcom-cli {__version__}")
+        raise typer.Exit()
+
+
 @app.callback()
 def root(
     ctx: typer.Context,
+    version: Annotated[
+        bool | None,
+        typer.Option(
+            "--version",
+            callback=_version_callback,
+            is_eager=True,
+            help="Show the CLI version and exit.",
+        ),
+    ] = None,
     base_url: Annotated[
         str,
         typer.Option(
