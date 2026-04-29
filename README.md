@@ -1,10 +1,44 @@
 # publicdotcom-cli
 
-An installable Python CLI for the Public API.
+Command-line client for the Public.com Trading API.
 
-The project keeps a vendored OpenAPI-generated client in `src/publicdotcom_cli/_generated`,
-and the user-facing CLI wraps the API with safer terminal workflows, secure token storage,
-JSON output, and confirmation prompts for trading actions.
+Use `public` to authenticate, inspect accounts, retrieve portfolio and market data, run
+preflight checks, and submit order-related requests from your terminal.
+
+## Install
+
+The recommended installation method for command-line Python tools is `pipx`:
+
+```bash
+pipx install publicdotcom-cli
+```
+
+You can also install with `uv`:
+
+```bash
+uv tool install publicdotcom-cli
+```
+
+Confirm the CLI is available:
+
+```bash
+public --help
+```
+
+## Quick Start
+
+Generate a personal secret from your Public.com settings, then authenticate:
+
+```bash
+public auth login
+public accounts list
+public accounts set-default ACCOUNT_ID
+public portfolio show
+public market quotes AAPL MSFT
+```
+
+Most account-scoped commands use the configured default account. You can override it with
+`--account-id ACCOUNT_ID` or `PUBLIC_ACCOUNT_ID=ACCOUNT_ID`.
 
 ## Important Disclosures
 
@@ -33,27 +67,6 @@ credentials.
 Personal secrets and access tokens can authorize account access and trading activity.
 Keep them private, do not commit them to source control, and rotate or revoke them if
 you believe they were exposed.
-
-## Install
-
-From this checkout:
-
-```bash
-uv tool install .
-```
-
-During development:
-
-```bash
-uv sync --extra dev
-uv run public --help
-```
-
-Once published to PyPI, users can install it with:
-
-```bash
-pipx install publicdotcom-cli
-```
 
 ## Authenticate
 
@@ -150,10 +163,51 @@ Trading commands prompt before submitting order placement, replacement, or cance
 requests. Use `--yes` only when your automation has already performed equivalent
 validation and approval.
 
+## JSON Output
+
+Use `--json` before the command group to print raw JSON:
+
+```bash
+public --json accounts list
+public --json market quotes AAPL MSFT
+```
+
+## Configuration
+
+The CLI supports these environment variables:
+
+```bash
+PUBLIC_ACCESS_TOKEN=...
+PUBLIC_PERSONAL_SECRET=...
+PUBLIC_ACCOUNT_ID=...
+PUBLIC_API_BASE_URL=https://api.public.com
+PUBLIC_AUTO_REFRESH=true
+```
+
+`PUBLIC_API_BASE_URL` is optional and defaults to `https://api.public.com`.
+
+## Upgrade
+
+```bash
+pipx upgrade publicdotcom-cli
+# or
+uv tool upgrade publicdotcom-cli
+```
+
+## Development
+
+For local development from a checkout:
+
+```bash
+uv sync --extra dev
+uv run public --help
+uv run pytest
+```
+
 ## Regenerate The OpenAPI Client
 
-The OpenAPI spec is not committed to this repository. To regenerate the vendored client,
-place the spec at the repository root as `spec.yaml`, then run:
+The package ships with a generated API client. Contributors who need to regenerate it
+must place the local OpenAPI spec at the repository root as `spec.yaml`, then run:
 
 ```bash
 uv run python scripts/generate_client.py
