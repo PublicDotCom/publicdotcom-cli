@@ -1,0 +1,12 @@
+{
+  "instrument": {
+    "symbol": "AAPL",
+    "type": "EQUITY"
+  },
+  "orderSide": "BUY",
+  "orderType": "MARKET",
+  "expiration": {
+    "timeInForce": "DAY"
+  },
+  "quantity": "1"
+}

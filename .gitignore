@@ -1,0 +1,13 @@
+.venv/
+dist/
+build/
+*.egg-info/
+
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+
+.env
+.env.*
+spec.yaml
