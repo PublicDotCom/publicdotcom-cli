@@ -47,6 +47,7 @@ instruments_app = typer.Typer(help="Instrument lookup commands.")
 market_app = typer.Typer(help="Market data commands.")
 options_app = typer.Typer(help="Option details commands.")
 order_app = typer.Typer(help="Order and preflight commands.")
+historicdata_app = typer.Typer(help="Historic bar data commands.")
 
 app.add_typer(auth_app, name="auth")
 app.add_typer(accounts_app, name="accounts")
@@ -56,6 +57,7 @@ app.add_typer(instruments_app, name="instruments")
 app.add_typer(market_app, name="market")
 app.add_typer(options_app, name="options")
 app.add_typer(order_app, name="order")
+app.add_typer(historicdata_app, name="historicdata")
 
 
 @dataclass
@@ -755,6 +757,40 @@ def order_cancel(
     )
     result = _call(ctx, "DELETE", f"/userapigateway/trading/{account_id}/order/{order_id}")
     _print(ctx, result if result is not None else {"cancelRequested": True})
+
+
+@historicdata_app.command("bars")
+def historicdata_bars(
+    ctx: typer.Context,
+    symbol: Annotated[str, typer.Argument(help="Ticker symbol, e.g. AAPL.")],
+    period: Annotated[
+        str,
+        typer.Argument(
+            help="Time period: DAY, WEEK, MONTH, QUARTER, HALF_YEAR, YEAR, FIVE_YEARS, YTD, SINCE_PURCHASE."
+        ),
+    ],
+    aggregation: Annotated[
+        str | None,
+        typer.Option(
+            "--aggregation",
+            help=(
+                "Bar aggregation override: ONE_MINUTE, FIVE_MINUTES, TEN_MINUTES, "
+                "FIFTEEN_MINUTES, THIRTY_MINUTES, ONE_HOUR, ONE_DAY, ONE_WEEK, "
+                "ONE_MONTH, THREE_MONTHS, SIX_MONTHS, ONE_YEAR."
+            ),
+        ),
+    ] = None,
+    purchase_date: Annotated[
+        str | None,
+        typer.Option("--purchase-date", help="Required when period is SINCE_PURCHASE. YYYY-MM-DD."),
+    ] = None,
+) -> None:
+    if aggregation:
+        path = f"/userapigateway/historicdata/{symbol.upper()}/{period.upper()}/{aggregation.upper()}"
+    else:
+        path = f"/userapigateway/historicdata/{symbol.upper()}/{period.upper()}"
+    result = _call(ctx, "GET", path, params={"purchaseDate": purchase_date})
+    _print(ctx, result)
 
 
 def main() -> None:

@@ -148,6 +148,35 @@ public market quotes AAPL MSFT --type EQUITY
 public market option-expirations AAPL
 public market option-chain AAPL 2026-05-15
 public options greeks "AAPL  260515C00200000"
+public historicdata bars AAPL YEAR
+public historicdata bars AAPL DAY --aggregation FIVE_MINUTES
+public historicdata bars AAPL SINCE_PURCHASE --purchase-date 2024-01-15
+```
+
+## Historic Bar Data
+
+Fetch OHLCV bar data for a symbol over a given time period:
+
+```bash
+public historicdata bars AAPL YEAR
+public historicdata bars BTC-USD WEEK
+```
+
+Available periods: `DAY`, `WEEK`, `MONTH`, `QUARTER`, `HALF_YEAR`, `YEAR`, `FIVE_YEARS`, `YTD`, `SINCE_PURCHASE`.
+
+Override the default bar aggregation with `--aggregation`:
+
+```bash
+public historicdata bars AAPL DAY --aggregation FIVE_MINUTES
+public historicdata bars AAPL MONTH --aggregation ONE_HOUR
+```
+
+Available aggregations: `ONE_MINUTE`, `FIVE_MINUTES`, `TEN_MINUTES`, `FIFTEEN_MINUTES`, `THIRTY_MINUTES`, `ONE_HOUR`, `ONE_DAY`, `ONE_WEEK`, `ONE_MONTH`, `THREE_MONTHS`, `SIX_MONTHS`, `ONE_YEAR`.
+
+When using the `SINCE_PURCHASE` period, supply the purchase date:
+
+```bash
+public historicdata bars AAPL SINCE_PURCHASE --purchase-date 2024-01-15
 ```
 
 Trading requests use JSON files so the exact payload is visible before submission:
