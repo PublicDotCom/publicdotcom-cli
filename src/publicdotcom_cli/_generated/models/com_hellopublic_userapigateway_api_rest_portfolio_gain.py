@@ -10,23 +10,27 @@ from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ComHellopublicUserapigatewayApiRestPortfolioPriceType0")
+T = TypeVar("T", bound="ComHellopublicUserapigatewayApiRestPortfolioGain")
 
 
 @_attrs_define
-class ComHellopublicUserapigatewayApiRestPortfolioPriceType0:
+class ComHellopublicUserapigatewayApiRestPortfolioGain:
     """
     Attributes:
-        last_price (str | Unset):
+        gain_value (str | Unset):
+        gain_percentage (str | Unset):
         timestamp (datetime.datetime | Unset):
     """
 
-    last_price: str | Unset = UNSET
+    gain_value: str | Unset = UNSET
+    gain_percentage: str | Unset = UNSET
     timestamp: datetime.datetime | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        last_price = self.last_price
+        gain_value = self.gain_value
+
+        gain_percentage = self.gain_percentage
 
         timestamp: str | Unset = UNSET
         if not isinstance(self.timestamp, Unset):
@@ -35,8 +39,10 @@ class ComHellopublicUserapigatewayApiRestPortfolioPriceType0:
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if last_price is not UNSET:
-            field_dict["lastPrice"] = last_price
+        if gain_value is not UNSET:
+            field_dict["gainValue"] = gain_value
+        if gain_percentage is not UNSET:
+            field_dict["gainPercentage"] = gain_percentage
         if timestamp is not UNSET:
             field_dict["timestamp"] = timestamp
 
@@ -45,7 +51,9 @@ class ComHellopublicUserapigatewayApiRestPortfolioPriceType0:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        last_price = d.pop("lastPrice", UNSET)
+        gain_value = d.pop("gainValue", UNSET)
+
+        gain_percentage = d.pop("gainPercentage", UNSET)
 
         _timestamp = d.pop("timestamp", UNSET)
         timestamp: datetime.datetime | Unset
@@ -54,13 +62,14 @@ class ComHellopublicUserapigatewayApiRestPortfolioPriceType0:
         else:
             timestamp = isoparse(_timestamp)
 
-        com_hellopublic_userapigateway_api_rest_portfolio_price_type_0 = cls(
-            last_price=last_price,
+        com_hellopublic_userapigateway_api_rest_portfolio_gain = cls(
+            gain_value=gain_value,
+            gain_percentage=gain_percentage,
             timestamp=timestamp,
         )
 
-        com_hellopublic_userapigateway_api_rest_portfolio_price_type_0.additional_properties = d
-        return com_hellopublic_userapigateway_api_rest_portfolio_price_type_0
+        com_hellopublic_userapigateway_api_rest_portfolio_gain.additional_properties = d
+        return com_hellopublic_userapigateway_api_rest_portfolio_gain
 
     @property
     def additional_keys(self) -> list[str]:

@@ -57,6 +57,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto:
         hard_to_borrow_percentage_rate (str | Unset): The hard to borrow rate as a percentage value.
         option_contract_price_increments (ComHellopublicHoldingsystemCoreTypesOptionPriceIncrement | Unset): Record
             representing price increments below and above $3.
+        exchange (str | Unset): Exchange where the instrument is traded.
+        exchange_name (str | Unset): The name of the exchange where the instrument is traded.
     """
 
     instrument: ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument
@@ -78,6 +80,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto:
     option_contract_price_increments: (
         ComHellopublicHoldingsystemCoreTypesOptionPriceIncrement | Unset
     ) = UNSET
+    exchange: str | Unset = UNSET
+    exchange_name: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -116,6 +120,10 @@ class ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto:
         if not isinstance(self.option_contract_price_increments, Unset):
             option_contract_price_increments = self.option_contract_price_increments.to_dict()
 
+        exchange = self.exchange
+
+        exchange_name = self.exchange_name
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -135,6 +143,10 @@ class ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto:
             field_dict["hardToBorrowPercentageRate"] = hard_to_borrow_percentage_rate
         if option_contract_price_increments is not UNSET:
             field_dict["optionContractPriceIncrements"] = option_contract_price_increments
+        if exchange is not UNSET:
+            field_dict["exchange"] = exchange
+        if exchange_name is not UNSET:
+            field_dict["exchangeName"] = exchange_name
 
         return field_dict
 
@@ -233,6 +245,10 @@ class ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto:
                 )
             )
 
+        exchange = d.pop("exchange", UNSET)
+
+        exchange_name = d.pop("exchangeName", UNSET)
+
         com_hellopublic_userapigateway_api_rest_order_api_instrument_dto = cls(
             instrument=instrument,
             trading=trading,
@@ -243,6 +259,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto:
             shorting_availability=shorting_availability,
             hard_to_borrow_percentage_rate=hard_to_borrow_percentage_rate,
             option_contract_price_increments=option_contract_price_increments,
+            exchange=exchange,
+            exchange_name=exchange_name,
         )
 
         com_hellopublic_userapigateway_api_rest_order_api_instrument_dto.additional_properties = d

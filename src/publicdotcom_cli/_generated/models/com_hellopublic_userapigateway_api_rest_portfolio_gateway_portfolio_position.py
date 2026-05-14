@@ -11,17 +11,17 @@ from dateutil.parser import isoparse
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gain_type_0 import (
-        ComHellopublicUserapigatewayApiRestPortfolioGainType0,
+    from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gain import (
+        ComHellopublicUserapigatewayApiRestPortfolioGain,
     )
-    from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0 import (
-        ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0,
+    from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis import (
+        ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis,
     )
     from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_portfolio_instrument import (
         ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioInstrument,
     )
-    from ..models.com_hellopublic_userapigateway_api_rest_portfolio_price_type_0 import (
-        ComHellopublicUserapigatewayApiRestPortfolioPriceType0,
+    from ..models.com_hellopublic_userapigateway_api_rest_portfolio_price import (
+        ComHellopublicUserapigatewayApiRestPortfolioPrice,
     )
 
 
@@ -40,11 +40,11 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioPosition:
         opened_at (datetime.datetime | None | Unset): When was this position opened. Null if unknown.
         current_value (None | str | Unset): How much the position is worth. Calculated from quantity * lastSalePrice.
         percent_of_portfolio (None | str | Unset): The percent that this position makes of the entire portfolio.
-        last_price (ComHellopublicUserapigatewayApiRestPortfolioPriceType0 | None | Unset):
-        instrument_gain (ComHellopublicUserapigatewayApiRestPortfolioGainType0 | None | Unset):
-        position_daily_gain (ComHellopublicUserapigatewayApiRestPortfolioGainType0 | None | Unset):
-        cost_basis (ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0 | None | Unset): Cost basis of a
-            position. What the member paid for entering the position. The cost basis is
+        last_price (ComHellopublicUserapigatewayApiRestPortfolioPrice | Unset):
+        instrument_gain (ComHellopublicUserapigatewayApiRestPortfolioGain | Unset):
+        position_daily_gain (ComHellopublicUserapigatewayApiRestPortfolioGain | Unset):
+        cost_basis (ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis | Unset): Cost basis of a position.
+            What the member paid for entering the position. The cost basis is
              based on tax lots and will factor in wash sales.
     """
 
@@ -54,27 +54,13 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioPosition:
     opened_at: datetime.datetime | None | Unset = UNSET
     current_value: None | str | Unset = UNSET
     percent_of_portfolio: None | str | Unset = UNSET
-    last_price: ComHellopublicUserapigatewayApiRestPortfolioPriceType0 | None | Unset = UNSET
-    instrument_gain: ComHellopublicUserapigatewayApiRestPortfolioGainType0 | None | Unset = UNSET
-    position_daily_gain: ComHellopublicUserapigatewayApiRestPortfolioGainType0 | None | Unset = (
-        UNSET
-    )
-    cost_basis: ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0 | None | Unset = (
-        UNSET
-    )
+    last_price: ComHellopublicUserapigatewayApiRestPortfolioPrice | Unset = UNSET
+    instrument_gain: ComHellopublicUserapigatewayApiRestPortfolioGain | Unset = UNSET
+    position_daily_gain: ComHellopublicUserapigatewayApiRestPortfolioGain | Unset = UNSET
+    cost_basis: ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gain_type_0 import (
-            ComHellopublicUserapigatewayApiRestPortfolioGainType0,
-        )
-        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0 import (
-            ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0,
-        )
-        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_price_type_0 import (
-            ComHellopublicUserapigatewayApiRestPortfolioPriceType0,
-        )
-
         instrument = self.instrument.to_dict()
 
         quantity = self.quantity
@@ -101,43 +87,21 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioPosition:
         else:
             percent_of_portfolio = self.percent_of_portfolio
 
-        last_price: dict[str, Any] | None | Unset
-        if isinstance(self.last_price, Unset):
-            last_price = UNSET
-        elif isinstance(self.last_price, ComHellopublicUserapigatewayApiRestPortfolioPriceType0):
+        last_price: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.last_price, Unset):
             last_price = self.last_price.to_dict()
-        else:
-            last_price = self.last_price
 
-        instrument_gain: dict[str, Any] | None | Unset
-        if isinstance(self.instrument_gain, Unset):
-            instrument_gain = UNSET
-        elif isinstance(
-            self.instrument_gain, ComHellopublicUserapigatewayApiRestPortfolioGainType0
-        ):
+        instrument_gain: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.instrument_gain, Unset):
             instrument_gain = self.instrument_gain.to_dict()
-        else:
-            instrument_gain = self.instrument_gain
 
-        position_daily_gain: dict[str, Any] | None | Unset
-        if isinstance(self.position_daily_gain, Unset):
-            position_daily_gain = UNSET
-        elif isinstance(
-            self.position_daily_gain, ComHellopublicUserapigatewayApiRestPortfolioGainType0
-        ):
+        position_daily_gain: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.position_daily_gain, Unset):
             position_daily_gain = self.position_daily_gain.to_dict()
-        else:
-            position_daily_gain = self.position_daily_gain
 
-        cost_basis: dict[str, Any] | None | Unset
-        if isinstance(self.cost_basis, Unset):
-            cost_basis = UNSET
-        elif isinstance(
-            self.cost_basis, ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0
-        ):
+        cost_basis: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.cost_basis, Unset):
             cost_basis = self.cost_basis.to_dict()
-        else:
-            cost_basis = self.cost_basis
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -167,17 +131,17 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioPosition:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gain_type_0 import (
-            ComHellopublicUserapigatewayApiRestPortfolioGainType0,
+        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gain import (
+            ComHellopublicUserapigatewayApiRestPortfolioGain,
         )
-        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0 import (
-            ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0,
+        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis import (
+            ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis,
         )
         from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_portfolio_instrument import (
             ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioInstrument,
         )
-        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_price_type_0 import (
-            ComHellopublicUserapigatewayApiRestPortfolioPriceType0,
+        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_price import (
+            ComHellopublicUserapigatewayApiRestPortfolioPrice,
         )
 
         d = dict(src_dict)
@@ -226,98 +190,39 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioPosition:
 
         percent_of_portfolio = _parse_percent_of_portfolio(d.pop("percentOfPortfolio", UNSET))
 
-        def _parse_last_price(
-            data: object,
-        ) -> ComHellopublicUserapigatewayApiRestPortfolioPriceType0 | None | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_price_type_0 = (
-                    ComHellopublicUserapigatewayApiRestPortfolioPriceType0.from_dict(data)
-                )
+        _last_price = d.pop("lastPrice", UNSET)
+        last_price: ComHellopublicUserapigatewayApiRestPortfolioPrice | Unset
+        if isinstance(_last_price, Unset):
+            last_price = UNSET
+        else:
+            last_price = ComHellopublicUserapigatewayApiRestPortfolioPrice.from_dict(_last_price)
 
-                return (
-                    componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_price_type_0
-                )
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(ComHellopublicUserapigatewayApiRestPortfolioPriceType0 | None | Unset, data)
-
-        last_price = _parse_last_price(d.pop("lastPrice", UNSET))
-
-        def _parse_instrument_gain(
-            data: object,
-        ) -> ComHellopublicUserapigatewayApiRestPortfolioGainType0 | None | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_gain_type_0 = (
-                    ComHellopublicUserapigatewayApiRestPortfolioGainType0.from_dict(data)
-                )
-
-                return (
-                    componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_gain_type_0
-                )
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(ComHellopublicUserapigatewayApiRestPortfolioGainType0 | None | Unset, data)
-
-        instrument_gain = _parse_instrument_gain(d.pop("instrumentGain", UNSET))
-
-        def _parse_position_daily_gain(
-            data: object,
-        ) -> ComHellopublicUserapigatewayApiRestPortfolioGainType0 | None | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_gain_type_0 = (
-                    ComHellopublicUserapigatewayApiRestPortfolioGainType0.from_dict(data)
-                )
-
-                return (
-                    componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_gain_type_0
-                )
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(ComHellopublicUserapigatewayApiRestPortfolioGainType0 | None | Unset, data)
-
-        position_daily_gain = _parse_position_daily_gain(d.pop("positionDailyGain", UNSET))
-
-        def _parse_cost_basis(
-            data: object,
-        ) -> ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0 | None | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0 = ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0.from_dict(
-                    data
-                )
-
-                return componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(
-                ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0 | None | Unset,
-                data,
+        _instrument_gain = d.pop("instrumentGain", UNSET)
+        instrument_gain: ComHellopublicUserapigatewayApiRestPortfolioGain | Unset
+        if isinstance(_instrument_gain, Unset):
+            instrument_gain = UNSET
+        else:
+            instrument_gain = ComHellopublicUserapigatewayApiRestPortfolioGain.from_dict(
+                _instrument_gain
             )
 
-        cost_basis = _parse_cost_basis(d.pop("costBasis", UNSET))
+        _position_daily_gain = d.pop("positionDailyGain", UNSET)
+        position_daily_gain: ComHellopublicUserapigatewayApiRestPortfolioGain | Unset
+        if isinstance(_position_daily_gain, Unset):
+            position_daily_gain = UNSET
+        else:
+            position_daily_gain = ComHellopublicUserapigatewayApiRestPortfolioGain.from_dict(
+                _position_daily_gain
+            )
+
+        _cost_basis = d.pop("costBasis", UNSET)
+        cost_basis: ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis | Unset
+        if isinstance(_cost_basis, Unset):
+            cost_basis = UNSET
+        else:
+            cost_basis = ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis.from_dict(
+                _cost_basis
+            )
 
         com_hellopublic_userapigateway_api_rest_portfolio_gateway_portfolio_position = cls(
             instrument=instrument,

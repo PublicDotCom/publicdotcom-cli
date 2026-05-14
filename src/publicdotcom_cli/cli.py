@@ -762,6 +762,10 @@ def order_cancel(
 @historicdata_app.command("bars")
 def historicdata_bars(
     ctx: typer.Context,
+    security_type: Annotated[
+        str,
+        typer.Argument(help="Instrument type: EQUITY, CRYPTO, OPTION, INDEX."),
+    ],
     symbol: Annotated[str, typer.Argument(help="Ticker symbol, e.g. AAPL.")],
     period: Annotated[
         str,
@@ -785,10 +789,8 @@ def historicdata_bars(
         typer.Option("--purchase-date", help="Required when period is SINCE_PURCHASE. YYYY-MM-DD."),
     ] = None,
 ) -> None:
-    if aggregation:
-        path = f"/userapigateway/historicdata/{symbol.upper()}/{period.upper()}/{aggregation.upper()}"
-    else:
-        path = f"/userapigateway/historicdata/{symbol.upper()}/{period.upper()}"
+    base = f"/userapigateway/historicdata/{security_type.upper()}/{symbol.upper()}/{period.upper()}"
+    path = f"{base}/{aggregation.upper()}" if aggregation else base
     result = _call(ctx, "GET", path, params={"purchaseDate": purchase_date})
     _print(ctx, result)
 

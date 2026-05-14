@@ -1,5 +1,7 @@
 """Contains all the data models used in inputs/outputs"""
 
+from .bar import Bar
+from .bars_response import BarsResponse
 from .com_hellopublic_holdingsystem_core_types_option_price_increment import (
     ComHellopublicHoldingsystemCoreTypesOptionPriceIncrement,
 )
@@ -201,14 +203,14 @@ from .com_hellopublic_userapigateway_api_rest_order_order_expiration import (
 from .com_hellopublic_userapigateway_api_rest_order_order_expiration_time_in_force import (
     ComHellopublicUserapigatewayApiRestOrderOrderExpirationTimeInForce,
 )
-from .com_hellopublic_userapigateway_api_rest_portfolio_gain_type_0 import (
-    ComHellopublicUserapigatewayApiRestPortfolioGainType0,
+from .com_hellopublic_userapigateway_api_rest_portfolio_gain import (
+    ComHellopublicUserapigatewayApiRestPortfolioGain,
 )
 from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_buying_power import (
     ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower,
 )
-from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0 import (
-    ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0,
+from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis import (
+    ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis,
 )
 from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_portfolio_account_v2 import (
     ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2,
@@ -237,8 +239,8 @@ from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_strategy import 
 from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_strategy_leg import (
     ComHellopublicUserapigatewayApiRestPortfolioGatewayStrategyLeg,
 )
-from .com_hellopublic_userapigateway_api_rest_portfolio_price_type_0 import (
-    ComHellopublicUserapigatewayApiRestPortfolioPriceType0,
+from .com_hellopublic_userapigateway_api_rest_portfolio_price import (
+    ComHellopublicUserapigatewayApiRestPortfolioPrice,
 )
 from .com_hellopublic_userapigateway_api_rest_preflight_gateway_margin_impact import (
     ComHellopublicUserapigatewayApiRestPreflightGatewayMarginImpact,
@@ -306,9 +308,19 @@ from .get_all_instruments_option_spread_trading_filter_item import (
 from .get_all_instruments_option_trading_filter_item import GetAllInstrumentsOptionTradingFilterItem
 from .get_all_instruments_trading_filter_item import GetAllInstrumentsTradingFilterItem
 from .get_all_instruments_type_filter_item import GetAllInstrumentsTypeFilterItem
+from .get_bars_v2_period import GetBarsV2Period
+from .get_bars_v2_type import GetBarsV2Type
+from .get_bars_v2_with_aggregation_aggregation import GetBarsV2WithAggregationAggregation
+from .get_bars_v2_with_aggregation_period import GetBarsV2WithAggregationPeriod
+from .get_bars_v2_with_aggregation_type import GetBarsV2WithAggregationType
 from .get_instrument_type import GetInstrumentType
+from .last_session_close import LastSessionClose
+from .market_session_bars import MarketSessionBars
+from .regular_session_closing_data import RegularSessionClosingData
 
 __all__ = (
+    "Bar",
+    "BarsResponse",
     "ComHellopublicHoldingsystemCoreTypesOptionPriceIncrement",
     "ComHellopublicUserapiauthserviceApiPersonalCreateAccessTokenRequest",
     "ComHellopublicUserapiauthserviceApiPersonalCreateAccessTokenResponse",
@@ -376,9 +388,9 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestOrderInstrumentdetailsApiInstrumentDetailsCrypto",
     "ComHellopublicUserapigatewayApiRestOrderOrderExpiration",
     "ComHellopublicUserapigatewayApiRestOrderOrderExpirationTimeInForce",
-    "ComHellopublicUserapigatewayApiRestPortfolioGainType0",
+    "ComHellopublicUserapigatewayApiRestPortfolioGain",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower",
-    "ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0",
+    "ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2AccountType",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioEquityV2",
@@ -388,7 +400,7 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioPosition",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayStrategy",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayStrategyLeg",
-    "ComHellopublicUserapigatewayApiRestPortfolioPriceType0",
+    "ComHellopublicUserapigatewayApiRestPortfolioPrice",
     "ComHellopublicUserapigatewayApiRestPreflightGatewayMarginImpact",
     "ComHellopublicUserapigatewayApiRestPreflightGatewayMarginRequirement",
     "ComHellopublicUserapigatewayApiRestPreflightGatewayOptionDetails",
@@ -413,5 +425,13 @@ __all__ = (
     "GetAllInstrumentsOptionTradingFilterItem",
     "GetAllInstrumentsTradingFilterItem",
     "GetAllInstrumentsTypeFilterItem",
+    "GetBarsV2Period",
+    "GetBarsV2Type",
+    "GetBarsV2WithAggregationAggregation",
+    "GetBarsV2WithAggregationPeriod",
+    "GetBarsV2WithAggregationType",
     "GetInstrumentType",
+    "LastSessionClose",
+    "MarketSessionBars",
+    "RegularSessionClosingData",
 )

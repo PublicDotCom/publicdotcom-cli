@@ -10,11 +10,11 @@ from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0")
+T = TypeVar("T", bound="ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis")
 
 
 @_attrs_define
-class ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0:
+class ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis:
     """Cost basis of a position. What the member paid for entering the position. The cost basis is
     based on tax lots and will factor in wash sales.
 
@@ -139,7 +139,7 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0:
 
         last_update = _parse_last_update(d.pop("lastUpdate", UNSET))
 
-        com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0 = cls(
+        com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis = cls(
             total_cost=total_cost,
             unit_cost=unit_cost,
             gain_value=gain_value,
@@ -147,8 +147,8 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasisType0:
             last_update=last_update,
         )
 
-        com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0.additional_properties = d
-        return com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis_type_0
+        com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis.additional_properties = d
+        return com_hellopublic_userapigateway_api_rest_portfolio_gateway_cost_basis
 
     @property
     def additional_keys(self) -> list[str]:
