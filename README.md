@@ -192,6 +192,12 @@ Trading commands prompt before submitting order placement, replacement, or cance
 requests. Use `--yes` only when your automation has already performed equivalent
 validation and approval.
 
+Order payloads accept optional fields beyond the basics shown above. For example,
+`useMargin` controls buying power on `order place` and `order place-multileg`: set it to
+`false` to evaluate the order against cash-only buying power instead of margin. When
+omitted it defaults to `true` (margin applied where the account allows). See
+`examples/order.single-leg.cash-only.json` for a sample.
+
 ## JSON Output
 
 Use `--json` before the command group to print raw JSON:
