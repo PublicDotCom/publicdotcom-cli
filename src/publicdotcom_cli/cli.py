@@ -770,7 +770,7 @@ def historicdata_bars(
     period: Annotated[
         str,
         typer.Argument(
-            help="Time period: DAY, WEEK, MONTH, QUARTER, HALF_YEAR, YEAR, FIVE_YEARS, YTD, SINCE_PURCHASE."
+            help="Time period: DAY, WEEK, MONTH, QUARTER, HALF_YEAR, YEAR, FIVE_YEARS, TEN_YEARS, ALL, YTD, SINCE_PURCHASE."
         ),
     ],
     aggregation: Annotated[

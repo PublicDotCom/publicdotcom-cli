@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-06-17
+
+### Added
+- `examples/order.single-leg.cash-only.json` demonstrating the optional `useMargin`
+  field, which controls whether margin or cash-only buying power is used when placing
+  single-leg and multi-leg orders. Documented in README.
+
+### Changed
+- `public historicdata bars` help text now lists the `TEN_YEARS` and `ALL` period
+  values added in the updated API spec.
+
 ## [1.2.0] - 2026-05-14
 
 ### Changed
