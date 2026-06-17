@@ -50,6 +50,14 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Install uv
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: astral-sh/setup-uv@v6
+
+      - name: Build
+        if: steps.tag_check.outputs.exists == 'false'
+        run: uv build
+
       - name: Create tag and GitHub release
         if: steps.tag_check.outputs.exists == 'false'
         env:
@@ -64,3 +72,9 @@ jobs:
             --title "v$VERSION" \
             --notes "${{ steps.changelog.outputs.notes }}" \
             --latest
+
+      - name: Publish to PyPI
+        if: steps.tag_check.outputs.exists == 'false'
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: uv publish
