@@ -6,7 +6,6 @@ from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
 
 from ..models.com_hellopublic_userapigateway_api_rest_history_gateway_history_transaction_direction import (
     ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryTransactionDirection,
@@ -159,7 +158,7 @@ class ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryTransaction:
         if isinstance(_timestamp, Unset):
             timestamp = UNSET
         else:
-            timestamp = isoparse(_timestamp)
+            timestamp = datetime.datetime.fromisoformat(_timestamp)
 
         id = d.pop("id", UNSET)
 

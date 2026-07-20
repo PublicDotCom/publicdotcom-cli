@@ -15,6 +15,9 @@ if TYPE_CHECKING:
     from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order import (
         ComHellopublicUserapigatewayApiRestOrderGatewayOrder,
     )
+    from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0 import (
+        ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0,
+    )
     from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_buying_power import (
         ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower,
     )
@@ -46,6 +49,10 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2:
         orders (list[ComHellopublicUserapigatewayApiRestOrderGatewayOrder]):
         strategies (list[ComHellopublicUserapigatewayApiRestPortfolioGatewayStrategy] | None | Unset): List of multi-leg
             option strategies. Null if backend doesn't support strategies.
+        cash (None | str | Unset): Cash value from account summary
+        total_account_value (None | str | Unset): Total account value
+        available_to_withdraw (ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0 | None |
+            Unset): Available to withdraw summary
     """
 
     account_id: str
@@ -57,9 +64,18 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2:
     strategies: list[ComHellopublicUserapigatewayApiRestPortfolioGatewayStrategy] | None | Unset = (
         UNSET
     )
+    cash: None | str | Unset = UNSET
+    total_account_value: None | str | Unset = UNSET
+    available_to_withdraw: (
+        ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0 | None | Unset
+    ) = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0 import (
+            ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0,
+        )
+
         account_id = self.account_id
 
         account_type = self.account_type.value
@@ -93,6 +109,29 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2:
         else:
             strategies = self.strategies
 
+        cash: None | str | Unset
+        if isinstance(self.cash, Unset):
+            cash = UNSET
+        else:
+            cash = self.cash
+
+        total_account_value: None | str | Unset
+        if isinstance(self.total_account_value, Unset):
+            total_account_value = UNSET
+        else:
+            total_account_value = self.total_account_value
+
+        available_to_withdraw: dict[str, Any] | None | Unset
+        if isinstance(self.available_to_withdraw, Unset):
+            available_to_withdraw = UNSET
+        elif isinstance(
+            self.available_to_withdraw,
+            ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0,
+        ):
+            available_to_withdraw = self.available_to_withdraw.to_dict()
+        else:
+            available_to_withdraw = self.available_to_withdraw
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -107,6 +146,12 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2:
         )
         if strategies is not UNSET:
             field_dict["strategies"] = strategies
+        if cash is not UNSET:
+            field_dict["cash"] = cash
+        if total_account_value is not UNSET:
+            field_dict["totalAccountValue"] = total_account_value
+        if available_to_withdraw is not UNSET:
+            field_dict["availableToWithdraw"] = available_to_withdraw
 
         return field_dict
 
@@ -114,6 +159,9 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2:
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order import (
             ComHellopublicUserapigatewayApiRestOrderGatewayOrder,
+        )
+        from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0 import (
+            ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0,
         )
         from ..models.com_hellopublic_userapigateway_api_rest_portfolio_gateway_buying_power import (
             ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower,
@@ -203,6 +251,54 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2:
 
         strategies = _parse_strategies(d.pop("strategies", UNSET))
 
+        def _parse_cash(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        cash = _parse_cash(d.pop("cash", UNSET))
+
+        def _parse_total_account_value(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        total_account_value = _parse_total_account_value(d.pop("totalAccountValue", UNSET))
+
+        def _parse_available_to_withdraw(
+            data: object,
+        ) -> (
+            ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0
+            | None
+            | Unset
+        ):
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0 = ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0.from_dict(
+                    data
+                )
+
+                return componentsschemascom_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(
+                ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0
+                | None
+                | Unset,
+                data,
+            )
+
+        available_to_withdraw = _parse_available_to_withdraw(d.pop("availableToWithdraw", UNSET))
+
         com_hellopublic_userapigateway_api_rest_portfolio_gateway_portfolio_account_v2 = cls(
             account_id=account_id,
             account_type=account_type,
@@ -211,6 +307,9 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2:
             positions=positions,
             orders=orders,
             strategies=strategies,
+            cash=cash,
+            total_account_value=total_account_value,
+            available_to_withdraw=available_to_withdraw,
         )
 
         com_hellopublic_userapigateway_api_rest_portfolio_gateway_portfolio_account_v2.additional_properties = d

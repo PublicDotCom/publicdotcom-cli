@@ -148,9 +148,13 @@ public market quotes AAPL MSFT --type EQUITY
 public market option-expirations AAPL
 public market option-chain AAPL 2026-05-15
 public options greeks "AAPL  260515C00200000"
+public options strategy-quote --file examples/strategy-quote.request.json
 public historicdata bars EQUITY AAPL YEAR
 public historicdata bars EQUITY AAPL DAY --aggregation FIVE_MINUTES
 public historicdata bars EQUITY AAPL SINCE_PURCHASE --purchase-date 2024-01-15
+public taxlots list
+public taxlots symbol AAPL
+public taxlots csv --output taxlots.csv
 ```
 
 ## Historic Bar Data
@@ -197,6 +201,42 @@ Order payloads accept optional fields beyond the basics shown above. For example
 `false` to evaluate the order against cash-only buying power instead of margin. When
 omitted it defaults to `true` (margin applied where the account allows). See
 `examples/order.single-leg.cash-only.json` for a sample.
+
+Order-placement and single-leg preflight payloads also accept an optional
+`taxLotMatchingInstructions` array (up to 8 entries of `{taxLotId, quantity}`) to specify
+which tax lots to close when selling equity. See
+`examples/order.single-leg.tax-lot-matching.json` for a sample.
+
+## Tax Lots
+
+Inspect unrealized tax lots for the configured (or `--account-id`) account:
+
+```bash
+public taxlots list
+public taxlots symbol AAPL
+public taxlots symbol AAPL --price 150.00
+```
+
+`taxlots symbol` accepts an optional `--price` used to value the lots. Export the full set
+as CSV — by default the base64-encoded response is printed, or pass `--output` to decode
+and write the CSV file directly:
+
+```bash
+public taxlots csv
+public taxlots csv --output taxlots.csv
+```
+
+## Strategy Quote
+
+Request a quote for a multi-leg options strategy from a JSON request file:
+
+```bash
+public options strategy-quote --file examples/strategy-quote.request.json
+```
+
+The request body is a `StrategyQuoteRequest` with a `baseSymbol` and an `optionLegs` array
+(each leg is `{symbol, side, openCloseIndicator, ratioQuantity}`), plus an optional
+`equityLeg`. See `examples/strategy-quote.request.json` for a sample.
 
 ## JSON Output
 

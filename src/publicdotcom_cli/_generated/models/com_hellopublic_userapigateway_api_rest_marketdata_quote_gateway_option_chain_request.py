@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
 
 if TYPE_CHECKING:
     from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_instrument import (
@@ -58,7 +57,7 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayOptionChainReques
             d.pop("instrument")
         )
 
-        expiration_date = isoparse(d.pop("expirationDate")).date()
+        expiration_date = datetime.date.fromisoformat(d.pop("expirationDate"))
 
         com_hellopublic_userapigateway_api_rest_marketdata_quote_gateway_option_chain_request = cls(
             instrument=instrument,

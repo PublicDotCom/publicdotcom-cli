@@ -36,6 +36,9 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequest:
     - **legs** - List of order legs (2-6 legs allowed, at most 1 equity leg)
     - **equityMarketSession** - The market session for equity legs
     - **validateOrder** - If true, the order will be validated against current account state. Defaults to true.
+    - **useMargin** - If false, the order will be evaluated using cash-only buying power instead of margin buying power
+    when available. This parameter only has an effect when validateOrder is true and the account has margin enabled.
+    Defaults to true.
 
         Attributes:
             order_type (ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequestOrderType):
@@ -44,6 +47,7 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequest:
             limit_price (str):
             legs (list[ComHellopublicUserapigatewayApiRestOrderGatewayOrderLeg]):
             validate_order (bool | Unset):
+            use_margin (bool | Unset):
     """
 
     order_type: ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequestOrderType
@@ -52,6 +56,7 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequest:
     limit_price: str
     legs: list[ComHellopublicUserapigatewayApiRestOrderGatewayOrderLeg]
     validate_order: bool | Unset = UNSET
+    use_margin: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -70,6 +75,8 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequest:
 
         validate_order = self.validate_order
 
+        use_margin = self.use_margin
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -83,6 +90,8 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequest:
         )
         if validate_order is not UNSET:
             field_dict["validateOrder"] = validate_order
+        if use_margin is not UNSET:
+            field_dict["useMargin"] = use_margin
 
         return field_dict
 
@@ -119,6 +128,8 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequest:
 
         validate_order = d.pop("validateOrder", UNSET)
 
+        use_margin = d.pop("useMargin", UNSET)
+
         com_hellopublic_userapigateway_api_rest_preflight_preflight_multi_leg_request = cls(
             order_type=order_type,
             expiration=expiration,
@@ -126,6 +137,7 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightMultiLegRequest:
             limit_price=limit_price,
             legs=legs,
             validate_order=validate_order,
+            use_margin=use_margin,
         )
 
         com_hellopublic_userapigateway_api_rest_preflight_preflight_multi_leg_request.additional_properties = d

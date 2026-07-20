@@ -1,0 +1,24 @@
+{
+  "instrument": {
+    "symbol": "AAPL",
+    "type": "EQUITY"
+  },
+  "orderSide": "SELL",
+  "orderType": "LIMIT",
+  "expiration": {
+    "timeInForce": "DAY"
+  },
+  "quantity": "3",
+  "limitPrice": "150.00",
+  "openCloseIndicator": "CLOSE",
+  "taxLotMatchingInstructions": [
+    {
+      "taxLotId": "lot-00000000-0000-0000-0000-000000000001",
+      "quantity": "2"
+    },
+    {
+      "taxLotId": "lot-00000000-0000-0000-0000-000000000002",
+      "quantity": "1"
+    }
+  ]
+}

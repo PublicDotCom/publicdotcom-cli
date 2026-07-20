@@ -103,6 +103,9 @@ def sync_detailed(
             - **equityMarketSession** - The market session for equity legs
             - **validateOrder** - If true, the order will be validated against current account state.
             Defaults to true.
+            - **useMargin** - If false, the order will be evaluated using cash-only buying power
+            instead of margin buying power when available. This parameter only has an effect when
+            validateOrder is true and the account has margin enabled. Defaults to true.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -157,6 +160,9 @@ def sync(
             - **equityMarketSession** - The market session for equity legs
             - **validateOrder** - If true, the order will be validated against current account state.
             Defaults to true.
+            - **useMargin** - If false, the order will be evaluated using cash-only buying power
+            instead of margin buying power when available. This parameter only has an effect when
+            validateOrder is true and the account has margin enabled. Defaults to true.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -206,6 +212,9 @@ async def asyncio_detailed(
             - **equityMarketSession** - The market session for equity legs
             - **validateOrder** - If true, the order will be validated against current account state.
             Defaults to true.
+            - **useMargin** - If false, the order will be evaluated using cash-only buying power
+            instead of margin buying power when available. This parameter only has an effect when
+            validateOrder is true and the account has margin enabled. Defaults to true.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -258,6 +267,9 @@ async def asyncio(
             - **equityMarketSession** - The market session for equity legs
             - **validateOrder** - If true, the order will be validated against current account state.
             Defaults to true.
+            - **useMargin** - If false, the order will be evaluated using cash-only buying power
+            instead of margin buying power when available. This parameter only has an effect when
+            validateOrder is true and the account has margin enabled. Defaults to true.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

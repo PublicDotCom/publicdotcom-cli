@@ -10,6 +10,7 @@ from attrs import field as _attrs_field
 from ..models.com_hellopublic_userapigateway_api_rest_order_api_multileg_order_request_type import (
     ComHellopublicUserapigatewayApiRestOrderApiMultilegOrderRequestType,
 )
+from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_leg import (
@@ -40,6 +41,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiMultilegOrderRequest:
             expiration (ComHellopublicUserapigatewayApiRestOrderOrderExpiration):
             legs (list[ComHellopublicUserapigatewayApiRestOrderGatewayOrderLeg]): From 2-6 legs. There can be at most 1
                 equity leg
+            use_margin (bool | Unset): Optional field to indicate whether to use margin buying power. Defaults to true if
+                not specified.
     """
 
     order_id: UUID
@@ -48,6 +51,7 @@ class ComHellopublicUserapigatewayApiRestOrderApiMultilegOrderRequest:
     limit_price: str
     expiration: ComHellopublicUserapigatewayApiRestOrderOrderExpiration
     legs: list[ComHellopublicUserapigatewayApiRestOrderGatewayOrderLeg]
+    use_margin: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -66,6 +70,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiMultilegOrderRequest:
             legs_item = legs_item_data.to_dict()
             legs.append(legs_item)
 
+        use_margin = self.use_margin
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -78,6 +84,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiMultilegOrderRequest:
                 "legs": legs,
             }
         )
+        if use_margin is not UNSET:
+            field_dict["useMargin"] = use_margin
 
         return field_dict
 
@@ -112,6 +120,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiMultilegOrderRequest:
 
             legs.append(legs_item)
 
+        use_margin = d.pop("useMargin", UNSET)
+
         com_hellopublic_userapigateway_api_rest_order_api_multileg_order_request = cls(
             order_id=order_id,
             quantity=quantity,
@@ -119,6 +129,7 @@ class ComHellopublicUserapigatewayApiRestOrderApiMultilegOrderRequest:
             limit_price=limit_price,
             expiration=expiration,
             legs=legs,
+            use_margin=use_margin,
         )
 
         com_hellopublic_userapigateway_api_rest_order_api_multileg_order_request.additional_properties = d

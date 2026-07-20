@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
 
 from ..types import UNSET, Unset
 
@@ -163,7 +162,7 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioPosition:
             try:
                 if not isinstance(data, str):
                     raise TypeError()
-                opened_at_type_0 = isoparse(data)
+                opened_at_type_0 = datetime.datetime.fromisoformat(data)
 
                 return opened_at_type_0
             except (TypeError, ValueError, AttributeError, KeyError):

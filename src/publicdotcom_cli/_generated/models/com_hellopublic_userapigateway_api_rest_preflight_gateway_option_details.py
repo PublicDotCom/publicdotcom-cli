@@ -6,7 +6,6 @@ from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
 
 from ..models.com_hellopublic_userapigateway_api_rest_preflight_gateway_option_details_type import (
     ComHellopublicUserapigatewayApiRestPreflightGatewayOptionDetailsType,
@@ -62,7 +61,7 @@ class ComHellopublicUserapigatewayApiRestPreflightGatewayOptionDetails:
 
         strike_price = d.pop("strikePrice")
 
-        option_expire_date = isoparse(d.pop("optionExpireDate")).date()
+        option_expire_date = datetime.date.fromisoformat(d.pop("optionExpireDate"))
 
         com_hellopublic_userapigateway_api_rest_preflight_gateway_option_details = cls(
             base_symbol=base_symbol,
