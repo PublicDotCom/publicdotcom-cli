@@ -24,6 +24,9 @@ if TYPE_CHECKING:
     from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_instrument import (
         ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument,
     )
+    from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_tax_lot_matching_instruction import (
+        ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction,
+    )
     from ..models.com_hellopublic_userapigateway_api_rest_order_order_expiration import (
         ComHellopublicUserapigatewayApiRestOrderOrderExpiration,
     )
@@ -56,6 +59,13 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequest:
             SELL-to-OPEN (opening a short position) or BUY-to-CLOSE (closing a short position).
         validate_order (bool | Unset): If true, the order will be validated against current account state. Defaults to
             true.
+        use_margin (bool | Unset): If false, the order will be evaluated using cash-only buying power instead of margin
+            buying power when available.
+            If true or omitted, margin will be applied when allowed by the account configuration.
+            This parameter only has an effect when validateOrder is true and the account has margin enabled.
+        tax_lot_matching_instructions (list[ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction] |
+            Unset): Tax lot matching instructions for this order. See the GatewayTaxLotMatchingInstruction type for detailed
+            rules and constraints.
     """
 
     instrument: ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument
@@ -75,6 +85,10 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequest:
         | Unset
     ) = UNSET
     validate_order: bool | Unset = UNSET
+    use_margin: bool | Unset = UNSET
+    tax_lot_matching_instructions: (
+        list[ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction] | Unset
+    ) = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -104,6 +118,17 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequest:
 
         validate_order = self.validate_order
 
+        use_margin = self.use_margin
+
+        tax_lot_matching_instructions: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.tax_lot_matching_instructions, Unset):
+            tax_lot_matching_instructions = []
+            for tax_lot_matching_instructions_item_data in self.tax_lot_matching_instructions:
+                tax_lot_matching_instructions_item = (
+                    tax_lot_matching_instructions_item_data.to_dict()
+                )
+                tax_lot_matching_instructions.append(tax_lot_matching_instructions_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -128,6 +153,10 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequest:
             field_dict["openCloseIndicator"] = open_close_indicator
         if validate_order is not UNSET:
             field_dict["validateOrder"] = validate_order
+        if use_margin is not UNSET:
+            field_dict["useMargin"] = use_margin
+        if tax_lot_matching_instructions is not UNSET:
+            field_dict["taxLotMatchingInstructions"] = tax_lot_matching_instructions
 
         return field_dict
 
@@ -135,6 +164,9 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequest:
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_instrument import (
             ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument,
+        )
+        from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_tax_lot_matching_instruction import (
+            ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction,
         )
         from ..models.com_hellopublic_userapigateway_api_rest_order_order_expiration import (
             ComHellopublicUserapigatewayApiRestOrderOrderExpiration,
@@ -191,6 +223,21 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequest:
 
         validate_order = d.pop("validateOrder", UNSET)
 
+        use_margin = d.pop("useMargin", UNSET)
+
+        _tax_lot_matching_instructions = d.pop("taxLotMatchingInstructions", UNSET)
+        tax_lot_matching_instructions: (
+            list[ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction] | Unset
+        ) = UNSET
+        if _tax_lot_matching_instructions is not UNSET:
+            tax_lot_matching_instructions = []
+            for tax_lot_matching_instructions_item_data in _tax_lot_matching_instructions:
+                tax_lot_matching_instructions_item = ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction.from_dict(
+                    tax_lot_matching_instructions_item_data
+                )
+
+                tax_lot_matching_instructions.append(tax_lot_matching_instructions_item)
+
         com_hellopublic_userapigateway_api_rest_preflight_preflight_single_leg_request = cls(
             instrument=instrument,
             order_side=order_side,
@@ -203,6 +250,8 @@ class ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequest:
             equity_market_session=equity_market_session,
             open_close_indicator=open_close_indicator,
             validate_order=validate_order,
+            use_margin=use_margin,
+            tax_lot_matching_instructions=tax_lot_matching_instructions,
         )
 
         com_hellopublic_userapigateway_api_rest_preflight_preflight_single_leg_request.additional_properties = d

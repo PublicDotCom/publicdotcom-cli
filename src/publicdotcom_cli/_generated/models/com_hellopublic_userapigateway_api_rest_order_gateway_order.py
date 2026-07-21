@@ -7,7 +7,6 @@ from uuid import UUID
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
 
 from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_open_close_indicator import (
     ComHellopublicUserapigatewayApiRestOrderGatewayOrderOpenCloseIndicator,
@@ -217,7 +216,7 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayOrder:
         if isinstance(_created_at, Unset):
             created_at = UNSET
         else:
-            created_at = isoparse(_created_at)
+            created_at = datetime.datetime.fromisoformat(_created_at)
 
         _type_ = d.pop("type", UNSET)
         type_: ComHellopublicUserapigatewayApiRestOrderGatewayOrderType | Unset
@@ -262,7 +261,7 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayOrder:
         if isinstance(_closed_at, Unset):
             closed_at = UNSET
         else:
-            closed_at = isoparse(_closed_at)
+            closed_at = datetime.datetime.fromisoformat(_closed_at)
 
         _open_close_indicator = d.pop("openCloseIndicator", UNSET)
         open_close_indicator: (

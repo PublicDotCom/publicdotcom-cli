@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
 
 from ..models.com_hellopublic_userapigateway_api_rest_marketdata_quote_gateway_quote_outcome import (
     ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuoteOutcome,
@@ -14,6 +13,9 @@ from ..models.com_hellopublic_userapigateway_api_rest_marketdata_quote_gateway_q
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.com_hellopublic_userapigateway_api_rest_marketdata_quote_bond_details import (
+        ComHellopublicUserapigatewayApiRestMarketdataQuoteBondDetails,
+    )
     from ..models.com_hellopublic_userapigateway_api_rest_marketdata_quote_one_day_change import (
         ComHellopublicUserapigatewayApiRestMarketdataQuoteOneDayChange,
     )
@@ -57,6 +59,8 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
             of current price minus previous close due to corporate actions, stock splits, or other adjustments.
         option_details (ComHellopublicUserapigatewayApiRestMarketdataQuoteOptionDetails | Unset): Option-specific
             details including Greeks, strike price, and mid price.
+        bond_details (ComHellopublicUserapigatewayApiRestMarketdataQuoteBondDetails | Unset): Bond-specific details for
+            a quote.
     """
 
     instrument: ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument
@@ -74,6 +78,7 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
     previous_close: str | Unset = UNSET
     one_day_change: ComHellopublicUserapigatewayApiRestMarketdataQuoteOneDayChange | Unset = UNSET
     option_details: ComHellopublicUserapigatewayApiRestMarketdataQuoteOptionDetails | Unset = UNSET
+    bond_details: ComHellopublicUserapigatewayApiRestMarketdataQuoteBondDetails | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -117,6 +122,10 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
         if not isinstance(self.option_details, Unset):
             option_details = self.option_details.to_dict()
 
+        bond_details: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.bond_details, Unset):
+            bond_details = self.bond_details.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -151,11 +160,16 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
             field_dict["oneDayChange"] = one_day_change
         if option_details is not UNSET:
             field_dict["optionDetails"] = option_details
+        if bond_details is not UNSET:
+            field_dict["bondDetails"] = bond_details
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.com_hellopublic_userapigateway_api_rest_marketdata_quote_bond_details import (
+            ComHellopublicUserapigatewayApiRestMarketdataQuoteBondDetails,
+        )
         from ..models.com_hellopublic_userapigateway_api_rest_marketdata_quote_one_day_change import (
             ComHellopublicUserapigatewayApiRestMarketdataQuoteOneDayChange,
         )
@@ -182,7 +196,7 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
         if isinstance(_last_timestamp, Unset):
             last_timestamp = UNSET
         else:
-            last_timestamp = isoparse(_last_timestamp)
+            last_timestamp = datetime.datetime.fromisoformat(_last_timestamp)
 
         bid = d.pop("bid", UNSET)
 
@@ -193,7 +207,7 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
         if isinstance(_bid_timestamp, Unset):
             bid_timestamp = UNSET
         else:
-            bid_timestamp = isoparse(_bid_timestamp)
+            bid_timestamp = datetime.datetime.fromisoformat(_bid_timestamp)
 
         ask = d.pop("ask", UNSET)
 
@@ -204,7 +218,7 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
         if isinstance(_ask_timestamp, Unset):
             ask_timestamp = UNSET
         else:
-            ask_timestamp = isoparse(_ask_timestamp)
+            ask_timestamp = datetime.datetime.fromisoformat(_ask_timestamp)
 
         volume = d.pop("volume", UNSET)
 
@@ -234,6 +248,15 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
                 )
             )
 
+        _bond_details = d.pop("bondDetails", UNSET)
+        bond_details: ComHellopublicUserapigatewayApiRestMarketdataQuoteBondDetails | Unset
+        if isinstance(_bond_details, Unset):
+            bond_details = UNSET
+        else:
+            bond_details = ComHellopublicUserapigatewayApiRestMarketdataQuoteBondDetails.from_dict(
+                _bond_details
+            )
+
         com_hellopublic_userapigateway_api_rest_marketdata_quote_gateway_quote = cls(
             instrument=instrument,
             outcome=outcome,
@@ -250,6 +273,7 @@ class ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuote:
             previous_close=previous_close,
             one_day_change=one_day_change,
             option_details=option_details,
+            bond_details=bond_details,
         )
 
         com_hellopublic_userapigateway_api_rest_marketdata_quote_gateway_quote.additional_properties = d

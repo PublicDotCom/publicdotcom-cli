@@ -2,8 +2,54 @@
 
 from .bar import Bar
 from .bars_response import BarsResponse
+from .com_hellopublic_core_dto_base_64_file import ComHellopublicCoreDtoBase64File
 from .com_hellopublic_holdingsystem_core_types_option_price_increment import (
     ComHellopublicHoldingsystemCoreTypesOptionPriceIncrement,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_instrument_specific_tax_lot_details import (
+    ComHellopublicHstier2ServiceTaxlotsApiInstrumentSpecificTaxLotDetails,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_option_specific_tax_lot_details import (
+    ComHellopublicHstier2ServiceTaxlotsApiOptionSpecificTaxLotDetails,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_option_specific_tax_lot_details_option_type import (
+    ComHellopublicHstier2ServiceTaxlotsApiOptionSpecificTaxLotDetailsOptionType,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_order_reference import (
+    ComHellopublicHstier2ServiceTaxlotsApiOrderReference,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_out_of_date_status import (
+    ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatus,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_out_of_date_status_description import (
+    ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatusDescription,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_out_of_date_status_type import (
+    ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatusType,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_unrealized_lot import (
+    ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLot,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_unrealized_lot_summary import (
+    ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotSummary,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_unrealized_lots_detail_response import (
+    ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsDetailResponse,
+)
+from .com_hellopublic_hstier_2_service_taxlots_api_unrealized_lots_summary_response import (
+    ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsSummaryResponse,
+)
+from .com_hellopublic_trading_core_quote_bond_quote_detail import (
+    ComHellopublicTradingCoreQuoteBondQuoteDetail,
+)
+from .com_hellopublic_trading_core_quote_quote_specific_detail import (
+    ComHellopublicTradingCoreQuoteQuoteSpecificDetail,
+)
+from .com_hellopublic_trading_core_quote_signed_quote import (
+    ComHellopublicTradingCoreQuoteSignedQuote,
+)
+from .com_hellopublic_trading_core_quote_signed_quote_uptick_rule import (
+    ComHellopublicTradingCoreQuoteSignedQuoteUptickRule,
 )
 from .com_hellopublic_userapiauthservice_api_personal_create_access_token_request import (
     ComHellopublicUserapiauthserviceApiPersonalCreateAccessTokenRequest,
@@ -52,6 +98,9 @@ from .com_hellopublic_userapigateway_api_rest_history_gateway_history_transactio
 )
 from .com_hellopublic_userapigateway_api_rest_history_gateway_history_transaction_type import (
     ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryTransactionType,
+)
+from .com_hellopublic_userapigateway_api_rest_marketdata_quote_bond_details import (
+    ComHellopublicUserapigatewayApiRestMarketdataQuoteBondDetails,
 )
 from .com_hellopublic_userapigateway_api_rest_marketdata_quote_gateway_option_chain_request import (
     ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayOptionChainRequest,
@@ -188,6 +237,9 @@ from .com_hellopublic_userapigateway_api_rest_order_gateway_short_selling_availa
 from .com_hellopublic_userapigateway_api_rest_order_gateway_short_selling_uptick_rule import (
     ComHellopublicUserapigatewayApiRestOrderGatewayShortSellingUptickRule,
 )
+from .com_hellopublic_userapigateway_api_rest_order_gateway_tax_lot_matching_instruction import (
+    ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction,
+)
 from .com_hellopublic_userapigateway_api_rest_order_instrumentdetails_api_instrument_details import (
     ComHellopublicUserapigatewayApiRestOrderInstrumentdetailsApiInstrumentDetails,
 )
@@ -205,6 +257,9 @@ from .com_hellopublic_userapigateway_api_rest_order_order_expiration_time_in_for
 )
 from .com_hellopublic_userapigateway_api_rest_portfolio_gain import (
     ComHellopublicUserapigatewayApiRestPortfolioGain,
+)
+from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0 import (
+    ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0,
 )
 from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_buying_power import (
     ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower,
@@ -299,6 +354,39 @@ from .com_hellopublic_userapigateway_api_rest_preflight_preflight_single_leg_req
 from .com_hellopublic_userapigateway_api_rest_preflight_preflight_single_leg_response import (
     ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegResponse,
 )
+from .com_matadorapp_shared_customerordergateway_dto_order_leg_type_0 import (
+    ComMatadorappSharedCustomerordergatewayDtoOrderLegType0,
+)
+from .com_matadorapp_shared_customerordergateway_dto_order_leg_type_0_open_close_indicator import (
+    ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator,
+)
+from .com_matadorapp_shared_customerordergateway_dto_order_leg_type_0_side import (
+    ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side,
+)
+from .com_matadorapp_shared_customerordergateway_dto_strategy_leg_dto import (
+    ComMatadorappSharedCustomerordergatewayDtoStrategyLegDto,
+)
+from .com_matadorapp_shared_customerordergateway_dto_strategy_leg_dto_open_close_indicator import (
+    ComMatadorappSharedCustomerordergatewayDtoStrategyLegDtoOpenCloseIndicator,
+)
+from .com_matadorapp_shared_customerordergateway_dto_strategy_leg_dto_side import (
+    ComMatadorappSharedCustomerordergatewayDtoStrategyLegDtoSide,
+)
+from .com_matadorapp_shared_customerordergateway_dto_strategy_leg_instrument_dto import (
+    ComMatadorappSharedCustomerordergatewayDtoStrategyLegInstrumentDto,
+)
+from .com_matadorapp_shared_customerordergateway_dto_strategy_leg_instrument_dto_type import (
+    ComMatadorappSharedCustomerordergatewayDtoStrategyLegInstrumentDtoType,
+)
+from .com_matadorapp_shared_customerordergateway_dto_strategy_quote_dto import (
+    ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteDto,
+)
+from .com_matadorapp_shared_customerordergateway_dto_strategy_quote_dto_debit_credit import (
+    ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteDtoDebitCredit,
+)
+from .com_matadorapp_shared_customerordergateway_dto_strategy_quote_request import (
+    ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteRequest,
+)
 from .get_all_instruments_fractional_trading_filter_item import (
     GetAllInstrumentsFractionalTradingFilterItem,
 )
@@ -309,9 +397,13 @@ from .get_all_instruments_option_trading_filter_item import GetAllInstrumentsOpt
 from .get_all_instruments_trading_filter_item import GetAllInstrumentsTradingFilterItem
 from .get_all_instruments_type_filter_item import GetAllInstrumentsTypeFilterItem
 from .get_bars_v2_period import GetBarsV2Period
+from .get_bars_v2_trading_session_toggle import GetBarsV2TradingSessionToggle
 from .get_bars_v2_type import GetBarsV2Type
 from .get_bars_v2_with_aggregation_aggregation import GetBarsV2WithAggregationAggregation
 from .get_bars_v2_with_aggregation_period import GetBarsV2WithAggregationPeriod
+from .get_bars_v2_with_aggregation_trading_session_toggle import (
+    GetBarsV2WithAggregationTradingSessionToggle,
+)
 from .get_bars_v2_with_aggregation_type import GetBarsV2WithAggregationType
 from .get_instrument_type import GetInstrumentType
 from .last_session_close import LastSessionClose
@@ -321,7 +413,23 @@ from .regular_session_closing_data import RegularSessionClosingData
 __all__ = (
     "Bar",
     "BarsResponse",
+    "ComHellopublicCoreDtoBase64File",
     "ComHellopublicHoldingsystemCoreTypesOptionPriceIncrement",
+    "ComHellopublicHstier2ServiceTaxlotsApiInstrumentSpecificTaxLotDetails",
+    "ComHellopublicHstier2ServiceTaxlotsApiOptionSpecificTaxLotDetails",
+    "ComHellopublicHstier2ServiceTaxlotsApiOptionSpecificTaxLotDetailsOptionType",
+    "ComHellopublicHstier2ServiceTaxlotsApiOrderReference",
+    "ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatus",
+    "ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatusDescription",
+    "ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatusType",
+    "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLot",
+    "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsDetailResponse",
+    "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsSummaryResponse",
+    "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotSummary",
+    "ComHellopublicTradingCoreQuoteBondQuoteDetail",
+    "ComHellopublicTradingCoreQuoteQuoteSpecificDetail",
+    "ComHellopublicTradingCoreQuoteSignedQuote",
+    "ComHellopublicTradingCoreQuoteSignedQuoteUptickRule",
     "ComHellopublicUserapiauthserviceApiPersonalCreateAccessTokenRequest",
     "ComHellopublicUserapiauthserviceApiPersonalCreateAccessTokenResponse",
     "ComHellopublicUserapiauthserviceDomainErrorErrorBody",
@@ -338,6 +446,7 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryTransactionSide",
     "ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryTransactionSubType",
     "ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryTransactionType",
+    "ComHellopublicUserapigatewayApiRestMarketdataQuoteBondDetails",
     "ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayOptionChainRequest",
     "ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayOptionChainResponse",
     "ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayOptionExpirationsRequest",
@@ -383,12 +492,14 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestOrderGatewayShortSelling",
     "ComHellopublicUserapigatewayApiRestOrderGatewayShortSellingAvailability",
     "ComHellopublicUserapigatewayApiRestOrderGatewayShortSellingUptickRule",
+    "ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction",
     "ComHellopublicUserapigatewayApiRestOrderInstrumentdetailsApiInstrumentDetails",
     "ComHellopublicUserapigatewayApiRestOrderInstrumentdetailsApiInstrumentDetailsBond",
     "ComHellopublicUserapigatewayApiRestOrderInstrumentdetailsApiInstrumentDetailsCrypto",
     "ComHellopublicUserapigatewayApiRestOrderOrderExpiration",
     "ComHellopublicUserapigatewayApiRestOrderOrderExpirationTimeInForce",
     "ComHellopublicUserapigatewayApiRestPortfolioGain",
+    "ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2",
@@ -420,15 +531,28 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequestOrderSide",
     "ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequestOrderType",
     "ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegResponse",
+    "ComMatadorappSharedCustomerordergatewayDtoOrderLegType0",
+    "ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator",
+    "ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side",
+    "ComMatadorappSharedCustomerordergatewayDtoStrategyLegDto",
+    "ComMatadorappSharedCustomerordergatewayDtoStrategyLegDtoOpenCloseIndicator",
+    "ComMatadorappSharedCustomerordergatewayDtoStrategyLegDtoSide",
+    "ComMatadorappSharedCustomerordergatewayDtoStrategyLegInstrumentDto",
+    "ComMatadorappSharedCustomerordergatewayDtoStrategyLegInstrumentDtoType",
+    "ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteDto",
+    "ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteDtoDebitCredit",
+    "ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteRequest",
     "GetAllInstrumentsFractionalTradingFilterItem",
     "GetAllInstrumentsOptionSpreadTradingFilterItem",
     "GetAllInstrumentsOptionTradingFilterItem",
     "GetAllInstrumentsTradingFilterItem",
     "GetAllInstrumentsTypeFilterItem",
     "GetBarsV2Period",
+    "GetBarsV2TradingSessionToggle",
     "GetBarsV2Type",
     "GetBarsV2WithAggregationAggregation",
     "GetBarsV2WithAggregationPeriod",
+    "GetBarsV2WithAggregationTradingSessionToggle",
     "GetBarsV2WithAggregationType",
     "GetInstrumentType",
     "LastSessionClose",

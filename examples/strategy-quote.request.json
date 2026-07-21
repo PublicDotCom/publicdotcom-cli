@@ -1,0 +1,22 @@
+{
+  "baseSymbol": "AAPL",
+  "optionLegs": [
+    {
+      "symbol": "AAPL  260515C00200000",
+      "side": "BUY",
+      "openCloseIndicator": "OPEN",
+      "ratioQuantity": 1
+    },
+    {
+      "symbol": "AAPL  260515C00210000",
+      "side": "SELL",
+      "openCloseIndicator": "OPEN",
+      "ratioQuantity": 1
+    }
+  ],
+  "equityLeg": {
+    "symbol": "AAPL",
+    "side": "BUY",
+    "ratioQuantity": 100
+  }
+}

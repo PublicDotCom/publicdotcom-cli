@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-07-20
+
+### Added
+- `public taxlots` command group covering the new unrealized tax-lot endpoints:
+  `taxlots list` (`GET /userapigateway/trading/{accountId}/taxlots/unrealized`),
+  `taxlots symbol SYMBOL [--price]`
+  (`GET /userapigateway/trading/{accountId}/taxlots/unrealized/{symbol}`), and
+  `taxlots csv [--output PATH]`
+  (`GET /userapigateway/trading/{accountId}/taxlots/csv/unrealized`), which can
+  decode the returned base64 CSV to a file.
+- `public options strategy-quote --file FILE` command covering
+  `POST /userapigateway/option-details/{accountId}/strategy-details/quote`.
+- `examples/order.single-leg.tax-lot-matching.json` demonstrating the optional
+  `taxLotMatchingInstructions` field now accepted on order-placement and
+  single-leg preflight request payloads.
+- `examples/strategy-quote.request.json` sample `StrategyQuoteRequest` body.
+- README sections documenting the tax-lot and strategy-quote commands.
+
+### Changed
+- Regenerated `_generated/` API client from the updated `spec.yaml`.
+
 ## [1.2.1] - 2026-06-17
 
 ### Added

@@ -30,6 +30,8 @@ class BarsResponse:
         previous_close_price (None | str | Unset):
         total_gain_loss (None | str | Unset):
         total_gain_loss_percentage (None | str | Unset):
+        pre_market_overnight (MarketSessionBars | Unset):
+        post_market_overnight (MarketSessionBars | Unset):
         last_trading_session_close (LastSessionClose | Unset):
         regular_session_closing_data (RegularSessionClosingData | Unset):
         last_regular_trading_session_close (LastSessionClose | Unset):
@@ -44,6 +46,8 @@ class BarsResponse:
     previous_close_price: None | str | Unset = UNSET
     total_gain_loss: None | str | Unset = UNSET
     total_gain_loss_percentage: None | str | Unset = UNSET
+    pre_market_overnight: MarketSessionBars | Unset = UNSET
+    post_market_overnight: MarketSessionBars | Unset = UNSET
     last_trading_session_close: LastSessionClose | Unset = UNSET
     regular_session_closing_data: RegularSessionClosingData | Unset = UNSET
     last_regular_trading_session_close: LastSessionClose | Unset = UNSET
@@ -80,6 +84,14 @@ class BarsResponse:
         else:
             total_gain_loss_percentage = self.total_gain_loss_percentage
 
+        pre_market_overnight: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.pre_market_overnight, Unset):
+            pre_market_overnight = self.pre_market_overnight.to_dict()
+
+        post_market_overnight: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.post_market_overnight, Unset):
+            post_market_overnight = self.post_market_overnight.to_dict()
+
         last_trading_session_close: dict[str, Any] | Unset = UNSET
         if not isinstance(self.last_trading_session_close, Unset):
             last_trading_session_close = self.last_trading_session_close.to_dict()
@@ -110,6 +122,10 @@ class BarsResponse:
             field_dict["totalGainLoss"] = total_gain_loss
         if total_gain_loss_percentage is not UNSET:
             field_dict["totalGainLossPercentage"] = total_gain_loss_percentage
+        if pre_market_overnight is not UNSET:
+            field_dict["preMarketOvernight"] = pre_market_overnight
+        if post_market_overnight is not UNSET:
+            field_dict["postMarketOvernight"] = post_market_overnight
         if last_trading_session_close is not UNSET:
             field_dict["lastTradingSessionClose"] = last_trading_session_close
         if regular_session_closing_data is not UNSET:
@@ -167,6 +183,20 @@ class BarsResponse:
             d.pop("totalGainLossPercentage", UNSET)
         )
 
+        _pre_market_overnight = d.pop("preMarketOvernight", UNSET)
+        pre_market_overnight: MarketSessionBars | Unset
+        if isinstance(_pre_market_overnight, Unset):
+            pre_market_overnight = UNSET
+        else:
+            pre_market_overnight = MarketSessionBars.from_dict(_pre_market_overnight)
+
+        _post_market_overnight = d.pop("postMarketOvernight", UNSET)
+        post_market_overnight: MarketSessionBars | Unset
+        if isinstance(_post_market_overnight, Unset):
+            post_market_overnight = UNSET
+        else:
+            post_market_overnight = MarketSessionBars.from_dict(_post_market_overnight)
+
         _last_trading_session_close = d.pop("lastTradingSessionClose", UNSET)
         last_trading_session_close: LastSessionClose | Unset
         if isinstance(_last_trading_session_close, Unset):
@@ -202,6 +232,8 @@ class BarsResponse:
             previous_close_price=previous_close_price,
             total_gain_loss=total_gain_loss,
             total_gain_loss_percentage=total_gain_loss_percentage,
+            pre_market_overnight=pre_market_overnight,
+            post_market_overnight=post_market_overnight,
             last_trading_session_close=last_trading_session_close,
             regular_session_closing_data=regular_session_closing_data,
             last_regular_trading_session_close=last_regular_trading_session_close,

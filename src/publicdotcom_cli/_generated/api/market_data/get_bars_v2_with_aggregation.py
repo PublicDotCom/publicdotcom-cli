@@ -9,6 +9,9 @@ from ...client import AuthenticatedClient, Client
 from ...models.bars_response import BarsResponse
 from ...models.get_bars_v2_with_aggregation_aggregation import GetBarsV2WithAggregationAggregation
 from ...models.get_bars_v2_with_aggregation_period import GetBarsV2WithAggregationPeriod
+from ...models.get_bars_v2_with_aggregation_trading_session_toggle import (
+    GetBarsV2WithAggregationTradingSessionToggle,
+)
 from ...models.get_bars_v2_with_aggregation_type import GetBarsV2WithAggregationType
 from ...types import UNSET, Response, Unset
 
@@ -20,11 +23,18 @@ def _get_kwargs(
     aggregation: GetBarsV2WithAggregationAggregation,
     *,
     purchase_date: str | Unset = UNSET,
+    trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
 
     params["purchaseDate"] = purchase_date
+
+    json_trading_session_toggle: str | Unset = UNSET
+    if not isinstance(trading_session_toggle, Unset):
+        json_trading_session_toggle = trading_session_toggle.value
+
+    params["tradingSessionToggle"] = json_trading_session_toggle
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -75,6 +85,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
     purchase_date: str | Unset = UNSET,
+    trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
 ) -> Response[BarsResponse]:
     """Fetch bar data for a given symbol and period
 
@@ -84,6 +95,7 @@ def sync_detailed(
         period (GetBarsV2WithAggregationPeriod):
         aggregation (GetBarsV2WithAggregationAggregation):
         purchase_date (str | Unset):  Example: 2025-02-24.
+        trading_session_toggle (GetBarsV2WithAggregationTradingSessionToggle | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -99,6 +111,7 @@ def sync_detailed(
         period=period,
         aggregation=aggregation,
         purchase_date=purchase_date,
+        trading_session_toggle=trading_session_toggle,
     )
 
     response = client.get_httpx_client().request(
@@ -116,6 +129,7 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
     purchase_date: str | Unset = UNSET,
+    trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
 ) -> BarsResponse | None:
     """Fetch bar data for a given symbol and period
 
@@ -125,6 +139,7 @@ def sync(
         period (GetBarsV2WithAggregationPeriod):
         aggregation (GetBarsV2WithAggregationAggregation):
         purchase_date (str | Unset):  Example: 2025-02-24.
+        trading_session_toggle (GetBarsV2WithAggregationTradingSessionToggle | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -141,6 +156,7 @@ def sync(
         aggregation=aggregation,
         client=client,
         purchase_date=purchase_date,
+        trading_session_toggle=trading_session_toggle,
     ).parsed
 
 
@@ -152,6 +168,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
     purchase_date: str | Unset = UNSET,
+    trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
 ) -> Response[BarsResponse]:
     """Fetch bar data for a given symbol and period
 
@@ -161,6 +178,7 @@ async def asyncio_detailed(
         period (GetBarsV2WithAggregationPeriod):
         aggregation (GetBarsV2WithAggregationAggregation):
         purchase_date (str | Unset):  Example: 2025-02-24.
+        trading_session_toggle (GetBarsV2WithAggregationTradingSessionToggle | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -176,6 +194,7 @@ async def asyncio_detailed(
         period=period,
         aggregation=aggregation,
         purchase_date=purchase_date,
+        trading_session_toggle=trading_session_toggle,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -191,6 +210,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
     purchase_date: str | Unset = UNSET,
+    trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
 ) -> BarsResponse | None:
     """Fetch bar data for a given symbol and period
 
@@ -200,6 +220,7 @@ async def asyncio(
         period (GetBarsV2WithAggregationPeriod):
         aggregation (GetBarsV2WithAggregationAggregation):
         purchase_date (str | Unset):  Example: 2025-02-24.
+        trading_session_toggle (GetBarsV2WithAggregationTradingSessionToggle | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -217,5 +238,6 @@ async def asyncio(
             aggregation=aggregation,
             client=client,
             purchase_date=purchase_date,
+            trading_session_toggle=trading_session_toggle,
         )
     ).parsed

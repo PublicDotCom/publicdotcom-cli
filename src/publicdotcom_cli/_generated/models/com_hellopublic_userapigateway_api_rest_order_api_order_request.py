@@ -25,6 +25,9 @@ if TYPE_CHECKING:
     from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_instrument import (
         ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument,
     )
+    from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_tax_lot_matching_instruction import (
+        ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction,
+    )
     from ..models.com_hellopublic_userapigateway_api_rest_order_order_expiration import (
         ComHellopublicUserapigatewayApiRestOrderOrderExpiration,
     )
@@ -63,6 +66,13 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
             open_close_indicator (ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOpenCloseIndicator | Unset): Used
                 for options to indicate if this is BUY to OPEN/CLOSE. Also used for shorting equities to indicate SELL-to-OPEN
                 (opening a short position) or BUY-to-CLOSE (closing a short position).
+                If null the default will be OPEN for buy orders and CLOSE for sell orders.
+            use_margin (bool | Unset): If false, the order will be evaluated using cash-only buying power instead of margin
+                buying power when available.
+                If true or omitted, margin will be applied when allowed by the account configuration.
+            tax_lot_matching_instructions (list[ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction] |
+                Unset): Tax lot matching instructions for this order. See the GatewayTaxLotMatchingInstruction type for detailed
+                rules and constraints.
     """
 
     order_id: UUID
@@ -79,6 +89,10 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
     ) = UNSET
     open_close_indicator: (
         ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOpenCloseIndicator | Unset
+    ) = UNSET
+    use_margin: bool | Unset = UNSET
+    tax_lot_matching_instructions: (
+        list[ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction] | Unset
     ) = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -109,6 +123,17 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
         if not isinstance(self.open_close_indicator, Unset):
             open_close_indicator = self.open_close_indicator.value
 
+        use_margin = self.use_margin
+
+        tax_lot_matching_instructions: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.tax_lot_matching_instructions, Unset):
+            tax_lot_matching_instructions = []
+            for tax_lot_matching_instructions_item_data in self.tax_lot_matching_instructions:
+                tax_lot_matching_instructions_item = (
+                    tax_lot_matching_instructions_item_data.to_dict()
+                )
+                tax_lot_matching_instructions.append(tax_lot_matching_instructions_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -132,6 +157,10 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
             field_dict["equityMarketSession"] = equity_market_session
         if open_close_indicator is not UNSET:
             field_dict["openCloseIndicator"] = open_close_indicator
+        if use_margin is not UNSET:
+            field_dict["useMargin"] = use_margin
+        if tax_lot_matching_instructions is not UNSET:
+            field_dict["taxLotMatchingInstructions"] = tax_lot_matching_instructions
 
         return field_dict
 
@@ -139,6 +168,9 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_instrument import (
             ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument,
+        )
+        from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_tax_lot_matching_instruction import (
+            ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction,
         )
         from ..models.com_hellopublic_userapigateway_api_rest_order_order_expiration import (
             ComHellopublicUserapigatewayApiRestOrderOrderExpiration,
@@ -197,6 +229,21 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
                 )
             )
 
+        use_margin = d.pop("useMargin", UNSET)
+
+        _tax_lot_matching_instructions = d.pop("taxLotMatchingInstructions", UNSET)
+        tax_lot_matching_instructions: (
+            list[ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction] | Unset
+        ) = UNSET
+        if _tax_lot_matching_instructions is not UNSET:
+            tax_lot_matching_instructions = []
+            for tax_lot_matching_instructions_item_data in _tax_lot_matching_instructions:
+                tax_lot_matching_instructions_item = ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction.from_dict(
+                    tax_lot_matching_instructions_item_data
+                )
+
+                tax_lot_matching_instructions.append(tax_lot_matching_instructions_item)
+
         com_hellopublic_userapigateway_api_rest_order_api_order_request = cls(
             order_id=order_id,
             instrument=instrument,
@@ -209,6 +256,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
             stop_price=stop_price,
             equity_market_session=equity_market_session,
             open_close_indicator=open_close_indicator,
+            use_margin=use_margin,
+            tax_lot_matching_instructions=tax_lot_matching_instructions,
         )
 
         com_hellopublic_userapigateway_api_rest_order_api_order_request.additional_properties = d

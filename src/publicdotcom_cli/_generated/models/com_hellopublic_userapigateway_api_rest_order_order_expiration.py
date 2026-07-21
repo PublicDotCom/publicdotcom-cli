@@ -6,7 +6,6 @@ from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-from dateutil.parser import isoparse
 
 from ..models.com_hellopublic_userapigateway_api_rest_order_order_expiration_time_in_force import (
     ComHellopublicUserapigatewayApiRestOrderOrderExpirationTimeInForce,
@@ -60,7 +59,7 @@ class ComHellopublicUserapigatewayApiRestOrderOrderExpiration:
         if isinstance(_expiration_time, Unset):
             expiration_time = UNSET
         else:
-            expiration_time = isoparse(_expiration_time)
+            expiration_time = datetime.datetime.fromisoformat(_expiration_time)
 
         com_hellopublic_userapigateway_api_rest_order_order_expiration = cls(
             time_in_force=time_in_force,

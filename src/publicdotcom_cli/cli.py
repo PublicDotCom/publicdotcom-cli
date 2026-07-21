@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 from dataclasses import dataclass
 from getpass import getpass
 from pathlib import Path
@@ -48,6 +49,7 @@ market_app = typer.Typer(help="Market data commands.")
 options_app = typer.Typer(help="Option details commands.")
 order_app = typer.Typer(help="Order and preflight commands.")
 historicdata_app = typer.Typer(help="Historic bar data commands.")
+taxlots_app = typer.Typer(help="Unrealized tax lot commands.")
 
 app.add_typer(auth_app, name="auth")
 app.add_typer(accounts_app, name="accounts")
@@ -58,6 +60,7 @@ app.add_typer(market_app, name="market")
 app.add_typer(options_app, name="options")
 app.add_typer(order_app, name="order")
 app.add_typer(historicdata_app, name="historicdata")
+app.add_typer(taxlots_app, name="taxlots")
 
 
 @dataclass
@@ -613,6 +616,26 @@ def option_greeks(
     _print(ctx, result)
 
 
+@options_app.command("strategy-quote")
+def option_strategy_quote(
+    ctx: typer.Context,
+    file: Annotated[Path, typer.Option("--file", "-f", exists=True, readable=True)],
+    account_id: Annotated[
+        str | None,
+        typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
+    ] = None,
+) -> None:
+    account_id = _resolve_account_id(ctx, account_id)
+    body = load_json_file(file)
+    result = _call(
+        ctx,
+        "POST",
+        f"/userapigateway/option-details/{account_id}/strategy-details/quote",
+        json_body=body,
+    )
+    _print(ctx, result)
+
+
 @order_app.command("preflight-single")
 def preflight_single(
     ctx: typer.Context,
@@ -792,6 +815,70 @@ def historicdata_bars(
     base = f"/userapigateway/historicdata/{security_type.upper()}/{symbol.upper()}/{period.upper()}"
     path = f"{base}/{aggregation.upper()}" if aggregation else base
     result = _call(ctx, "GET", path, params={"purchaseDate": purchase_date})
+    _print(ctx, result)
+
+
+@taxlots_app.command("list")
+def taxlots_list(
+    ctx: typer.Context,
+    account_id: Annotated[
+        str | None,
+        typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
+    ] = None,
+) -> None:
+    account_id = _resolve_account_id(ctx, account_id)
+    result = _call(ctx, "GET", f"/userapigateway/trading/{account_id}/taxlots/unrealized")
+    _print(ctx, result)
+
+
+@taxlots_app.command("symbol")
+def taxlots_symbol(
+    ctx: typer.Context,
+    symbol: Annotated[str, typer.Argument()],
+    account_id: Annotated[
+        str | None,
+        typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
+    ] = None,
+    price: Annotated[
+        str | None,
+        typer.Option("--price", help="Optional price used to value the lots."),
+    ] = None,
+) -> None:
+    account_id = _resolve_account_id(ctx, account_id)
+    result = _call(
+        ctx,
+        "GET",
+        f"/userapigateway/trading/{account_id}/taxlots/unrealized/{symbol.upper()}",
+        params={"price": price},
+    )
+    _print(ctx, result)
+
+
+@taxlots_app.command("csv")
+def taxlots_csv(
+    ctx: typer.Context,
+    account_id: Annotated[
+        str | None,
+        typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            "-o",
+            help="Write the decoded CSV file to this path instead of printing the response.",
+        ),
+    ] = None,
+) -> None:
+    account_id = _resolve_account_id(ctx, account_id)
+    result = _call(ctx, "GET", f"/userapigateway/trading/{account_id}/taxlots/csv/unrealized")
+    if output is not None:
+        base64_data = result.get("base64Data") if isinstance(result, dict) else None
+        if not isinstance(base64_data, str) or not base64_data:
+            exit_with_error("Response did not contain base64Data to write.")
+        output.write_bytes(base64.b64decode(base64_data))
+        console.print(f"Tax lots CSV written to {output}.")
+        return
     _print(ctx, result)
 
 
