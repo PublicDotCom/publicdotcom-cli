@@ -77,8 +77,8 @@ def sync_detailed(
 ) -> Response[Any | ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsDetailResponse]:
     """Retrieve unrealized tax lots for a specific symbol
 
-     Returns detailed unrealized tax lots for a specific symbol in the account. Requires the `portfolio`
-    scope. Available to individual investors.
+     Returns detailed unrealized tax lots for a specific symbol in the account. Requires the
+    `trading.read` scope. Available to individual investors.
 
     Args:
         account_id (str):
@@ -115,8 +115,8 @@ def sync(
 ) -> Any | ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsDetailResponse | None:
     """Retrieve unrealized tax lots for a specific symbol
 
-     Returns detailed unrealized tax lots for a specific symbol in the account. Requires the `portfolio`
-    scope. Available to individual investors.
+     Returns detailed unrealized tax lots for a specific symbol in the account. Requires the
+    `trading.read` scope. Available to individual investors.
 
     Args:
         account_id (str):
@@ -148,8 +148,8 @@ async def asyncio_detailed(
 ) -> Response[Any | ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsDetailResponse]:
     """Retrieve unrealized tax lots for a specific symbol
 
-     Returns detailed unrealized tax lots for a specific symbol in the account. Requires the `portfolio`
-    scope. Available to individual investors.
+     Returns detailed unrealized tax lots for a specific symbol in the account. Requires the
+    `trading.read` scope. Available to individual investors.
 
     Args:
         account_id (str):
@@ -184,8 +184,8 @@ async def asyncio(
 ) -> Any | ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsDetailResponse | None:
     """Retrieve unrealized tax lots for a specific symbol
 
-     Returns detailed unrealized tax lots for a specific symbol in the account. Requires the `portfolio`
-    scope. Available to individual investors.
+     Returns detailed unrealized tax lots for a specific symbol in the account. Requires the
+    `trading.read` scope. Available to individual investors.
 
     Args:
         account_id (str):

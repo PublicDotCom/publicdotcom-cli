@@ -60,8 +60,8 @@ def sync_detailed(
 ) -> Response[Any | ComHellopublicCoreDtoBase64File]:
     """Retrieve unrealized tax lots as CSV
 
-     Returns unrealized tax lots for the specified account in CSV format. Requires the `portfolio` scope.
-    Available to individual investors.
+     Returns unrealized tax lots for the specified account in CSV format. Requires the `trading.read`
+    scope. Available to individual investors.
 
     Args:
         account_id (str):
@@ -92,8 +92,8 @@ def sync(
 ) -> Any | ComHellopublicCoreDtoBase64File | None:
     """Retrieve unrealized tax lots as CSV
 
-     Returns unrealized tax lots for the specified account in CSV format. Requires the `portfolio` scope.
-    Available to individual investors.
+     Returns unrealized tax lots for the specified account in CSV format. Requires the `trading.read`
+    scope. Available to individual investors.
 
     Args:
         account_id (str):
@@ -119,8 +119,8 @@ async def asyncio_detailed(
 ) -> Response[Any | ComHellopublicCoreDtoBase64File]:
     """Retrieve unrealized tax lots as CSV
 
-     Returns unrealized tax lots for the specified account in CSV format. Requires the `portfolio` scope.
-    Available to individual investors.
+     Returns unrealized tax lots for the specified account in CSV format. Requires the `trading.read`
+    scope. Available to individual investors.
 
     Args:
         account_id (str):
@@ -149,8 +149,8 @@ async def asyncio(
 ) -> Any | ComHellopublicCoreDtoBase64File | None:
     """Retrieve unrealized tax lots as CSV
 
-     Returns unrealized tax lots for the specified account in CSV format. Requires the `portfolio` scope.
-    Available to individual investors.
+     Returns unrealized tax lots for the specified account in CSV format. Requires the `trading.read`
+    scope. Available to individual investors.
 
     Args:
         account_id (str):
