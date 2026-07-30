@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-07-24
+
+### Changed
+- Regenerated `_generated/` API client from the updated `spec.yaml`:
+  - `ENTITY` added to the `accountType` enums on `GatewayPortfolioAccountV2` and
+    `AccountSettings`. Additive and non-breaking — the CLI treats `accountType`
+    as an opaque string (`public accounts` renders it in a table, `public
+    portfolio` emits raw JSON), so entity accounts already display correctly.
+  - The three `taxlots` endpoints now document `trading.read` (was `portfolio`)
+    as their required scope, matching the corrected spec. Behaviour is
+    unchanged; only the stated scope was wrong.
+
+### Added
+- `tests/test_generated_enums.py` asserting both regenerated `accountType`
+  enums parse `ENTITY` and match the spec's full member set.
+- `tests/test_output.py` covering `print_accounts` rendering of an `ENTITY`
+  account, guarding against a future regression to strict enum parsing.
+
 ## [1.3.0] - 2026-07-20
 
 ### Added

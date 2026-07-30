@@ -4,6 +4,7 @@ from enum import Enum
 class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2AccountType(str, Enum):
     BOND_ACCOUNT = "BOND_ACCOUNT"
     BROKERAGE = "BROKERAGE"
+    ENTITY = "ENTITY"
     HIGH_YIELD = "HIGH_YIELD"
     RIA_ASSET = "RIA_ASSET"
     ROTH_IRA = "ROTH_IRA"

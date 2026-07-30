@@ -66,7 +66,7 @@ def sync_detailed(
 ) -> Response[Any | ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsSummaryResponse]:
     """Retrieve unrealized tax lots
 
-     Returns an overview of unrealized tax lots for the specified account. Requires the `portfolio`
+     Returns an overview of unrealized tax lots for the specified account. Requires the `trading.read`
     scope. Available to individual investors.
 
     Args:
@@ -98,7 +98,7 @@ def sync(
 ) -> Any | ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsSummaryResponse | None:
     """Retrieve unrealized tax lots
 
-     Returns an overview of unrealized tax lots for the specified account. Requires the `portfolio`
+     Returns an overview of unrealized tax lots for the specified account. Requires the `trading.read`
     scope. Available to individual investors.
 
     Args:
@@ -125,7 +125,7 @@ async def asyncio_detailed(
 ) -> Response[Any | ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsSummaryResponse]:
     """Retrieve unrealized tax lots
 
-     Returns an overview of unrealized tax lots for the specified account. Requires the `portfolio`
+     Returns an overview of unrealized tax lots for the specified account. Requires the `trading.read`
     scope. Available to individual investors.
 
     Args:
@@ -155,7 +155,7 @@ async def asyncio(
 ) -> Any | ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsSummaryResponse | None:
     """Retrieve unrealized tax lots
 
-     Returns an overview of unrealized tax lots for the specified account. Requires the `portfolio`
+     Returns an overview of unrealized tax lots for the specified account. Requires the `trading.read`
     scope. Available to individual investors.
 
     Args:
