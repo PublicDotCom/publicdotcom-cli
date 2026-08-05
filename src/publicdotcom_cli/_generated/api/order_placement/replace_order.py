@@ -76,11 +76,12 @@ def sync_detailed(
 ) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderApiOrderResult]:
     """Cancel-Replace an existing order
 
-     Submits a request to replace an existing order asynchronously for the specified account.
-
-    Note: Order replacement is asynchronous. This response confirms submission only.
-    To verify the order status or execution details, use the GET /{orderId} endpoint after replacement.
-    This feature is only available for crypto quantity orders and option orders. Equities coming soon.
+     Submits a request to replace an existing order asynchronously for the specified account. A
+    replacement lets you modify an open order (for example, its quantity or price) without cancelling
+    and resubmitting it manually.
+    Note: Order replacement is asynchronous. This response confirms submission only. To verify the order
+    status or execution details, use the GET /{orderId} endpoint after replacement.
+    Supported for equity, option, and crypto quantity orders.
 
     Args:
         account_id (str):
@@ -117,11 +118,12 @@ def sync(
 ) -> Any | ComHellopublicUserapigatewayApiRestOrderApiOrderResult | None:
     """Cancel-Replace an existing order
 
-     Submits a request to replace an existing order asynchronously for the specified account.
-
-    Note: Order replacement is asynchronous. This response confirms submission only.
-    To verify the order status or execution details, use the GET /{orderId} endpoint after replacement.
-    This feature is only available for crypto quantity orders and option orders. Equities coming soon.
+     Submits a request to replace an existing order asynchronously for the specified account. A
+    replacement lets you modify an open order (for example, its quantity or price) without cancelling
+    and resubmitting it manually.
+    Note: Order replacement is asynchronous. This response confirms submission only. To verify the order
+    status or execution details, use the GET /{orderId} endpoint after replacement.
+    Supported for equity, option, and crypto quantity orders.
 
     Args:
         account_id (str):
@@ -153,11 +155,12 @@ async def asyncio_detailed(
 ) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderApiOrderResult]:
     """Cancel-Replace an existing order
 
-     Submits a request to replace an existing order asynchronously for the specified account.
-
-    Note: Order replacement is asynchronous. This response confirms submission only.
-    To verify the order status or execution details, use the GET /{orderId} endpoint after replacement.
-    This feature is only available for crypto quantity orders and option orders. Equities coming soon.
+     Submits a request to replace an existing order asynchronously for the specified account. A
+    replacement lets you modify an open order (for example, its quantity or price) without cancelling
+    and resubmitting it manually.
+    Note: Order replacement is asynchronous. This response confirms submission only. To verify the order
+    status or execution details, use the GET /{orderId} endpoint after replacement.
+    Supported for equity, option, and crypto quantity orders.
 
     Args:
         account_id (str):
@@ -192,11 +195,12 @@ async def asyncio(
 ) -> Any | ComHellopublicUserapigatewayApiRestOrderApiOrderResult | None:
     """Cancel-Replace an existing order
 
-     Submits a request to replace an existing order asynchronously for the specified account.
-
-    Note: Order replacement is asynchronous. This response confirms submission only.
-    To verify the order status or execution details, use the GET /{orderId} endpoint after replacement.
-    This feature is only available for crypto quantity orders and option orders. Equities coming soon.
+     Submits a request to replace an existing order asynchronously for the specified account. A
+    replacement lets you modify an open order (for example, its quantity or price) without cancelling
+    and resubmitting it manually.
+    Note: Order replacement is asynchronous. This response confirms submission only. To verify the order
+    status or execution details, use the GET /{orderId} endpoint after replacement.
+    Supported for equity, option, and crypto quantity orders.
 
     Args:
         account_id (str):

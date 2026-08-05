@@ -78,8 +78,8 @@ def sync_detailed(
 ) -> Response[Any | ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuoteResponse]:
     """Retrieve real-time quotes
 
-     Returns market quotes for a set of instruments. Requires the `marketdata` scope. Available to
-    individual investors. Supports EQUITY, OPTION, CRYPTO and INDEX instruments.
+     Returns real-time market quotes for a set of instruments. Requires the marketdata scope and is
+    available to individual investors. Supported instrument types: EQUITY, OPTION, CRYPTO, and INDEX.
 
     Args:
         account_id (str):
@@ -113,8 +113,8 @@ def sync(
 ) -> Any | ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuoteResponse | None:
     """Retrieve real-time quotes
 
-     Returns market quotes for a set of instruments. Requires the `marketdata` scope. Available to
-    individual investors. Supports EQUITY, OPTION, CRYPTO and INDEX instruments.
+     Returns real-time market quotes for a set of instruments. Requires the marketdata scope and is
+    available to individual investors. Supported instrument types: EQUITY, OPTION, CRYPTO, and INDEX.
 
     Args:
         account_id (str):
@@ -143,8 +143,8 @@ async def asyncio_detailed(
 ) -> Response[Any | ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuoteResponse]:
     """Retrieve real-time quotes
 
-     Returns market quotes for a set of instruments. Requires the `marketdata` scope. Available to
-    individual investors. Supports EQUITY, OPTION, CRYPTO and INDEX instruments.
+     Returns real-time market quotes for a set of instruments. Requires the marketdata scope and is
+    available to individual investors. Supported instrument types: EQUITY, OPTION, CRYPTO, and INDEX.
 
     Args:
         account_id (str):
@@ -176,8 +176,8 @@ async def asyncio(
 ) -> Any | ComHellopublicUserapigatewayApiRestMarketdataQuoteGatewayQuoteResponse | None:
     """Retrieve real-time quotes
 
-     Returns market quotes for a set of instruments. Requires the `marketdata` scope. Available to
-    individual investors. Supports EQUITY, OPTION, CRYPTO and INDEX instruments.
+     Returns real-time market quotes for a set of instruments. Requires the marketdata scope and is
+    available to individual investors. Supported instrument types: EQUITY, OPTION, CRYPTO, and INDEX.
 
     Args:
         account_id (str):

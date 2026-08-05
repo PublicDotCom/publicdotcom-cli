@@ -524,6 +524,211 @@ def instrument_get(
     _print(ctx, result)
 
 
+@instruments_app.command("bonds")
+def instruments_bonds(
+    ctx: typer.Context,
+    page_number: Annotated[
+        int | None,
+        typer.Option("--page-number", min=0, help="Page number (zero-based). Defaults to 0."),
+    ] = None,
+    page_size: Annotated[
+        int | None,
+        typer.Option("--page-size", min=1, help="Number of items per page. Defaults to 20."),
+    ] = None,
+    sort_property: Annotated[
+        str | None,
+        typer.Option("--sort-property", help="Property to sort by."),
+    ] = None,
+    sort_direction: Annotated[
+        str | None,
+        typer.Option("--sort-direction", help="Sort direction: ASC or DESC. Defaults to DESC."),
+    ] = None,
+    issuer: Annotated[
+        str | None,
+        typer.Option("--issuer", help="Filter by issuer name."),
+    ] = None,
+    issuer_symbol: Annotated[
+        list[str] | None,
+        typer.Option("--issuer-symbol", help="Filter by issuer symbol. Repeat for multiple."),
+    ] = None,
+    bond_status: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--bond-status",
+            help="Filter by bond status, e.g. OUTSTANDING, MATURED, CALLED. Repeat for multiple.",
+        ),
+    ] = None,
+    bond_type: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--bond-type",
+            help=(
+                "Filter by bond type: AGENCY, CD, CORPORATE, GOVERNMENT, MUNICIPAL, or TREASURY. "
+                "Repeat for multiple."
+            ),
+        ),
+    ] = None,
+    treasury_subtype: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--treasury-subtype",
+            help=(
+                "Filter by treasury subtype: BOND, BILL, NOTE, STRIPS, TIPS, or FLOATING. "
+                "Repeat for multiple."
+            ),
+        ),
+    ] = None,
+    rating: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--rating",
+            help="Filter by S&P credit rating, e.g. AAA, AA+, BBB-. Repeat for multiple.",
+        ),
+    ] = None,
+    rating_category: Annotated[
+        str | None,
+        typer.Option(
+            "--rating-category",
+            help="Filter by rating category: INVESTMENT_GRADE or SPECULATIVE_GRADE.",
+        ),
+    ] = None,
+    sp_outlook: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--sp-outlook",
+            help=(
+                "Filter by S&P outlook: POSITIVE, NEGATIVE, DEVELOPING, STABLE, NOT_RATED, or "
+                "NOT_MEANINGFUL. Repeat for multiple."
+            ),
+        ),
+    ] = None,
+    sp_creditwatch: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--sp-creditwatch",
+            help=(
+                "Filter by S&P creditwatch status: POSITIVE, NEGATIVE, DEVELOPING, or "
+                "NOT_MEANINGFUL. Repeat for multiple."
+            ),
+        ),
+    ] = None,
+    coupon_frequency: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--coupon-frequency",
+            help=(
+                "Filter by coupon payment frequency: AT_MATURITY, ZERO, MONTHLY, QUARTERLY, "
+                "SEMI_ANNUAL, or ANNUAL. Repeat for multiple."
+            ),
+        ),
+    ] = None,
+    min_coupon: Annotated[
+        float | None,
+        typer.Option("--min-coupon", help="Minimum coupon rate."),
+    ] = None,
+    max_coupon: Annotated[
+        float | None,
+        typer.Option("--max-coupon", help="Maximum coupon rate."),
+    ] = None,
+    min_maturity_date: Annotated[
+        str | None,
+        typer.Option(
+            "--min-maturity-date",
+            help=(
+                "Minimum maturity date (YYYY-MM-DD). The API defaults this to today + 14 days to "
+                "exclude bonds nearing maturity with volatile yields."
+            ),
+        ),
+    ] = None,
+    max_maturity_date: Annotated[
+        str | None,
+        typer.Option("--max-maturity-date", help="Maximum maturity date (YYYY-MM-DD)."),
+    ] = None,
+    min_current_yield: Annotated[
+        float | None,
+        typer.Option("--min-current-yield", help="Minimum current yield."),
+    ] = None,
+    max_current_yield: Annotated[
+        float | None,
+        typer.Option("--max-current-yield", help="Maximum current yield."),
+    ] = None,
+    min_par_value: Annotated[
+        float | None,
+        typer.Option("--min-par-value", help="Minimum par value."),
+    ] = None,
+    max_par_value: Annotated[
+        float | None,
+        typer.Option("--max-par-value", help="Maximum par value."),
+    ] = None,
+    min_liquidity_rating: Annotated[
+        float | None,
+        typer.Option("--min-liquidity-rating", help="Minimum liquidity rating (1-5)."),
+    ] = None,
+    max_liquidity_rating: Annotated[
+        float | None,
+        typer.Option("--max-liquidity-rating", help="Maximum liquidity rating (1-5)."),
+    ] = None,
+    liquidity_rating: Annotated[
+        list[float] | None,
+        typer.Option(
+            "--liquidity-rating",
+            help=(
+                "Filter by specific liquidity rating, from 1 (low) to 5 (high). "
+                "Repeat for multiple."
+            ),
+        ),
+    ] = None,
+    callable_filter: Annotated[
+        bool | None,
+        typer.Option("--callable/--no-callable", help="Filter by callable status."),
+    ] = None,
+    perpetual: Annotated[
+        bool | None,
+        typer.Option("--perpetual/--no-perpetual", help="Filter by perpetual bond status."),
+    ] = None,
+    partial_par: Annotated[
+        bool | None,
+        typer.Option("--partial-par/--no-partial-par", help="Filter by partial par status."),
+    ] = None,
+) -> None:
+    result = _call(
+        ctx,
+        "GET",
+        "/userapigateway/trading/instruments/bonds",
+        params={
+            "pageNumber": page_number,
+            "pageSize": page_size,
+            "sortProperty": sort_property,
+            "sortDirection": sort_direction,
+            "issuer": issuer,
+            "issuerSymbol": issuer_symbol,
+            "bondStatus": bond_status,
+            "bondType": bond_type,
+            "treasurySubtype": treasury_subtype,
+            "rating": rating,
+            "ratingCategory": rating_category,
+            "spOutlook": sp_outlook,
+            "spCreditwatch": sp_creditwatch,
+            "couponFrequency": coupon_frequency,
+            "minCoupon": min_coupon,
+            "maxCoupon": max_coupon,
+            "minMaturityDate": min_maturity_date,
+            "maxMaturityDate": max_maturity_date,
+            "minCurrentYield": min_current_yield,
+            "maxCurrentYield": max_current_yield,
+            "minParValue": min_par_value,
+            "maxParValue": max_par_value,
+            "minLiquidityRating": min_liquidity_rating,
+            "maxLiquidityRating": max_liquidity_rating,
+            "liquidityRating": liquidity_rating,
+            "callable": callable_filter,
+            "perpetual": perpetual,
+            "partialPar": partial_par,
+        },
+    )
+    _print(ctx, result)
+
+
 @market_app.command("quotes")
 def market_quotes(
     ctx: typer.Context,
@@ -545,6 +750,24 @@ def market_quotes(
         json_body={"instruments": instruments(symbols, security_type)},
     )
     _print(ctx, result, table="quotes")
+
+
+@market_app.command("bond-details")
+def market_bond_details(
+    ctx: typer.Context,
+    symbol: Annotated[str, typer.Argument(help="Bond symbol, typically CUSIP-BOND format.")],
+    account_id: Annotated[
+        str | None,
+        typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
+    ] = None,
+) -> None:
+    account_id = _resolve_account_id(ctx, account_id)
+    result = _call(
+        ctx,
+        "GET",
+        f"/userapigateway/marketdata/{account_id}/bond-details/{symbol.upper()}",
+    )
+    _print(ctx, result)
 
 
 @market_app.command("option-expirations")
@@ -709,10 +932,48 @@ def order_replace(
         str | None,
         typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
     ] = None,
+    quantity: Annotated[
+        str | None,
+        typer.Option(
+            "--quantity",
+            help=(
+                "Replacement order quantity. Overrides `quantity` in the request file. "
+                "Mutually exclusive with --amount."
+            ),
+        ),
+    ] = None,
+    amount: Annotated[
+        str | None,
+        typer.Option(
+            "--amount",
+            help=(
+                "Replacement notional order amount. Overrides `amount` in the request file. "
+                "Mutually exclusive with --quantity."
+            ),
+        ),
+    ] = None,
     yes: Annotated[bool, typer.Option("--yes", "-y", help="Skip confirmation.")] = False,
 ) -> None:
     account_id = _resolve_account_id(ctx, account_id)
+    if quantity is not None and amount is not None:
+        exit_with_error("--quantity and --amount are mutually exclusive.")
     body = load_json_file(file)
+    if quantity is not None or amount is not None:
+        if not isinstance(body, dict):
+            exit_with_error(
+                "Replace request JSON must be an object to override quantity or amount."
+            )
+        if quantity is not None:
+            body["quantity"] = quantity
+            body.pop("amount", None)
+        else:
+            body["amount"] = amount
+            body.pop("quantity", None)
+    if isinstance(body, dict) and "quantity" in body and "amount" in body:
+        exit_with_error(
+            "Replace request cannot include both `quantity` and `amount`; "
+            "they are mutually exclusive."
+        )
     _confirm("Submit cancel-replace request?", yes, warning=ORDER_ACTION_WARNING)
     result = _call(
         ctx,

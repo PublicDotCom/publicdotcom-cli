@@ -37,6 +37,10 @@ class ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest:
             order_type (ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequestOrderType): The Type of order
             expiration (ComHellopublicUserapigatewayApiRestOrderOrderExpiration):
             quantity (str | Unset): The order quantity. Used when buying/selling whole shares and when selling fractional.
+                Mutually exclusive with `amount`
+            amount (str | Unset): The order amount.
+                Used when replacing an order for a specific notional value.
+                Mutually exclusive with `quantity`
             limit_price (str | Unset): The limit price. Used when orderType = LIMIT or orderType = STOP_LIMIT
             stop_price (str | Unset): The stop price. Used when orderType = STOP or orderType = STOP_LIMIT
     """
@@ -46,6 +50,7 @@ class ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest:
     order_type: ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequestOrderType
     expiration: ComHellopublicUserapigatewayApiRestOrderOrderExpiration
     quantity: str | Unset = UNSET
+    amount: str | Unset = UNSET
     limit_price: str | Unset = UNSET
     stop_price: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -60,6 +65,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest:
         expiration = self.expiration.to_dict()
 
         quantity = self.quantity
+
+        amount = self.amount
 
         limit_price = self.limit_price
 
@@ -77,6 +84,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest:
         )
         if quantity is not UNSET:
             field_dict["quantity"] = quantity
+        if amount is not UNSET:
+            field_dict["amount"] = amount
         if limit_price is not UNSET:
             field_dict["limitPrice"] = limit_price
         if stop_price is not UNSET:
@@ -105,6 +114,8 @@ class ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest:
 
         quantity = d.pop("quantity", UNSET)
 
+        amount = d.pop("amount", UNSET)
+
         limit_price = d.pop("limitPrice", UNSET)
 
         stop_price = d.pop("stopPrice", UNSET)
@@ -115,6 +126,7 @@ class ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest:
             order_type=order_type,
             expiration=expiration,
             quantity=quantity,
+            amount=amount,
             limit_price=limit_price,
             stop_price=stop_price,
         )

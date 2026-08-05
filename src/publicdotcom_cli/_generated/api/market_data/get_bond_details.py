@@ -6,23 +6,22 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.com_hellopublic_userapigateway_api_rest_order_api_instrument_dto import (
-    ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto,
+from ...models.com_hellopublic_userapigateway_api_rest_marketdata_bonddetails_bond_details_response import (
+    ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse,
 )
-from ...models.get_instrument_type import GetInstrumentType
 from ...types import Response
 
 
 def _get_kwargs(
+    account_id: str,
     symbol: str,
-    type_: GetInstrumentType,
 ) -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/userapigateway/trading/instruments/{symbol}/{type_}".format(
+        "url": "/userapigateway/marketdata/{account_id}/bond-details/{symbol}".format(
+            account_id=quote(str(account_id), safe=""),
             symbol=quote(str(symbol), safe=""),
-            type_=quote(str(type_), safe=""),
         ),
     }
 
@@ -31,10 +30,12 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto | None:
+) -> Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse | None:
     if response.status_code == 200:
-        response_200 = ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto.from_dict(
-            response.json()
+        response_200 = (
+            ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse.from_dict(
+                response.json()
+            )
         )
 
         return response_200
@@ -42,10 +43,6 @@ def _parse_response(
     if response.status_code == 400:
         response_400 = cast(Any, None)
         return response_400
-
-    if response.status_code == 404:
-        response_404 = cast(Any, None)
-        return response_404
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -55,7 +52,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto]:
+) -> Response[Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -65,31 +62,31 @@ def _build_response(
 
 
 def sync_detailed(
+    account_id: str,
     symbol: str,
-    type_: GetInstrumentType,
     *,
     client: AuthenticatedClient | Client,
-) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto]:
-    """Retrieve a single instrument
+) -> Response[Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse]:
+    """Retrieve bond details
 
-     Retrieves detailed reference data for a single trading instrument, identified by its symbol and
-    security type. Use this when you already know the symbol and type.
+     Returns comprehensive bond instrument details including pricing, ratings, and maturity information.
+    Requires the `marketdata` scope. Available to individual investors.
 
     Args:
+        account_id (str):
         symbol (str):
-        type_ (GetInstrumentType):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto]
+        Response[Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse]
     """
 
     kwargs = _get_kwargs(
+        account_id=account_id,
         symbol=symbol,
-        type_=type_,
     )
 
     response = client.get_httpx_client().request(
@@ -100,61 +97,61 @@ def sync_detailed(
 
 
 def sync(
+    account_id: str,
     symbol: str,
-    type_: GetInstrumentType,
     *,
     client: AuthenticatedClient | Client,
-) -> Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto | None:
-    """Retrieve a single instrument
+) -> Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse | None:
+    """Retrieve bond details
 
-     Retrieves detailed reference data for a single trading instrument, identified by its symbol and
-    security type. Use this when you already know the symbol and type.
+     Returns comprehensive bond instrument details including pricing, ratings, and maturity information.
+    Requires the `marketdata` scope. Available to individual investors.
 
     Args:
+        account_id (str):
         symbol (str):
-        type_ (GetInstrumentType):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto
+        Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse
     """
 
     return sync_detailed(
+        account_id=account_id,
         symbol=symbol,
-        type_=type_,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
+    account_id: str,
     symbol: str,
-    type_: GetInstrumentType,
     *,
     client: AuthenticatedClient | Client,
-) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto]:
-    """Retrieve a single instrument
+) -> Response[Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse]:
+    """Retrieve bond details
 
-     Retrieves detailed reference data for a single trading instrument, identified by its symbol and
-    security type. Use this when you already know the symbol and type.
+     Returns comprehensive bond instrument details including pricing, ratings, and maturity information.
+    Requires the `marketdata` scope. Available to individual investors.
 
     Args:
+        account_id (str):
         symbol (str):
-        type_ (GetInstrumentType):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto]
+        Response[Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse]
     """
 
     kwargs = _get_kwargs(
+        account_id=account_id,
         symbol=symbol,
-        type_=type_,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -163,32 +160,32 @@ async def asyncio_detailed(
 
 
 async def asyncio(
+    account_id: str,
     symbol: str,
-    type_: GetInstrumentType,
     *,
     client: AuthenticatedClient | Client,
-) -> Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto | None:
-    """Retrieve a single instrument
+) -> Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse | None:
+    """Retrieve bond details
 
-     Retrieves detailed reference data for a single trading instrument, identified by its symbol and
-    security type. Use this when you already know the symbol and type.
+     Returns comprehensive bond instrument details including pricing, ratings, and maturity information.
+    Requires the `marketdata` scope. Available to individual investors.
 
     Args:
+        account_id (str):
         symbol (str):
-        type_ (GetInstrumentType):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto
+        Any | ComHellopublicUserapigatewayApiRestMarketdataBonddetailsBondDetailsResponse
     """
 
     return (
         await asyncio_detailed(
+            account_id=account_id,
             symbol=symbol,
-            type_=type_,
             client=client,
         )
     ).parsed
