@@ -127,7 +127,7 @@ def sync_detailed(
     option_spread_trading_filter: list[GetAllInstrumentsOptionSpreadTradingFilterItem]
     | Unset = UNSET,
 ) -> Response[ComHellopublicUserapigatewayApiRestOrderApiInstrumentResponse]:
-    """Retrieves all available trading instruments with optional filtering capabilities.
+    """Retrieve all trading instruments
 
      Retrieves all available trading instruments with optional filtering capabilities.
 
@@ -176,7 +176,7 @@ def sync(
     option_spread_trading_filter: list[GetAllInstrumentsOptionSpreadTradingFilterItem]
     | Unset = UNSET,
 ) -> ComHellopublicUserapigatewayApiRestOrderApiInstrumentResponse | None:
-    """Retrieves all available trading instruments with optional filtering capabilities.
+    """Retrieve all trading instruments
 
      Retrieves all available trading instruments with optional filtering capabilities.
 
@@ -220,7 +220,7 @@ async def asyncio_detailed(
     option_spread_trading_filter: list[GetAllInstrumentsOptionSpreadTradingFilterItem]
     | Unset = UNSET,
 ) -> Response[ComHellopublicUserapigatewayApiRestOrderApiInstrumentResponse]:
-    """Retrieves all available trading instruments with optional filtering capabilities.
+    """Retrieve all trading instruments
 
      Retrieves all available trading instruments with optional filtering capabilities.
 
@@ -267,7 +267,7 @@ async def asyncio(
     option_spread_trading_filter: list[GetAllInstrumentsOptionSpreadTradingFilterItem]
     | Unset = UNSET,
 ) -> ComHellopublicUserapigatewayApiRestOrderApiInstrumentResponse | None:
-    """Retrieves all available trading instruments with optional filtering capabilities.
+    """Retrieve all trading instruments
 
      Retrieves all available trading instruments with optional filtering capabilities.
 

@@ -72,8 +72,8 @@ def sync_detailed(
 ) -> Response[ComHellopublicUserapigatewayApiRestOptionsGreeksResponse]:
     """Get option greeks
 
-     Get the greeks for a list of option symbol in the OSI-normalized format. Max 250 contracts per
-    request.
+     Returns the greeks for a list of option contracts specified in OSI (Options Symbology Initiative)
+    normalized format. Maximum 250 contracts per request.
 
     Args:
         account_id (str):
@@ -107,8 +107,8 @@ def sync(
 ) -> ComHellopublicUserapigatewayApiRestOptionsGreeksResponse | None:
     """Get option greeks
 
-     Get the greeks for a list of option symbol in the OSI-normalized format. Max 250 contracts per
-    request.
+     Returns the greeks for a list of option contracts specified in OSI (Options Symbology Initiative)
+    normalized format. Maximum 250 contracts per request.
 
     Args:
         account_id (str):
@@ -137,8 +137,8 @@ async def asyncio_detailed(
 ) -> Response[ComHellopublicUserapigatewayApiRestOptionsGreeksResponse]:
     """Get option greeks
 
-     Get the greeks for a list of option symbol in the OSI-normalized format. Max 250 contracts per
-    request.
+     Returns the greeks for a list of option contracts specified in OSI (Options Symbology Initiative)
+    normalized format. Maximum 250 contracts per request.
 
     Args:
         account_id (str):
@@ -170,8 +170,8 @@ async def asyncio(
 ) -> ComHellopublicUserapigatewayApiRestOptionsGreeksResponse | None:
     """Get option greeks
 
-     Get the greeks for a list of option symbol in the OSI-normalized format. Max 250 contracts per
-    request.
+     Returns the greeks for a list of option contracts specified in OSI (Options Symbology Initiative)
+    normalized format. Maximum 250 contracts per request.
 
     Args:
         account_id (str):

@@ -95,8 +95,9 @@ def sync_detailed(
 ) -> Response[Any | ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryResponsePage]:
     """Retrieve account history
 
-     Fetches a paginated list of historical events for the specified account. Supports optional time
-    range filtering and pagination via a continuation token.
+     Fetches a paginated list of historical account events — including trades, money movements, and
+    position adjustments — for the specified account. Supports optional time-range filtering (start/end)
+    and pagination via the nextToken continuation token.
 
     Args:
         account_id (str):
@@ -139,8 +140,9 @@ def sync(
 ) -> Any | ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryResponsePage | None:
     """Retrieve account history
 
-     Fetches a paginated list of historical events for the specified account. Supports optional time
-    range filtering and pagination via a continuation token.
+     Fetches a paginated list of historical account events — including trades, money movements, and
+    position adjustments — for the specified account. Supports optional time-range filtering (start/end)
+    and pagination via the nextToken continuation token.
 
     Args:
         account_id (str):
@@ -178,8 +180,9 @@ async def asyncio_detailed(
 ) -> Response[Any | ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryResponsePage]:
     """Retrieve account history
 
-     Fetches a paginated list of historical events for the specified account. Supports optional time
-    range filtering and pagination via a continuation token.
+     Fetches a paginated list of historical account events — including trades, money movements, and
+    position adjustments — for the specified account. Supports optional time-range filtering (start/end)
+    and pagination via the nextToken continuation token.
 
     Args:
         account_id (str):
@@ -220,8 +223,9 @@ async def asyncio(
 ) -> Any | ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryResponsePage | None:
     """Retrieve account history
 
-     Fetches a paginated list of historical events for the specified account. Supports optional time
-    range filtering and pagination via a continuation token.
+     Fetches a paginated list of historical account events — including trades, money movements, and
+    position adjustments — for the specified account. Supports optional time-range filtering (start/end)
+    and pagination via the nextToken continuation token.
 
     Args:
         account_id (str):

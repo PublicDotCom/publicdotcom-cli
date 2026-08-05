@@ -144,7 +144,9 @@ public accounts set-default ACCOUNT_ID
 public portfolio show
 public history list --page-size 25
 public instruments get AAPL EQUITY
+public instruments bonds --bond-type TREASURY --rating AAA
 public market quotes AAPL MSFT --type EQUITY
+public market bond-details 912828XG0-BOND
 public market option-expirations AAPL
 public market option-chain AAPL 2026-05-15
 public options greeks "AAPL  260515C00200000"
@@ -188,6 +190,7 @@ Trading requests use JSON files so the exact payload is visible before submissio
 ```bash
 public order preflight-single --file examples/order.single-leg.market-buy.json
 public order place --file examples/order.single-leg.market-buy.json
+public order replace --file examples/order.replace.notional.json
 public order get ORDER_ID
 public order cancel ORDER_ID
 ```
@@ -206,6 +209,18 @@ Order-placement and single-leg preflight payloads also accept an optional
 `taxLotMatchingInstructions` array (up to 8 entries of `{taxLotId, quantity}`) to specify
 which tax lots to close when selling equity. See
 `examples/order.single-leg.tax-lot-matching.json` for a sample.
+
+`order replace` submits a cancel-replace request for an open order. The replacement can
+specify either a `quantity` or a notional `amount` — the two fields are mutually
+exclusive. `--quantity` and `--amount` override the corresponding field in the request
+file. Replacement is supported for equity, option, and crypto quantity orders, and is
+asynchronous: verify order status after submitting. See
+`examples/order.replace.notional.json` for a sample notional replacement payload.
+
+```bash
+public order replace --file examples/order.replace.notional.json
+public order replace --file examples/order.replace.notional.json --amount 250.00
+```
 
 ## Tax Lots
 
@@ -237,6 +252,32 @@ public options strategy-quote --file examples/strategy-quote.request.json
 The request body is a `StrategyQuoteRequest` with a `baseSymbol` and an `optionLegs` array
 (each leg is `{symbol, side, openCloseIndicator, ratioQuantity}`), plus an optional
 `equityLeg`. See `examples/strategy-quote.request.json` for a sample.
+
+## Bonds
+
+Search fixed income instruments with optional filtering, sorting, and pagination:
+
+```bash
+public instruments bonds
+public instruments bonds --bond-type TREASURY --treasury-subtype NOTE --min-coupon 4
+public instruments bonds --rating AAA --rating AA+ --max-maturity-date 2030-12-31
+public instruments bonds --page-size 50 --sort-property maturityDate --sort-direction ASC
+```
+
+Filters cover issuer, bond status/type, treasury subtype, S&P ratings and outlook,
+coupon, maturity dates, current yield, par value, liquidity rating, and
+callable/perpetual/partial-par flags. Repeatable options (for example `--rating`) can be
+passed multiple times. Results are returned as a page with `content` plus paging
+metadata. The API defaults the minimum maturity date to today + 14 days to exclude bonds
+nearing maturity with volatile yields; pass `--min-maturity-date` to override.
+
+Retrieve comprehensive details for a single bond — pricing, ratings, coupon, and
+maturity/call information — using the configured (or `--account-id`) account. The bond
+symbol is typically in `CUSIP-BOND` format:
+
+```bash
+public market bond-details 912828XG0-BOND
+```
 
 ## JSON Output
 

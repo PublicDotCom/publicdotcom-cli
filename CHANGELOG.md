@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-08-05
+
+### Added
+- `public instruments bonds` command covering the new
+  `GET /userapigateway/trading/instruments/bonds` endpoint: paged, filtered
+  fixed-income search with options for issuer, bond status/type, treasury
+  subtype, S&P rating/outlook/creditwatch, coupon, maturity dates, current
+  yield, par value, liquidity rating, and callable/perpetual/partial-par flags.
+- `public market bond-details SYMBOL` command covering the new
+  `GET /userapigateway/marketdata/{accountId}/bond-details/{symbol}` endpoint,
+  returning comprehensive bond pricing, rating, coupon, and maturity/call data.
+- `--quantity` and `--amount` overrides on `public order replace`, mirroring the
+  cancel-replace request schema's new notional `amount` field. The two are
+  mutually exclusive (enforced before submission, including when both fields
+  appear in the request file). Replacement is now supported for equity, option,
+  and crypto quantity orders.
+- `examples/order.replace.notional.json` demonstrating a notional (`amount`)
+  cancel-replace payload.
+- README sections for bond search, bond details, and order replacement.
+
+### Changed
+- Regenerated `_generated/` from the updated `spec.yaml`:
+  - New `search-bonds` and `get-bond-details` endpoint modules and models
+    (`InstrumentDto`, `BondDetailsResponse`, Spring page/pageable/sort, and the
+    bond search filter enums).
+  - `amount` added to `ApiCancelReplaceOrderRequest` (mutually exclusive with
+    `quantity`).
+  - `AGGREGATE` added to the tax-lot `OutOfDateStatus` `type` enum.
+  - Refreshed endpoint docstrings (instruments list/get, quotes, greeks,
+    history, replace-order) to match the updated spec text; `get-instrument`
+    now documents 400/404 responses.
+- `scripts/generate_client.py` now injects `x-enum-varnames` for enum values
+  that collide after sanitization (e.g. S&P ratings `AA+`/`AA`/`AA-`), which
+  the bonds `rating` filter requires for generation to succeed.
+
 ## [1.3.1] - 2026-07-24
 
 ### Changed

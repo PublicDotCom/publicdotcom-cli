@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatusType(str, Enum):
+    AGGREGATE = "AGGREGATE"
     CORPORATE_ACTION_UNDERWAY = "CORPORATE_ACTION_UNDERWAY"
     LOT_ASSIGNED = "LOT_ASSIGNED"
     NOT_REPORTED_YET = "NOT_REPORTED_YET"
