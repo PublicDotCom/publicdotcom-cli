@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -5,12 +6,19 @@ from typer.testing import CliRunner
 from publicdotcom_cli import __version__
 from publicdotcom_cli.cli import app
 
+_ANSI_ESCAPES = re.compile(r"\x1b\[[0-9;]*m")
+
+
+def _plain(text: str) -> str:
+    """Strip ANSI styling so help-text assertions hold when color is forced (CI)."""
+    return _ANSI_ESCAPES.sub("", text)
+
 
 def test_version_option_prints_package_version() -> None:
     result = CliRunner().invoke(app, ["--version"])
 
     assert result.exit_code == 0
-    assert f"publicdotcom-cli {__version__}" in result.stdout
+    assert f"publicdotcom-cli {__version__}" in _plain(result.stdout)
 
 
 def test_taxlots_help_lists_subcommands() -> None:
@@ -47,8 +55,8 @@ def test_order_replace_help_lists_quantity_and_amount() -> None:
     result = CliRunner().invoke(app, ["order", "replace", "--help"])
 
     assert result.exit_code == 0
-    assert "--quantity" in result.stdout
-    assert "--amount" in result.stdout
+    assert "--quantity" in _plain(result.stdout)
+    assert "--amount" in _plain(result.stdout)
 
 
 def test_order_replace_rejects_quantity_with_amount(tmp_path: Path) -> None:
