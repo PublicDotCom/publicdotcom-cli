@@ -413,6 +413,7 @@ from .get_bars_v2_with_aggregation_trading_session_toggle import (
 from .get_bars_v2_with_aggregation_type import GetBarsV2WithAggregationType
 from .get_instrument_type import GetInstrumentType
 from .last_session_close import LastSessionClose
+from .leading_fill import LeadingFill
 from .market_session_bars import MarketSessionBars
 from .org_springframework_data_domain_page_com_hellopublic_fixedincomegateway_instrument_instrument_dto import (
     OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrumentInstrumentDto,
@@ -578,6 +579,7 @@ __all__ = (
     "GetBarsV2WithAggregationType",
     "GetInstrumentType",
     "LastSessionClose",
+    "LeadingFill",
     "MarketSessionBars",
     "OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrumentInstrumentDto",
     "PageableObject",

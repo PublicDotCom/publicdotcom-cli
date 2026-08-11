@@ -24,6 +24,7 @@ def _get_kwargs(
     *,
     purchase_date: str | Unset = UNSET,
     trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
+    ipo_date: str | Unset = UNSET,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -35,6 +36,8 @@ def _get_kwargs(
         json_trading_session_toggle = trading_session_toggle.value
 
     params["tradingSessionToggle"] = json_trading_session_toggle
+
+    params["ipoDate"] = ipo_date
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -86,6 +89,7 @@ def sync_detailed(
     client: AuthenticatedClient | Client,
     purchase_date: str | Unset = UNSET,
     trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
+    ipo_date: str | Unset = UNSET,
 ) -> Response[BarsResponse]:
     """Fetch bar data for a given symbol and period
 
@@ -96,6 +100,7 @@ def sync_detailed(
         aggregation (GetBarsV2WithAggregationAggregation):
         purchase_date (str | Unset):  Example: 2025-02-24.
         trading_session_toggle (GetBarsV2WithAggregationTradingSessionToggle | Unset):
+        ipo_date (str | Unset):  Example: 2026-07-20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -112,6 +117,7 @@ def sync_detailed(
         aggregation=aggregation,
         purchase_date=purchase_date,
         trading_session_toggle=trading_session_toggle,
+        ipo_date=ipo_date,
     )
 
     response = client.get_httpx_client().request(
@@ -130,6 +136,7 @@ def sync(
     client: AuthenticatedClient | Client,
     purchase_date: str | Unset = UNSET,
     trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
+    ipo_date: str | Unset = UNSET,
 ) -> BarsResponse | None:
     """Fetch bar data for a given symbol and period
 
@@ -140,6 +147,7 @@ def sync(
         aggregation (GetBarsV2WithAggregationAggregation):
         purchase_date (str | Unset):  Example: 2025-02-24.
         trading_session_toggle (GetBarsV2WithAggregationTradingSessionToggle | Unset):
+        ipo_date (str | Unset):  Example: 2026-07-20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -157,6 +165,7 @@ def sync(
         client=client,
         purchase_date=purchase_date,
         trading_session_toggle=trading_session_toggle,
+        ipo_date=ipo_date,
     ).parsed
 
 
@@ -169,6 +178,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient | Client,
     purchase_date: str | Unset = UNSET,
     trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
+    ipo_date: str | Unset = UNSET,
 ) -> Response[BarsResponse]:
     """Fetch bar data for a given symbol and period
 
@@ -179,6 +189,7 @@ async def asyncio_detailed(
         aggregation (GetBarsV2WithAggregationAggregation):
         purchase_date (str | Unset):  Example: 2025-02-24.
         trading_session_toggle (GetBarsV2WithAggregationTradingSessionToggle | Unset):
+        ipo_date (str | Unset):  Example: 2026-07-20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -195,6 +206,7 @@ async def asyncio_detailed(
         aggregation=aggregation,
         purchase_date=purchase_date,
         trading_session_toggle=trading_session_toggle,
+        ipo_date=ipo_date,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -211,6 +223,7 @@ async def asyncio(
     client: AuthenticatedClient | Client,
     purchase_date: str | Unset = UNSET,
     trading_session_toggle: GetBarsV2WithAggregationTradingSessionToggle | Unset = UNSET,
+    ipo_date: str | Unset = UNSET,
 ) -> BarsResponse | None:
     """Fetch bar data for a given symbol and period
 
@@ -221,6 +234,7 @@ async def asyncio(
         aggregation (GetBarsV2WithAggregationAggregation):
         purchase_date (str | Unset):  Example: 2025-02-24.
         trading_session_toggle (GetBarsV2WithAggregationTradingSessionToggle | Unset):
+        ipo_date (str | Unset):  Example: 2026-07-20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -239,5 +253,6 @@ async def asyncio(
             client=client,
             purchase_date=purchase_date,
             trading_session_toggle=trading_session_toggle,
+            ipo_date=ipo_date,
         )
     ).parsed
