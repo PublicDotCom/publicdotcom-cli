@@ -154,6 +154,7 @@ public options strategy-quote --file examples/strategy-quote.request.json
 public historicdata bars EQUITY AAPL YEAR
 public historicdata bars EQUITY AAPL DAY --aggregation FIVE_MINUTES
 public historicdata bars EQUITY AAPL SINCE_PURCHASE --purchase-date 2024-01-15
+public historicdata bars EQUITY RDDT FIVE_YEARS --ipo-date 2024-03-21
 public taxlots list
 public taxlots symbol AAPL
 public taxlots csv --output taxlots.csv
@@ -183,6 +184,12 @@ When using the `SINCE_PURCHASE` period, supply the purchase date:
 
 ```bash
 public historicdata bars EQUITY AAPL SINCE_PURCHASE --purchase-date 2024-01-15
+```
+
+For recently listed assets, pass the IPO / first-trade date with `--ipo-date`. When the asset is younger than the requested period, the backend switches to a finer aggregation over the available post-IPO history and the response includes a `leadingFill` object describing the flat lead-in to draw for the pre-IPO portion. Omitting the option leaves behavior unchanged, and it is not applied to the `DAY` chart:
+
+```bash
+public historicdata bars EQUITY RDDT FIVE_YEARS --ipo-date 2024-03-21
 ```
 
 Trading requests use JSON files so the exact payload is visible before submission:

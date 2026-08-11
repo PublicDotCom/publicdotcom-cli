@@ -59,6 +59,13 @@ def test_order_replace_help_lists_quantity_and_amount() -> None:
     assert "--amount" in _plain(result.stdout)
 
 
+def test_historicdata_bars_help_lists_ipo_date() -> None:
+    result = CliRunner().invoke(app, ["historicdata", "bars", "--help"])
+
+    assert result.exit_code == 0
+    assert "--ipo-date" in _plain(result.stdout)
+
+
 def test_order_replace_rejects_quantity_with_amount(tmp_path: Path) -> None:
     request = tmp_path / "replace.json"
     request.write_text("{}", encoding="utf-8")

@@ -1072,10 +1072,22 @@ def historicdata_bars(
         str | None,
         typer.Option("--purchase-date", help="Required when period is SINCE_PURCHASE. YYYY-MM-DD."),
     ] = None,
+    ipo_date: Annotated[
+        str | None,
+        typer.Option(
+            "--ipo-date",
+            help=(
+                "Optional IPO / first-trade date, YYYY-MM-DD. When the asset is younger "
+                "than the requested period, the response uses a finer aggregation over "
+                "post-IPO history and includes a leadingFill object describing the flat "
+                "pre-IPO lead-in. Not applied to the DAY chart."
+            ),
+        ),
+    ] = None,
 ) -> None:
     base = f"/userapigateway/historicdata/{security_type.upper()}/{symbol.upper()}/{period.upper()}"
     path = f"{base}/{aggregation.upper()}" if aggregation else base
-    result = _call(ctx, "GET", path, params={"purchaseDate": purchase_date})
+    result = _call(ctx, "GET", path, params={"purchaseDate": purchase_date, "ipoDate": ipo_date})
     _print(ctx, result)
 
 

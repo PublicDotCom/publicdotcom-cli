@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-08-11
+
+### Added
+- `--ipo-date` option on `public historicdata bars`, mirroring the new optional
+  `ipoDate` query parameter on both historic-data endpoints. Supplying the
+  asset's IPO / first-trade date lets the backend switch to a finer aggregation
+  over post-IPO history for assets younger than the requested period; the
+  response then includes a `leadingFill` object describing the flat pre-IPO
+  lead-in. Omitted, behavior is unchanged; not applied to the `DAY` chart.
+- README examples for `--ipo-date`.
+
+### Changed
+- Regenerated `_generated/` from the updated `spec.yaml`:
+  - New `LeadingFill` model (`startTimestamp`, `endTimestamp`, `value`,
+    `count`, `includedInTotalExpectedBars`, all required) and the optional
+    `leadingFill` field on `BarsResponse`.
+  - `ipo_date` parameter on the `get_bars_v2` and
+    `get_bars_v2_with_aggregation` endpoint modules.
+  - `PageableObject` / `SortObject` field order follows a cosmetic key reorder
+    in the spec (no behavioral change).
+  - The generator's usual unrelated churn (unpinned newer generator rewriting
+    `from_dict` to `typing_extensions.Self`, which is not a declared
+    dependency) was reverted; new/changed files were normalized to the
+    vendored TypeVar style.
+
 ## [1.3.2] - 2026-08-05
 
 ### Added

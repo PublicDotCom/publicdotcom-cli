@@ -10,6 +10,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.last_session_close import LastSessionClose
+    from ..models.leading_fill import LeadingFill
     from ..models.market_session_bars import MarketSessionBars
     from ..models.regular_session_closing_data import RegularSessionClosingData
 
@@ -35,6 +36,7 @@ class BarsResponse:
         last_trading_session_close (LastSessionClose | Unset):
         regular_session_closing_data (RegularSessionClosingData | Unset):
         last_regular_trading_session_close (LastSessionClose | Unset):
+        leading_fill (LeadingFill | Unset):
     """
 
     symbol: str
@@ -51,6 +53,7 @@ class BarsResponse:
     last_trading_session_close: LastSessionClose | Unset = UNSET
     regular_session_closing_data: RegularSessionClosingData | Unset = UNSET
     last_regular_trading_session_close: LastSessionClose | Unset = UNSET
+    leading_fill: LeadingFill | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -104,6 +107,10 @@ class BarsResponse:
         if not isinstance(self.last_regular_trading_session_close, Unset):
             last_regular_trading_session_close = self.last_regular_trading_session_close.to_dict()
 
+        leading_fill: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.leading_fill, Unset):
+            leading_fill = self.leading_fill.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -132,12 +139,15 @@ class BarsResponse:
             field_dict["regularSessionClosingData"] = regular_session_closing_data
         if last_regular_trading_session_close is not UNSET:
             field_dict["lastRegularTradingSessionClose"] = last_regular_trading_session_close
+        if leading_fill is not UNSET:
+            field_dict["leadingFill"] = leading_fill
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.last_session_close import LastSessionClose
+        from ..models.leading_fill import LeadingFill
         from ..models.market_session_bars import MarketSessionBars
         from ..models.regular_session_closing_data import RegularSessionClosingData
 
@@ -222,6 +232,13 @@ class BarsResponse:
                 _last_regular_trading_session_close
             )
 
+        _leading_fill = d.pop("leadingFill", UNSET)
+        leading_fill: LeadingFill | Unset
+        if isinstance(_leading_fill, Unset):
+            leading_fill = UNSET
+        else:
+            leading_fill = LeadingFill.from_dict(_leading_fill)
+
         bars_response = cls(
             symbol=symbol,
             period=period,
@@ -237,6 +254,7 @@ class BarsResponse:
             last_trading_session_close=last_trading_session_close,
             regular_session_closing_data=regular_session_closing_data,
             last_regular_trading_session_close=last_regular_trading_session_close,
+            leading_fill=leading_fill,
         )
 
         bars_response.additional_properties = d
