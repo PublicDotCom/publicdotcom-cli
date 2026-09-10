@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side(str, Enum):
+class ComMatadorappSharedCustomerordergatewayDtoOrderLegSide(str, Enum):
     BUY = "BUY"
     SELL = "SELL"
 

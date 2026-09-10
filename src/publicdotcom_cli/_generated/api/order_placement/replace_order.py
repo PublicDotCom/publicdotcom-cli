@@ -82,6 +82,9 @@ def sync_detailed(
     Note: Order replacement is asynchronous. This response confirms submission only. To verify the order
     status or execution details, use the GET /{orderId} endpoint after replacement.
     Supported for equity, option, and crypto quantity orders.
+    Bracket orders: the opening (entry) order cannot be replaced. The closing legs (take-profit, stop-
+    loss, and both legs of an OCO) can have their limitPrice and stopPrice replaced; quantity, orderType
+    and expiration must be resubmitted unchanged.
 
     Args:
         account_id (str):
@@ -124,6 +127,9 @@ def sync(
     Note: Order replacement is asynchronous. This response confirms submission only. To verify the order
     status or execution details, use the GET /{orderId} endpoint after replacement.
     Supported for equity, option, and crypto quantity orders.
+    Bracket orders: the opening (entry) order cannot be replaced. The closing legs (take-profit, stop-
+    loss, and both legs of an OCO) can have their limitPrice and stopPrice replaced; quantity, orderType
+    and expiration must be resubmitted unchanged.
 
     Args:
         account_id (str):
@@ -161,6 +167,9 @@ async def asyncio_detailed(
     Note: Order replacement is asynchronous. This response confirms submission only. To verify the order
     status or execution details, use the GET /{orderId} endpoint after replacement.
     Supported for equity, option, and crypto quantity orders.
+    Bracket orders: the opening (entry) order cannot be replaced. The closing legs (take-profit, stop-
+    loss, and both legs of an OCO) can have their limitPrice and stopPrice replaced; quantity, orderType
+    and expiration must be resubmitted unchanged.
 
     Args:
         account_id (str):
@@ -201,6 +210,9 @@ async def asyncio(
     Note: Order replacement is asynchronous. This response confirms submission only. To verify the order
     status or execution details, use the GET /{orderId} endpoint after replacement.
     Supported for equity, option, and crypto quantity orders.
+    Bracket orders: the opening (entry) order cannot be replaced. The closing legs (take-profit, stop-
+    loss, and both legs of an OCO) can have their limitPrice and stopPrice replaced; quantity, orderType
+    and expiration must be resubmitted unchanged.
 
     Args:
         account_id (str):

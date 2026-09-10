@@ -189,6 +189,62 @@ ORDER_ACTION_WARNING = (
 )
 
 
+ORDER_CLASSES = ("SIMPLE", "BRACKET", "OCO", "OTO")
+BRACKET_ORDER_CLASSES = ("BRACKET", "OCO", "OTO")
+
+
+def _apply_bracket_overrides(
+    body: dict[str, Any],
+    *,
+    order_class: str | None,
+    take_profit_limit: str | None,
+    stop_loss_stop: str | None,
+    stop_loss_limit: str | None,
+) -> None:
+    """Fold the bracket-order flags into the request body, in place.
+
+    Each flag overrides the corresponding key in the request file. Only the
+    coherence of the flags themselves is checked here — the remaining bracket
+    constraints (whole-share quantity, CORE session, entry order type) are
+    enforced by the API.
+    """
+    if stop_loss_limit is not None and stop_loss_stop is None:
+        exit_with_error("--stop-loss-limit requires --stop-loss-stop.")
+
+    if order_class is not None:
+        normalized = order_class.strip().upper()
+        if normalized not in ORDER_CLASSES:
+            exit_with_error(
+                f"Invalid --order-class {order_class!r}. Expected one of: "
+                f"{', '.join(ORDER_CLASSES)}."
+            )
+        body["orderClass"] = normalized
+
+    if take_profit_limit is not None:
+        body["takeProfit"] = {"limitPrice": take_profit_limit}
+
+    if stop_loss_stop is not None:
+        stop_loss: dict[str, str] = {"stopPrice": stop_loss_stop}
+        if stop_loss_limit is not None:
+            stop_loss["limitPrice"] = stop_loss_limit
+        body["stopLoss"] = stop_loss
+
+    effective_class = body.get("orderClass")
+    has_exit_leg = "takeProfit" in body or "stopLoss" in body
+
+    if effective_class in BRACKET_ORDER_CLASSES and not has_exit_leg:
+        exit_with_error(
+            f"Order class {effective_class} requires at least one of "
+            "--take-profit-limit or --stop-loss-stop (or `takeProfit` / `stopLoss` "
+            "in the request file)."
+        )
+    if has_exit_leg and effective_class not in BRACKET_ORDER_CLASSES:
+        exit_with_error(
+            "`takeProfit` and `stopLoss` require --order-class to be one of: "
+            f"{', '.join(BRACKET_ORDER_CLASSES)}."
+        )
+
+
 def _confirm(action: str, yes: bool, *, warning: str | None = None) -> None:
     if yes:
         return
@@ -907,12 +963,60 @@ def order_place(
         str | None,
         typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
     ] = None,
+    order_class: Annotated[
+        str | None,
+        typer.Option(
+            "--order-class",
+            help=(
+                "Order class: SIMPLE, BRACKET, OCO or OTO. Overrides `orderClass` in the "
+                "request file. The bracket classes need at least one of --take-profit-limit "
+                "or --stop-loss-stop."
+            ),
+        ),
+    ] = None,
+    take_profit_limit: Annotated[
+        str | None,
+        typer.Option(
+            "--take-profit-limit",
+            help=(
+                "Take-profit limit price for a bracket order. Overrides `takeProfit` in the "
+                "request file."
+            ),
+        ),
+    ] = None,
+    stop_loss_stop: Annotated[
+        str | None,
+        typer.Option(
+            "--stop-loss-stop",
+            help=(
+                "Stop-loss stop price for a bracket order. Overrides `stopLoss` in the "
+                "request file. Placed as a STOP order unless --stop-loss-limit is given too."
+            ),
+        ),
+    ] = None,
+    stop_loss_limit: Annotated[
+        str | None,
+        typer.Option(
+            "--stop-loss-limit",
+            help=(
+                "Stop-loss limit price, making the stop-loss a STOP_LIMIT order. "
+                "Requires --stop-loss-stop."
+            ),
+        ),
+    ] = None,
     yes: Annotated[bool, typer.Option("--yes", "-y", help="Skip confirmation.")] = False,
 ) -> None:
     account_id = _resolve_account_id(ctx, account_id)
     body = load_json_file(file)
     if not isinstance(body, dict):
         exit_with_error("Order request JSON must be an object.")
+    _apply_bracket_overrides(
+        body,
+        order_class=order_class,
+        take_profit_limit=take_profit_limit,
+        stop_loss_stop=stop_loss_stop,
+        stop_loss_limit=stop_loss_limit,
+    )
     order_id = ensure_order_id(body)
     _confirm(f"Submit order {order_id}?", yes, warning=ORDER_ACTION_WARNING)
     result = _call(

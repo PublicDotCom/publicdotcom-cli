@@ -42,6 +42,8 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayOrder:
     """
     Attributes:
         order_id (UUID | Unset):
+        bracket_id (UUID | Unset): Identifies the bracket this order belongs to, which is the orderId of the bracket's
+            entry (parent) order. All legs of the same bracket share this id. Null for standalone (non-bracket) orders.
         instrument (ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument | Unset):
         created_at (datetime.datetime | Unset): Creation time of the order
         type_ (ComHellopublicUserapigatewayApiRestOrderGatewayOrderType | Unset):
@@ -64,6 +66,7 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayOrder:
     """
 
     order_id: UUID | Unset = UNSET
+    bracket_id: UUID | Unset = UNSET
     instrument: ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument | Unset = UNSET
     created_at: datetime.datetime | Unset = UNSET
     type_: ComHellopublicUserapigatewayApiRestOrderGatewayOrderType | Unset = UNSET
@@ -88,6 +91,10 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayOrder:
         order_id: str | Unset = UNSET
         if not isinstance(self.order_id, Unset):
             order_id = str(self.order_id)
+
+        bracket_id: str | Unset = UNSET
+        if not isinstance(self.bracket_id, Unset):
+            bracket_id = str(self.bracket_id)
 
         instrument: dict[str, Any] | Unset = UNSET
         if not isinstance(self.instrument, Unset):
@@ -147,6 +154,8 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayOrder:
         field_dict.update({})
         if order_id is not UNSET:
             field_dict["orderId"] = order_id
+        if bracket_id is not UNSET:
+            field_dict["bracketId"] = bracket_id
         if instrument is not UNSET:
             field_dict["instrument"] = instrument
         if created_at is not UNSET:
@@ -201,6 +210,13 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayOrder:
             order_id = UNSET
         else:
             order_id = UUID(_order_id)
+
+        _bracket_id = d.pop("bracketId", UNSET)
+        bracket_id: UUID | Unset
+        if isinstance(_bracket_id, Unset):
+            bracket_id = UNSET
+        else:
+            bracket_id = UUID(_bracket_id)
 
         _instrument = d.pop("instrument", UNSET)
         instrument: ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument | Unset
@@ -295,6 +311,7 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayOrder:
 
         com_hellopublic_userapigateway_api_rest_order_gateway_order = cls(
             order_id=order_id,
+            bracket_id=bracket_id,
             instrument=instrument,
             created_at=created_at,
             type_=type_,

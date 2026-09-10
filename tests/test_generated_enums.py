@@ -7,6 +7,9 @@ from publicdotcom_cli._generated.models import (
 from publicdotcom_cli._generated.models import (
     ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2AccountType as PortfolioAccountType,
 )
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass as OrderClass,
+)
 from publicdotcom_cli._generated.models import SearchBondsRatingItem
 
 EXPECTED_ACCOUNT_TYPES = {
@@ -63,3 +66,17 @@ def test_search_bonds_rating_item_parses_symbol_ratings() -> None:
 
 def test_search_bonds_rating_item_covers_all_spec_values() -> None:
     assert len(SearchBondsRatingItem) == 29
+
+
+EXPECTED_ORDER_CLASSES = {"SIMPLE", "BRACKET", "OCO", "OTO"}
+
+
+def test_order_class_parses_bracket_values() -> None:
+    assert OrderClass("SIMPLE") is OrderClass.SIMPLE
+    assert OrderClass("BRACKET") is OrderClass.BRACKET
+    assert OrderClass("OCO") is OrderClass.OCO
+    assert OrderClass("OTO") is OrderClass.OTO
+
+
+def test_order_class_matches_spec() -> None:
+    assert {member.value for member in OrderClass} == EXPECTED_ORDER_CLASSES

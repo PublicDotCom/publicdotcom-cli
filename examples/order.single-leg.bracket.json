@@ -1,0 +1,21 @@
+{
+  "instrument": {
+    "symbol": "AAPL",
+    "type": "EQUITY"
+  },
+  "orderSide": "BUY",
+  "orderType": "LIMIT",
+  "expiration": {
+    "timeInForce": "DAY"
+  },
+  "quantity": "10",
+  "limitPrice": "227.50",
+  "equityMarketSession": "CORE",
+  "orderClass": "BRACKET",
+  "takeProfit": {
+    "limitPrice": "245.00"
+  },
+  "stopLoss": {
+    "stopPrice": "210.00"
+  }
+}

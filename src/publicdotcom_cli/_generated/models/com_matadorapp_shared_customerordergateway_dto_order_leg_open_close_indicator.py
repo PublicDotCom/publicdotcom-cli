@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator(str, Enum):
+class ComMatadorappSharedCustomerordergatewayDtoOrderLegOpenCloseIndicator(str, Enum):
     CLOSE = "CLOSE"
     OPEN = "OPEN"
 

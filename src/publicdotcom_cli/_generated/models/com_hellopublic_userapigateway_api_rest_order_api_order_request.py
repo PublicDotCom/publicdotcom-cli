@@ -13,6 +13,9 @@ from ..models.com_hellopublic_userapigateway_api_rest_order_api_order_request_eq
 from ..models.com_hellopublic_userapigateway_api_rest_order_api_order_request_open_close_indicator import (
     ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOpenCloseIndicator,
 )
+from ..models.com_hellopublic_userapigateway_api_rest_order_api_order_request_order_class import (
+    ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass,
+)
 from ..models.com_hellopublic_userapigateway_api_rest_order_api_order_request_order_side import (
     ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderSide,
 )
@@ -24,6 +27,12 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_instrument import (
         ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument,
+    )
+    from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_stop_loss import (
+        ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss,
+    )
+    from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_take_profit import (
+        ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit,
     )
     from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_tax_lot_matching_instruction import (
         ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction,
@@ -73,6 +82,16 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
             tax_lot_matching_instructions (list[ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction] |
                 Unset): Tax lot matching instructions for this order. See the GatewayTaxLotMatchingInstruction type for detailed
                 rules and constraints.
+            order_class (ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass | Unset): The order class.
+                Omitted or SIMPLE places a standalone order. BRACKET, OCO, or OTO place a bracket order
+                using `takeProfit` and `stopLoss`. Bracket orders are supported for equities and options only, require a
+                whole-share `quantity` (no `amount`), must use the CORE market session, and the entry order type must be
+                LIMIT or MARKET (LIMIT only for OCO).
+            take_profit (ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit | Unset): The take-profit leg of a
+                bracket order. Always placed as a LIMIT order on the opposite side of the entry.
+            stop_loss (ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss | Unset): The stop-loss leg of a bracket
+                order. Placed as a STOP order when only `stopPrice` is present, or as a
+                STOP_LIMIT order when `limitPrice` is also present.
     """
 
     order_id: UUID
@@ -94,6 +113,9 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
     tax_lot_matching_instructions: (
         list[ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction] | Unset
     ) = UNSET
+    order_class: ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass | Unset = UNSET
+    take_profit: ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit | Unset = UNSET
+    stop_loss: ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -134,6 +156,18 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
                 )
                 tax_lot_matching_instructions.append(tax_lot_matching_instructions_item)
 
+        order_class: str | Unset = UNSET
+        if not isinstance(self.order_class, Unset):
+            order_class = self.order_class.value
+
+        take_profit: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.take_profit, Unset):
+            take_profit = self.take_profit.to_dict()
+
+        stop_loss: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.stop_loss, Unset):
+            stop_loss = self.stop_loss.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -161,6 +195,12 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
             field_dict["useMargin"] = use_margin
         if tax_lot_matching_instructions is not UNSET:
             field_dict["taxLotMatchingInstructions"] = tax_lot_matching_instructions
+        if order_class is not UNSET:
+            field_dict["orderClass"] = order_class
+        if take_profit is not UNSET:
+            field_dict["takeProfit"] = take_profit
+        if stop_loss is not UNSET:
+            field_dict["stopLoss"] = stop_loss
 
         return field_dict
 
@@ -168,6 +208,12 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_order_instrument import (
             ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument,
+        )
+        from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_stop_loss import (
+            ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss,
+        )
+        from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_take_profit import (
+            ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit,
         )
         from ..models.com_hellopublic_userapigateway_api_rest_order_gateway_tax_lot_matching_instruction import (
             ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction,
@@ -244,6 +290,33 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
 
                 tax_lot_matching_instructions.append(tax_lot_matching_instructions_item)
 
+        _order_class = d.pop("orderClass", UNSET)
+        order_class: ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass | Unset
+        if isinstance(_order_class, Unset):
+            order_class = UNSET
+        else:
+            order_class = ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass(
+                _order_class
+            )
+
+        _take_profit = d.pop("takeProfit", UNSET)
+        take_profit: ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit | Unset
+        if isinstance(_take_profit, Unset):
+            take_profit = UNSET
+        else:
+            take_profit = ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit.from_dict(
+                _take_profit
+            )
+
+        _stop_loss = d.pop("stopLoss", UNSET)
+        stop_loss: ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss | Unset
+        if isinstance(_stop_loss, Unset):
+            stop_loss = UNSET
+        else:
+            stop_loss = ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss.from_dict(
+                _stop_loss
+            )
+
         com_hellopublic_userapigateway_api_rest_order_api_order_request = cls(
             order_id=order_id,
             instrument=instrument,
@@ -258,6 +331,9 @@ class ComHellopublicUserapigatewayApiRestOrderApiOrderRequest:
             open_close_indicator=open_close_indicator,
             use_margin=use_margin,
             tax_lot_matching_instructions=tax_lot_matching_instructions,
+            order_class=order_class,
+            take_profit=take_profit,
+            stop_loss=stop_loss,
         )
 
         com_hellopublic_userapigateway_api_rest_order_api_order_request.additional_properties = d

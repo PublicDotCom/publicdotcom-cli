@@ -6,13 +6,11 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar(
-    "T", bound="ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0"
-)
+T = TypeVar("T", bound="ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdraw")
 
 
 @_attrs_define
-class ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0:
+class ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdraw:
     """Available to withdraw summary
 
     Attributes:
@@ -48,17 +46,13 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType
 
         available_to_withdraw = d.pop("availableToWithdraw")
 
-        com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0 = (
-            cls(
-                cash_only_available_to_withdraw=cash_only_available_to_withdraw,
-                available_to_withdraw=available_to_withdraw,
-            )
+        com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw = cls(
+            cash_only_available_to_withdraw=cash_only_available_to_withdraw,
+            available_to_withdraw=available_to_withdraw,
         )
 
-        com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0.additional_properties = d
-        return (
-            com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0
-        )
+        com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw.additional_properties = d
+        return com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw
 
     @property
     def additional_keys(self) -> list[str]:

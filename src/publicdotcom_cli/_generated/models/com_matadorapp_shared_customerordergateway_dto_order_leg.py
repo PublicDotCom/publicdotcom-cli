@@ -6,34 +6,34 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.com_matadorapp_shared_customerordergateway_dto_order_leg_type_0_open_close_indicator import (
-    ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator,
+from ..models.com_matadorapp_shared_customerordergateway_dto_order_leg_open_close_indicator import (
+    ComMatadorappSharedCustomerordergatewayDtoOrderLegOpenCloseIndicator,
 )
-from ..models.com_matadorapp_shared_customerordergateway_dto_order_leg_type_0_side import (
-    ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side,
+from ..models.com_matadorapp_shared_customerordergateway_dto_order_leg_side import (
+    ComMatadorappSharedCustomerordergatewayDtoOrderLegSide,
 )
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ComMatadorappSharedCustomerordergatewayDtoOrderLegType0")
+T = TypeVar("T", bound="ComMatadorappSharedCustomerordergatewayDtoOrderLeg")
 
 
 @_attrs_define
-class ComMatadorappSharedCustomerordergatewayDtoOrderLegType0:
+class ComMatadorappSharedCustomerordergatewayDtoOrderLeg:
     """Leg definition for the strategy.
 
     Attributes:
         symbol (str): Symbol for the leg.
-        side (ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side): Side for the leg.
+        side (ComMatadorappSharedCustomerordergatewayDtoOrderLegSide): Side for the leg.
         ratio_quantity (int): Ratio quantity for the leg.
-        open_close_indicator (ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator | Unset):
-            Position effect for the leg. Will be null for equity leg.
+        open_close_indicator (ComMatadorappSharedCustomerordergatewayDtoOrderLegOpenCloseIndicator | Unset): Position
+            effect for the leg. Will be null for equity leg.
     """
 
     symbol: str
-    side: ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side
+    side: ComMatadorappSharedCustomerordergatewayDtoOrderLegSide
     ratio_quantity: int
     open_close_indicator: (
-        ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator | Unset
+        ComMatadorappSharedCustomerordergatewayDtoOrderLegOpenCloseIndicator | Unset
     ) = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -67,32 +67,32 @@ class ComMatadorappSharedCustomerordergatewayDtoOrderLegType0:
         d = dict(src_dict)
         symbol = d.pop("symbol")
 
-        side = ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side(d.pop("side"))
+        side = ComMatadorappSharedCustomerordergatewayDtoOrderLegSide(d.pop("side"))
 
         ratio_quantity = d.pop("ratioQuantity")
 
         _open_close_indicator = d.pop("openCloseIndicator", UNSET)
         open_close_indicator: (
-            ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator | Unset
+            ComMatadorappSharedCustomerordergatewayDtoOrderLegOpenCloseIndicator | Unset
         )
         if isinstance(_open_close_indicator, Unset):
             open_close_indicator = UNSET
         else:
             open_close_indicator = (
-                ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator(
+                ComMatadorappSharedCustomerordergatewayDtoOrderLegOpenCloseIndicator(
                     _open_close_indicator
                 )
             )
 
-        com_matadorapp_shared_customerordergateway_dto_order_leg_type_0 = cls(
+        com_matadorapp_shared_customerordergateway_dto_order_leg = cls(
             symbol=symbol,
             side=side,
             ratio_quantity=ratio_quantity,
             open_close_indicator=open_close_indicator,
         )
 
-        com_matadorapp_shared_customerordergateway_dto_order_leg_type_0.additional_properties = d
-        return com_matadorapp_shared_customerordergateway_dto_order_leg_type_0
+        com_matadorapp_shared_customerordergateway_dto_order_leg.additional_properties = d
+        return com_matadorapp_shared_customerordergateway_dto_order_leg
 
     @property
     def additional_keys(self) -> list[str]:
