@@ -217,6 +217,45 @@ Order-placement and single-leg preflight payloads also accept an optional
 which tax lots to close when selling equity. See
 `examples/order.single-leg.tax-lot-matching.json` for a sample.
 
+### Bracket Orders
+
+`order place` accepts bracket orders — an entry order with take-profit and/or stop-loss
+exit legs that are placed automatically when the entry fills. Set `orderClass` to
+`BRACKET`, `OCO` or `OTO` in the request file, or pass the flags:
+
+```bash
+public order place --file examples/order.single-leg.bracket.json
+
+public order place --file examples/order.single-leg.market-buy.json \
+  --order-class BRACKET --take-profit-limit 245.00 --stop-loss-stop 210.00
+
+# STOP_LIMIT stop-loss instead of a plain STOP
+public order place --file examples/order.single-leg.market-buy.json \
+  --order-class OTO --stop-loss-stop 210.00 --stop-loss-limit 209.50
+```
+
+`--order-class`, `--take-profit-limit`, `--stop-loss-stop` and `--stop-loss-limit`
+override `orderClass`, `takeProfit` and `stopLoss` in the request file. A bracket class
+needs at least one exit leg, and exit legs need a bracket class — the CLI checks both
+before submitting.
+
+| Class | Meaning |
+|---|---|
+| `SIMPLE` (or omitted) | Standalone order — no exit legs. |
+| `BRACKET` | Entry with take-profit and/or stop-loss exits. |
+| `OCO` | One-cancels-other exits; the entry must be a `LIMIT` order. |
+| `OTO` | One-triggers-other — the entry triggers the attached exit. |
+
+The API enforces the remaining constraints: equities and options only, a whole-share
+`quantity` (no `amount`), the `CORE` market session, and a `LIMIT` or `MARKET` entry
+order type (`LIMIT` only for `OCO`). Responses from `order get` carry a `bracketId` —
+the entry order's id, shared by every leg of the bracket, and absent on standalone
+orders. See `examples/order.single-leg.bracket.json` for a full sample payload.
+
+Bracket legs have their own replacement rules: the entry order cannot be replaced, and
+the closing legs accept `limitPrice` / `stopPrice` replacements only — resubmit
+`quantity`, `orderType` and `expiration` unchanged.
+
 `order replace` submits a cancel-replace request for an open order. The replacement can
 specify either a `quantity` or a notional `amount` — the two fields are mutually
 exclusive. `--quantity` and `--amount` override the corresponding field in the request

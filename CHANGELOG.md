@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.4] - 2026-09-10
+
+### Added
+- Bracket-order support on `public order place`, mirroring the new `orderClass`,
+  `takeProfit` and `stopLoss` fields on the order request. New flags
+  `--order-class` (`SIMPLE`/`BRACKET`/`OCO`/`OTO`), `--take-profit-limit`,
+  `--stop-loss-stop` and `--stop-loss-limit` override the corresponding keys in
+  the request file. The CLI checks that a bracket class has at least one exit
+  leg and that exit legs carry a bracket class; the remaining constraints
+  (equities and options only, whole-share `quantity`, `CORE` session, `LIMIT`
+  or `MARKET` entry — `LIMIT` only for `OCO`) are enforced by the API.
+- `examples/order.single-leg.bracket.json` sample payload.
+- README "Bracket Orders" section covering the classes, flags, `bracketId`
+  grouping, and the bracket replacement rules.
+
+### Changed
+- Regenerated `_generated/` from the updated `spec.yaml`:
+  - New `ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass`
+    enum and `GatewayTakeProfit` / `GatewayStopLoss` models, wired as the
+    optional `order_class`, `take_profit` and `stop_loss` fields on the order
+    request.
+  - `bracket_id` on `GatewayOrder`.
+  - `nullable: true` was dropped from `OrderLeg`, `OptionGreeks` and
+    `GatewayAvailableToWithdraw` in the spec, so their generated `*_type_0`
+    variants collapse into plain models (5 files removed, 8 added).
+  - `PageableObject` field order follows a cosmetic key reorder in the spec (no
+    behavioral change).
+  - The generator's usual unrelated churn was reverted: the unpinned newer
+    generator rewrites `from_dict` to return `typing_extensions.Self` (not a
+    declared dependency) and emits `enum.StrEnum`, which requires Python 3.11
+    while this package supports 3.10. 147 files were normalized back.
+
+### Notes
+- The spec also tightened multileg `quantity` and `ratioQuantity` to
+  `exclusiveMinimum: 0`. The generated models carry no numeric constraints, so
+  this is a no-op for the CLI; the API rejects non-positive values.
+
 ## [1.3.3] - 2026-08-11
 
 ### Added

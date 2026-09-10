@@ -26,36 +26,36 @@ T = TypeVar(
 class OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrumentInstrumentDto:
     """
     Attributes:
-        total_elements (int | Unset):
         total_pages (int | Unset):
+        total_elements (int | Unset):
         size (int | Unset):
         content (list[ComHellopublicFixedincomegatewayInstrumentInstrumentDto] | Unset):
         number (int | Unset):
-        number_of_elements (int | Unset):
         sort (SortObject | Unset):
         pageable (PageableObject | Unset):
+        number_of_elements (int | Unset):
         first (bool | Unset):
         last (bool | Unset):
         empty (bool | Unset):
     """
 
-    total_elements: int | Unset = UNSET
     total_pages: int | Unset = UNSET
+    total_elements: int | Unset = UNSET
     size: int | Unset = UNSET
     content: list[ComHellopublicFixedincomegatewayInstrumentInstrumentDto] | Unset = UNSET
     number: int | Unset = UNSET
-    number_of_elements: int | Unset = UNSET
     sort: SortObject | Unset = UNSET
     pageable: PageableObject | Unset = UNSET
+    number_of_elements: int | Unset = UNSET
     first: bool | Unset = UNSET
     last: bool | Unset = UNSET
     empty: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        total_elements = self.total_elements
-
         total_pages = self.total_pages
+
+        total_elements = self.total_elements
 
         size = self.size
 
@@ -68,8 +68,6 @@ class OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrument
 
         number = self.number
 
-        number_of_elements = self.number_of_elements
-
         sort: dict[str, Any] | Unset = UNSET
         if not isinstance(self.sort, Unset):
             sort = self.sort.to_dict()
@@ -77,6 +75,8 @@ class OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrument
         pageable: dict[str, Any] | Unset = UNSET
         if not isinstance(self.pageable, Unset):
             pageable = self.pageable.to_dict()
+
+        number_of_elements = self.number_of_elements
 
         first = self.first
 
@@ -87,22 +87,22 @@ class OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrument
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if total_elements is not UNSET:
-            field_dict["totalElements"] = total_elements
         if total_pages is not UNSET:
             field_dict["totalPages"] = total_pages
+        if total_elements is not UNSET:
+            field_dict["totalElements"] = total_elements
         if size is not UNSET:
             field_dict["size"] = size
         if content is not UNSET:
             field_dict["content"] = content
         if number is not UNSET:
             field_dict["number"] = number
-        if number_of_elements is not UNSET:
-            field_dict["numberOfElements"] = number_of_elements
         if sort is not UNSET:
             field_dict["sort"] = sort
         if pageable is not UNSET:
             field_dict["pageable"] = pageable
+        if number_of_elements is not UNSET:
+            field_dict["numberOfElements"] = number_of_elements
         if first is not UNSET:
             field_dict["first"] = first
         if last is not UNSET:
@@ -121,9 +121,9 @@ class OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrument
         from ..models.sort_object import SortObject
 
         d = dict(src_dict)
-        total_elements = d.pop("totalElements", UNSET)
-
         total_pages = d.pop("totalPages", UNSET)
+
+        total_elements = d.pop("totalElements", UNSET)
 
         size = d.pop("size", UNSET)
 
@@ -140,8 +140,6 @@ class OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrument
 
         number = d.pop("number", UNSET)
 
-        number_of_elements = d.pop("numberOfElements", UNSET)
-
         _sort = d.pop("sort", UNSET)
         sort: SortObject | Unset
         if isinstance(_sort, Unset):
@@ -156,6 +154,8 @@ class OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrument
         else:
             pageable = PageableObject.from_dict(_pageable)
 
+        number_of_elements = d.pop("numberOfElements", UNSET)
+
         first = d.pop("first", UNSET)
 
         last = d.pop("last", UNSET)
@@ -163,14 +163,14 @@ class OrgSpringframeworkDataDomainPageComHellopublicFixedincomegatewayInstrument
         empty = d.pop("empty", UNSET)
 
         org_springframework_data_domain_page_com_hellopublic_fixedincomegateway_instrument_instrument_dto = cls(
-            total_elements=total_elements,
             total_pages=total_pages,
+            total_elements=total_elements,
             size=size,
             content=content,
             number=number,
-            number_of_elements=number_of_elements,
             sort=sort,
             pageable=pageable,
+            number_of_elements=number_of_elements,
             first=first,
             last=last,
             empty=empty,

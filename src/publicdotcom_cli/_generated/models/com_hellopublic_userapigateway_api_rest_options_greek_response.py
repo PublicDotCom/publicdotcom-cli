@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, TypeVar, cast
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,8 +9,8 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.com_hellopublic_userapigateway_api_rest_options_option_greeks_type_0 import (
-        ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0,
+    from ..models.com_hellopublic_userapigateway_api_rest_options_option_greeks import (
+        ComHellopublicUserapigatewayApiRestOptionsOptionGreeks,
     )
 
 
@@ -22,27 +22,19 @@ class ComHellopublicUserapigatewayApiRestOptionsGreekResponse:
     """
     Attributes:
         symbol (str): The OSI-normalized format of the option symbol
-        greeks (ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0 | None | Unset):
+        greeks (ComHellopublicUserapigatewayApiRestOptionsOptionGreeks | Unset):
     """
 
     symbol: str
-    greeks: ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0 | None | Unset = UNSET
+    greeks: ComHellopublicUserapigatewayApiRestOptionsOptionGreeks | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.com_hellopublic_userapigateway_api_rest_options_option_greeks_type_0 import (
-            ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0,
-        )
-
         symbol = self.symbol
 
-        greeks: dict[str, Any] | None | Unset
-        if isinstance(self.greeks, Unset):
-            greeks = UNSET
-        elif isinstance(self.greeks, ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0):
+        greeks: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.greeks, Unset):
             greeks = self.greeks.to_dict()
-        else:
-            greeks = self.greeks
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -58,35 +50,19 @@ class ComHellopublicUserapigatewayApiRestOptionsGreekResponse:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        from ..models.com_hellopublic_userapigateway_api_rest_options_option_greeks_type_0 import (
-            ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0,
+        from ..models.com_hellopublic_userapigateway_api_rest_options_option_greeks import (
+            ComHellopublicUserapigatewayApiRestOptionsOptionGreeks,
         )
 
         d = dict(src_dict)
         symbol = d.pop("symbol")
 
-        def _parse_greeks(
-            data: object,
-        ) -> ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0 | None | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                componentsschemascom_hellopublic_userapigateway_api_rest_options_option_greeks_type_0 = ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0.from_dict(
-                    data
-                )
-
-                return componentsschemascom_hellopublic_userapigateway_api_rest_options_option_greeks_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(
-                ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0 | None | Unset, data
-            )
-
-        greeks = _parse_greeks(d.pop("greeks", UNSET))
+        _greeks = d.pop("greeks", UNSET)
+        greeks: ComHellopublicUserapigatewayApiRestOptionsOptionGreeks | Unset
+        if isinstance(_greeks, Unset):
+            greeks = UNSET
+        else:
+            greeks = ComHellopublicUserapigatewayApiRestOptionsOptionGreeks.from_dict(_greeks)
 
         com_hellopublic_userapigateway_api_rest_options_greek_response = cls(
             symbol=symbol,

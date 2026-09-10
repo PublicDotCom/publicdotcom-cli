@@ -144,8 +144,8 @@ from .com_hellopublic_userapigateway_api_rest_options_greek_response import (
 from .com_hellopublic_userapigateway_api_rest_options_greeks_response import (
     ComHellopublicUserapigatewayApiRestOptionsGreeksResponse,
 )
-from .com_hellopublic_userapigateway_api_rest_options_option_greeks_type_0 import (
-    ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0,
+from .com_hellopublic_userapigateway_api_rest_options_option_greeks import (
+    ComHellopublicUserapigatewayApiRestOptionsOptionGreeks,
 )
 from .com_hellopublic_userapigateway_api_rest_order_api_cancel_replace_order_request import (
     ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest,
@@ -188,6 +188,9 @@ from .com_hellopublic_userapigateway_api_rest_order_api_order_request_equity_mar
 )
 from .com_hellopublic_userapigateway_api_rest_order_api_order_request_open_close_indicator import (
     ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOpenCloseIndicator,
+)
+from .com_hellopublic_userapigateway_api_rest_order_api_order_request_order_class import (
+    ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass,
 )
 from .com_hellopublic_userapigateway_api_rest_order_api_order_request_order_side import (
     ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderSide,
@@ -243,6 +246,12 @@ from .com_hellopublic_userapigateway_api_rest_order_gateway_short_selling_availa
 from .com_hellopublic_userapigateway_api_rest_order_gateway_short_selling_uptick_rule import (
     ComHellopublicUserapigatewayApiRestOrderGatewayShortSellingUptickRule,
 )
+from .com_hellopublic_userapigateway_api_rest_order_gateway_stop_loss import (
+    ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss,
+)
+from .com_hellopublic_userapigateway_api_rest_order_gateway_take_profit import (
+    ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit,
+)
 from .com_hellopublic_userapigateway_api_rest_order_gateway_tax_lot_matching_instruction import (
     ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction,
 )
@@ -264,8 +273,8 @@ from .com_hellopublic_userapigateway_api_rest_order_order_expiration_time_in_for
 from .com_hellopublic_userapigateway_api_rest_portfolio_gain import (
     ComHellopublicUserapigatewayApiRestPortfolioGain,
 )
-from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw_type_0 import (
-    ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0,
+from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_available_to_withdraw import (
+    ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdraw,
 )
 from .com_hellopublic_userapigateway_api_rest_portfolio_gateway_buying_power import (
     ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower,
@@ -360,14 +369,14 @@ from .com_hellopublic_userapigateway_api_rest_preflight_preflight_single_leg_req
 from .com_hellopublic_userapigateway_api_rest_preflight_preflight_single_leg_response import (
     ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegResponse,
 )
-from .com_matadorapp_shared_customerordergateway_dto_order_leg_type_0 import (
-    ComMatadorappSharedCustomerordergatewayDtoOrderLegType0,
+from .com_matadorapp_shared_customerordergateway_dto_order_leg import (
+    ComMatadorappSharedCustomerordergatewayDtoOrderLeg,
 )
-from .com_matadorapp_shared_customerordergateway_dto_order_leg_type_0_open_close_indicator import (
-    ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator,
+from .com_matadorapp_shared_customerordergateway_dto_order_leg_open_close_indicator import (
+    ComMatadorappSharedCustomerordergatewayDtoOrderLegOpenCloseIndicator,
 )
-from .com_matadorapp_shared_customerordergateway_dto_order_leg_type_0_side import (
-    ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side,
+from .com_matadorapp_shared_customerordergateway_dto_order_leg_side import (
+    ComMatadorappSharedCustomerordergatewayDtoOrderLegSide,
 )
 from .com_matadorapp_shared_customerordergateway_dto_strategy_leg_dto import (
     ComMatadorappSharedCustomerordergatewayDtoStrategyLegDto,
@@ -445,9 +454,9 @@ __all__ = (
     "ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatusDescription",
     "ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatusType",
     "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLot",
+    "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotSummary",
     "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsDetailResponse",
     "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotsSummaryResponse",
-    "ComHellopublicHstier2ServiceTaxlotsApiUnrealizedLotSummary",
     "ComHellopublicTradingCoreQuoteBondQuoteDetail",
     "ComHellopublicTradingCoreQuoteQuoteSpecificDetail",
     "ComHellopublicTradingCoreQuoteSignedQuote",
@@ -482,7 +491,7 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestMarketdataQuoteOptionDetails",
     "ComHellopublicUserapigatewayApiRestOptionsGreekResponse",
     "ComHellopublicUserapigatewayApiRestOptionsGreeksResponse",
-    "ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0",
+    "ComHellopublicUserapigatewayApiRestOptionsOptionGreeks",
     "ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest",
     "ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequestOrderType",
     "ComHellopublicUserapigatewayApiRestOrderApiInstrumentDto",
@@ -497,6 +506,7 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestOrderApiOrderRequest",
     "ComHellopublicUserapigatewayApiRestOrderApiOrderRequestEquityMarketSession",
     "ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOpenCloseIndicator",
+    "ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass",
     "ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderSide",
     "ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderType",
     "ComHellopublicUserapigatewayApiRestOrderApiOrderResult",
@@ -515,6 +525,8 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestOrderGatewayShortSelling",
     "ComHellopublicUserapigatewayApiRestOrderGatewayShortSellingAvailability",
     "ComHellopublicUserapigatewayApiRestOrderGatewayShortSellingUptickRule",
+    "ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss",
+    "ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit",
     "ComHellopublicUserapigatewayApiRestOrderGatewayTaxLotMatchingInstruction",
     "ComHellopublicUserapigatewayApiRestOrderInstrumentdetailsApiInstrumentDetails",
     "ComHellopublicUserapigatewayApiRestOrderInstrumentdetailsApiInstrumentDetailsBond",
@@ -522,7 +534,7 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestOrderOrderExpiration",
     "ComHellopublicUserapigatewayApiRestOrderOrderExpirationTimeInForce",
     "ComHellopublicUserapigatewayApiRestPortfolioGain",
-    "ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdrawType0",
+    "ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdraw",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayCostBasis",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioAccountV2",
@@ -554,9 +566,9 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequestOrderSide",
     "ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegRequestOrderType",
     "ComHellopublicUserapigatewayApiRestPreflightPreflightSingleLegResponse",
-    "ComMatadorappSharedCustomerordergatewayDtoOrderLegType0",
-    "ComMatadorappSharedCustomerordergatewayDtoOrderLegType0OpenCloseIndicator",
-    "ComMatadorappSharedCustomerordergatewayDtoOrderLegType0Side",
+    "ComMatadorappSharedCustomerordergatewayDtoOrderLeg",
+    "ComMatadorappSharedCustomerordergatewayDtoOrderLegOpenCloseIndicator",
+    "ComMatadorappSharedCustomerordergatewayDtoOrderLegSide",
     "ComMatadorappSharedCustomerordergatewayDtoStrategyLegDto",
     "ComMatadorappSharedCustomerordergatewayDtoStrategyLegDtoOpenCloseIndicator",
     "ComMatadorappSharedCustomerordergatewayDtoStrategyLegDtoSide",

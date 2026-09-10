@@ -8,11 +8,11 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0")
+T = TypeVar("T", bound="ComHellopublicUserapigatewayApiRestOptionsOptionGreeks")
 
 
 @_attrs_define
-class ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0:
+class ComHellopublicUserapigatewayApiRestOptionsOptionGreeks:
     """
     Attributes:
         delta (str | Unset): Delta is the theoretical estimate of how much an option's value may change given a $1 move
@@ -88,7 +88,7 @@ class ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0:
 
         implied_volatility = d.pop("impliedVolatility", UNSET)
 
-        com_hellopublic_userapigateway_api_rest_options_option_greeks_type_0 = cls(
+        com_hellopublic_userapigateway_api_rest_options_option_greeks = cls(
             delta=delta,
             gamma=gamma,
             theta=theta,
@@ -97,8 +97,8 @@ class ComHellopublicUserapigatewayApiRestOptionsOptionGreeksType0:
             implied_volatility=implied_volatility,
         )
 
-        com_hellopublic_userapigateway_api_rest_options_option_greeks_type_0.additional_properties = d
-        return com_hellopublic_userapigateway_api_rest_options_option_greeks_type_0
+        com_hellopublic_userapigateway_api_rest_options_option_greeks.additional_properties = d
+        return com_hellopublic_userapigateway_api_rest_options_option_greeks
 
     @property
     def additional_keys(self) -> list[str]:

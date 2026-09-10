@@ -78,6 +78,10 @@ def sync_detailed(
 
      Submits a new order asynchronously for the specified account.
 
+    Bracket orders: set orderClass to BRACKET, OCO, or OTO and supply takeProfit and/or stopLoss. The
+    returned orderId
+    identifies the entry order; the exit legs are placed automatically when the entry fills.
+
     Note: Order placement is asynchronous. The returned result confirms submission, not execution or
     visibility.
     To retrieve the order status or execution details, query the GET /{orderId} endpoint after
@@ -119,6 +123,10 @@ def sync(
 
      Submits a new order asynchronously for the specified account.
 
+    Bracket orders: set orderClass to BRACKET, OCO, or OTO and supply takeProfit and/or stopLoss. The
+    returned orderId
+    identifies the entry order; the exit legs are placed automatically when the entry fills.
+
     Note: Order placement is asynchronous. The returned result confirms submission, not execution or
     visibility.
     To retrieve the order status or execution details, query the GET /{orderId} endpoint after
@@ -154,6 +162,10 @@ async def asyncio_detailed(
     """Place a new order
 
      Submits a new order asynchronously for the specified account.
+
+    Bracket orders: set orderClass to BRACKET, OCO, or OTO and supply takeProfit and/or stopLoss. The
+    returned orderId
+    identifies the entry order; the exit legs are placed automatically when the entry fills.
 
     Note: Order placement is asynchronous. The returned result confirms submission, not execution or
     visibility.
@@ -193,6 +205,10 @@ async def asyncio(
     """Place a new order
 
      Submits a new order asynchronously for the specified account.
+
+    Bracket orders: set orderClass to BRACKET, OCO, or OTO and supply takeProfit and/or stopLoss. The
+    returned orderId
+    identifies the entry order; the exit legs are placed automatically when the entry fills.
 
     Note: Order placement is asynchronous. The returned result confirms submission, not execution or
     visibility.

@@ -1,6 +1,11 @@
 from publicdotcom_cli._generated.models import (
     BarsResponse,
     ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest as CancelReplaceOrderRequest,
+    ComHellopublicUserapigatewayApiRestOrderApiOrderRequest as OrderRequest,
+    ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass as OrderClass,
+    ComHellopublicUserapigatewayApiRestOrderGatewayOrder as GatewayOrder,
+    ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss as StopLoss,
+    ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit as TakeProfit,
     LeadingFill,
 )
 
@@ -62,3 +67,77 @@ def test_bars_response_omits_leading_fill_when_absent() -> None:
     response = BarsResponse.from_dict(BARS_RESPONSE)
 
     assert "leadingFill" not in response.to_dict()
+
+
+BRACKET_ORDER_REQUEST = {
+    "orderId": "0d2abd8d-3625-4c83-a806-98abf35567cc",
+    "instrument": {"symbol": "AAPL", "type": "EQUITY"},
+    "orderSide": "BUY",
+    "orderType": "LIMIT",
+    "expiration": {"timeInForce": "DAY"},
+    "quantity": 10,
+}
+
+
+def test_take_profit_round_trips() -> None:
+    take_profit = TakeProfit.from_dict({"limitPrice": "245.00"})
+
+    assert take_profit.limit_price == "245.00"
+    assert take_profit.to_dict() == {"limitPrice": "245.00"}
+
+
+def test_stop_loss_round_trips_stop_only() -> None:
+    stop_loss = StopLoss.from_dict({"stopPrice": "210.00"})
+
+    assert stop_loss.stop_price == "210.00"
+    assert stop_loss.to_dict() == {"stopPrice": "210.00"}
+
+
+def test_stop_loss_round_trips_stop_limit() -> None:
+    stop_loss = StopLoss.from_dict({"stopPrice": "210.00", "limitPrice": "209.50"})
+
+    assert stop_loss.limit_price == "209.50"
+    assert stop_loss.to_dict() == {"stopPrice": "210.00", "limitPrice": "209.50"}
+
+
+def test_order_request_round_trips_bracket_fields() -> None:
+    request = OrderRequest.from_dict(
+        {
+            **BRACKET_ORDER_REQUEST,
+            "orderClass": "BRACKET",
+            "takeProfit": {"limitPrice": "245.00"},
+            "stopLoss": {"stopPrice": "210.00"},
+        }
+    )
+
+    assert request.order_class == OrderClass.BRACKET
+    payload = request.to_dict()
+    assert payload["orderClass"] == "BRACKET"
+    assert payload["takeProfit"] == {"limitPrice": "245.00"}
+    assert payload["stopLoss"] == {"stopPrice": "210.00"}
+
+
+def test_order_request_omits_bracket_fields_when_absent() -> None:
+    payload = OrderRequest.from_dict(BRACKET_ORDER_REQUEST).to_dict()
+
+    assert "orderClass" not in payload
+    assert "takeProfit" not in payload
+    assert "stopLoss" not in payload
+
+
+def test_gateway_order_round_trips_bracket_id() -> None:
+    order = GatewayOrder.from_dict(
+        {
+            "orderId": "0d2abd8d-3625-4c83-a806-98abf35567cc",
+            "bracketId": "0d2abd8d-3625-4c83-a806-98abf35567cc",
+        }
+    )
+
+    assert str(order.bracket_id) == "0d2abd8d-3625-4c83-a806-98abf35567cc"
+    assert order.to_dict()["bracketId"] == "0d2abd8d-3625-4c83-a806-98abf35567cc"
+
+
+def test_gateway_order_omits_bracket_id_for_standalone_orders() -> None:
+    order = GatewayOrder.from_dict({"orderId": "0d2abd8d-3625-4c83-a806-98abf35567cc"})
+
+    assert "bracketId" not in order.to_dict()

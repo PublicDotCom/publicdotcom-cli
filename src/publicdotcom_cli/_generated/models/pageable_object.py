@@ -20,23 +20,27 @@ class PageableObject:
     """
     Attributes:
         offset (int | Unset):
+        paged (bool | Unset):
+        page_number (int | Unset):
         page_size (int | Unset):
         sort (SortObject | Unset):
-        paged (bool | Unset):
         unpaged (bool | Unset):
-        page_number (int | Unset):
     """
 
     offset: int | Unset = UNSET
+    paged: bool | Unset = UNSET
+    page_number: int | Unset = UNSET
     page_size: int | Unset = UNSET
     sort: SortObject | Unset = UNSET
-    paged: bool | Unset = UNSET
     unpaged: bool | Unset = UNSET
-    page_number: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         offset = self.offset
+
+        paged = self.paged
+
+        page_number = self.page_number
 
         page_size = self.page_size
 
@@ -44,27 +48,23 @@ class PageableObject:
         if not isinstance(self.sort, Unset):
             sort = self.sort.to_dict()
 
-        paged = self.paged
-
         unpaged = self.unpaged
-
-        page_number = self.page_number
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if offset is not UNSET:
             field_dict["offset"] = offset
+        if paged is not UNSET:
+            field_dict["paged"] = paged
+        if page_number is not UNSET:
+            field_dict["pageNumber"] = page_number
         if page_size is not UNSET:
             field_dict["pageSize"] = page_size
         if sort is not UNSET:
             field_dict["sort"] = sort
-        if paged is not UNSET:
-            field_dict["paged"] = paged
         if unpaged is not UNSET:
             field_dict["unpaged"] = unpaged
-        if page_number is not UNSET:
-            field_dict["pageNumber"] = page_number
 
         return field_dict
 
@@ -75,6 +75,10 @@ class PageableObject:
         d = dict(src_dict)
         offset = d.pop("offset", UNSET)
 
+        paged = d.pop("paged", UNSET)
+
+        page_number = d.pop("pageNumber", UNSET)
+
         page_size = d.pop("pageSize", UNSET)
 
         _sort = d.pop("sort", UNSET)
@@ -84,19 +88,15 @@ class PageableObject:
         else:
             sort = SortObject.from_dict(_sort)
 
-        paged = d.pop("paged", UNSET)
-
         unpaged = d.pop("unpaged", UNSET)
-
-        page_number = d.pop("pageNumber", UNSET)
 
         pageable_object = cls(
             offset=offset,
+            paged=paged,
+            page_number=page_number,
             page_size=page_size,
             sort=sort,
-            paged=paged,
             unpaged=unpaged,
-            page_number=page_number,
         )
 
         pageable_object.additional_properties = d
