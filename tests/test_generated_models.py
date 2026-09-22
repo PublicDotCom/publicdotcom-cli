@@ -3,9 +3,16 @@ from publicdotcom_cli._generated.models import (
     ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest as CancelReplaceOrderRequest,
     ComHellopublicUserapigatewayApiRestOrderApiOrderRequest as OrderRequest,
     ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass as OrderClass,
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequest as QueryOrdersRequest,
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestSecurityType as QueryOrdersSecurityType,
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestStatus as QueryOrdersStatus,
     ComHellopublicUserapigatewayApiRestOrderGatewayOrder as GatewayOrder,
     ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss as StopLoss,
     ComHellopublicUserapigatewayApiRestOrderGatewayTakeProfit as TakeProfit,
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrders as GatewayOrders,
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2 as GatewayOrderV2,
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2EquityMarketSession as OrderV2EquityMarketSession,
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade as GatewayTrade,
     LeadingFill,
 )
 
@@ -141,3 +148,86 @@ def test_gateway_order_omits_bracket_id_for_standalone_orders() -> None:
     order = GatewayOrder.from_dict({"orderId": "0d2abd8d-3625-4c83-a806-98abf35567cc"})
 
     assert "bracketId" not in order.to_dict()
+
+
+ORDER_V2 = {
+    "orderId": "0d2abd8d-3625-4c83-a806-98abf35567cc",
+    "instrument": {"symbol": "AAPL", "type": "EQUITY"},
+    "createdAt": "2026-09-21T14:30:00+00:00",
+    "type": "LIMIT",
+    "side": "BUY",
+    "status": "FILLED",
+    "quantity": "10",
+    "expiration": {"timeInForce": "DAY"},
+    "limitPrice": "245.00",
+    "filledQuantity": "10",
+    "averagePrice": "244.90",
+    "equityMarketSession": "REGULAR",
+    "filledAt": "2026-09-21T14:30:05+00:00",
+    "replacedAt": "2026-09-21T14:29:00+00:00",
+    "lastModified": "2026-09-21T14:30:05+00:00",
+    "trades": [
+        {
+            "instrument": {"symbol": "AAPL", "type": "EQUITY"},
+            "quantity": "10",
+            "price": "244.90",
+            "side": "BUY",
+            "tradeId": "trade-1",
+            "timestamp": "2026-09-21T14:30:05+00:00",
+        }
+    ],
+}
+
+
+def test_gateway_order_v2_round_trips_v2_fields() -> None:
+    order = GatewayOrderV2.from_dict(ORDER_V2)
+
+    assert order.equity_market_session == OrderV2EquityMarketSession.REGULAR
+    assert order.filled_at.isoformat() == "2026-09-21T14:30:05+00:00"
+    assert order.replaced_at.isoformat() == "2026-09-21T14:29:00+00:00"
+    assert order.last_modified.isoformat() == "2026-09-21T14:30:05+00:00"
+    assert len(order.trades) == 1
+    assert isinstance(order.trades[0], GatewayTrade)
+    assert order.trades[0].trade_id == "trade-1"
+    assert order.trades[0].price == "244.90"
+    assert order.to_dict() == ORDER_V2
+
+
+def test_gateway_order_v2_omits_v2_fields_when_absent() -> None:
+    payload = GatewayOrderV2.from_dict(
+        {"orderId": "0d2abd8d-3625-4c83-a806-98abf35567cc", "status": "NEW"}
+    ).to_dict()
+
+    for key in ("trades", "filledAt", "replacedAt", "lastModified", "equityMarketSession"):
+        assert key not in payload
+
+
+def test_gateway_orders_round_trips_list() -> None:
+    orders = GatewayOrders.from_dict({"orders": [ORDER_V2]})
+
+    assert len(orders.orders) == 1
+    assert orders.orders[0].order_id == ORDER_V2["orderId"]
+    assert orders.to_dict() == {"orders": [ORDER_V2]}
+
+
+QUERY_ORDERS_REQUEST = {
+    "status": "FILLED",
+    "createdAfter": "2026-09-01T00:00:00+00:00",
+    "createdBefore": "2026-09-22T00:00:00+00:00",
+    "instruments": [{"symbol": "AAPL", "type": "EQUITY"}],
+    "side": "BUY",
+    "openCloseIndicator": "OPEN",
+    "securityType": "EQUITY",
+}
+
+
+def test_query_orders_request_round_trips_all_filters() -> None:
+    request = QueryOrdersRequest.from_dict(QUERY_ORDERS_REQUEST)
+
+    assert request.status == QueryOrdersStatus.FILLED
+    assert request.security_type == QueryOrdersSecurityType.EQUITY
+    assert request.to_dict() == QUERY_ORDERS_REQUEST
+
+
+def test_query_orders_request_is_empty_without_filters() -> None:
+    assert QueryOrdersRequest.from_dict({}).to_dict() == {}

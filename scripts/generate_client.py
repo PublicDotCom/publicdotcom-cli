@@ -57,7 +57,9 @@ def _inject_enum_varnames(text: str) -> str:
             i += 1
             continue
         indent = match.group(1)
-        item_re = re.compile(rf"^({re.escape(indent)}\s+)- (\S.*?)\s*$")
+        # Sequence items may sit deeper than the `enum:` key or at the same indent
+        # (PyYAML's default dump style), so allow zero or more extra spaces.
+        item_re = re.compile(rf"^({re.escape(indent)}\s*)- (\S.*?)\s*$")
         values: list[str] = []
         item_indent = ""
         j = i + 1

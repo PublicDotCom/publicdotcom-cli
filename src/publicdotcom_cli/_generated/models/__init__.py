@@ -201,6 +201,21 @@ from .com_hellopublic_userapigateway_api_rest_order_api_order_request_order_type
 from .com_hellopublic_userapigateway_api_rest_order_api_order_result import (
     ComHellopublicUserapigatewayApiRestOrderApiOrderResult,
 )
+from .com_hellopublic_userapigateway_api_rest_order_api_query_orders_request import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequest,
+)
+from .com_hellopublic_userapigateway_api_rest_order_api_query_orders_request_open_close_indicator import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestOpenCloseIndicator,
+)
+from .com_hellopublic_userapigateway_api_rest_order_api_query_orders_request_security_type import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestSecurityType,
+)
+from .com_hellopublic_userapigateway_api_rest_order_api_query_orders_request_side import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestSide,
+)
+from .com_hellopublic_userapigateway_api_rest_order_api_query_orders_request_status import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestStatus,
+)
 from .com_hellopublic_userapigateway_api_rest_order_gateway_leg_instrument import (
     ComHellopublicUserapigatewayApiRestOrderGatewayLegInstrument,
 )
@@ -269,6 +284,33 @@ from .com_hellopublic_userapigateway_api_rest_order_order_expiration import (
 )
 from .com_hellopublic_userapigateway_api_rest_order_order_expiration_time_in_force import (
     ComHellopublicUserapigatewayApiRestOrderOrderExpirationTimeInForce,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_order_v2 import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_order_v2_equity_market_session import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2EquityMarketSession,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_order_v2_open_close_indicator import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2OpenCloseIndicator,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_order_v2_side import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2Side,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_order_v2_status import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2Status,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_order_v2_type import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2Type,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_orders import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrders,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_trade import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade,
+)
+from .com_hellopublic_userapigateway_api_rest_order_v2_gateway_trade_side import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayTradeSide,
 )
 from .com_hellopublic_userapigateway_api_rest_portfolio_gain import (
     ComHellopublicUserapigatewayApiRestPortfolioGain,
@@ -510,6 +552,11 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderSide",
     "ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderType",
     "ComHellopublicUserapigatewayApiRestOrderApiOrderResult",
+    "ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequest",
+    "ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestOpenCloseIndicator",
+    "ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestSecurityType",
+    "ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestSide",
+    "ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestStatus",
     "ComHellopublicUserapigatewayApiRestOrderGatewayLegInstrument",
     "ComHellopublicUserapigatewayApiRestOrderGatewayLegInstrumentType",
     "ComHellopublicUserapigatewayApiRestOrderGatewayOrder",
@@ -533,6 +580,15 @@ __all__ = (
     "ComHellopublicUserapigatewayApiRestOrderInstrumentdetailsApiInstrumentDetailsCrypto",
     "ComHellopublicUserapigatewayApiRestOrderOrderExpiration",
     "ComHellopublicUserapigatewayApiRestOrderOrderExpirationTimeInForce",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2EquityMarketSession",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2OpenCloseIndicator",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2Side",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2Status",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2Type",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayOrders",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade",
+    "ComHellopublicUserapigatewayApiRestOrderV2GatewayTradeSide",
     "ComHellopublicUserapigatewayApiRestPortfolioGain",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayAvailableToWithdraw",
     "ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower",

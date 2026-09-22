@@ -6,6 +6,7 @@ class ComHellopublicUserapigatewayApiRestAccountAccountSettingsAccountType(str, 
     BROKERAGE = "BROKERAGE"
     ENTITY = "ENTITY"
     HIGH_YIELD = "HIGH_YIELD"
+    JOINT = "JOINT"
     RIA_ASSET = "RIA_ASSET"
     ROTH_IRA = "ROTH_IRA"
     TRADITIONAL_IRA = "TRADITIONAL_IRA"

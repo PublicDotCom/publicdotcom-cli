@@ -35,9 +35,16 @@ from publicdotcom_cli.output import (
     print_accounts,
     print_error,
     print_json,
+    print_orders,
     print_quotes,
 )
-from publicdotcom_cli.payloads import ensure_order_id, instrument, instruments, load_json_file
+from publicdotcom_cli.payloads import (
+    ensure_order_id,
+    instrument,
+    instrument_spec,
+    instruments,
+    load_json_file,
+)
 
 app = typer.Typer(help="CLI for the Public API.")
 auth_app = typer.Typer(help="Authentication commands.")
@@ -159,6 +166,8 @@ def _print(ctx: typer.Context, data: Any, *, table: str | None = None) -> None:
         print_accounts(data)
     elif table == "quotes":
         print_quotes(data)
+    elif table == "orders":
+        print_orders(data)
     else:
         print_json(data)
 
@@ -191,6 +200,85 @@ ORDER_ACTION_WARNING = (
 
 ORDER_CLASSES = ("SIMPLE", "BRACKET", "OCO", "OTO")
 BRACKET_ORDER_CLASSES = ("BRACKET", "OCO", "OTO")
+
+
+ORDER_SEARCH_STATUSES = (
+    "NEW",
+    "PARTIALLY_FILLED",
+    "CANCELLED",
+    "QUEUED_CANCELLED",
+    "FILLED",
+    "REJECTED",
+    "PENDING_REPLACE",
+    "PENDING_CANCEL",
+    "EXPIRED",
+    "REPLACED",
+)
+ORDER_SEARCH_SIDES = ("BUY", "SELL")
+ORDER_SEARCH_OPEN_CLOSE = ("OPEN", "CLOSE")
+ORDER_SEARCH_SECURITY_TYPES = (
+    "EQUITY",
+    "OPTION",
+    "MULTI_LEG_INSTRUMENT",
+    "CRYPTO",
+    "ALT",
+    "TREASURY",
+    "BOND",
+    "INDEX",
+)
+
+
+def _normalized_choice(value: str | None, *, flag: str, choices: tuple[str, ...]) -> str | None:
+    """Upper-case a flag value and reject anything outside the spec's enum."""
+    if value is None:
+        return None
+    normalized = value.strip().upper()
+    if normalized not in choices:
+        exit_with_error(f"Invalid {flag} {value!r}. Expected one of: {', '.join(choices)}.")
+    return normalized
+
+
+def _order_search_body(
+    *,
+    status: str | None,
+    side: str | None,
+    open_close: str | None,
+    security_type: str | None,
+    created_after: str | None,
+    created_before: str | None,
+    symbols: list[str] | None,
+) -> dict[str, Any]:
+    """Build the order-search request body from the filter flags.
+
+    Only filters that were given are included, so a bare `order search` sends `{}`
+    and the API returns every order from the last 30 days (up to 500).
+    """
+    body: dict[str, Any] = {}
+
+    normalized_status = _normalized_choice(status, flag="--status", choices=ORDER_SEARCH_STATUSES)
+    if normalized_status is not None:
+        body["status"] = normalized_status
+    if created_after is not None:
+        body["createdAfter"] = created_after
+    if created_before is not None:
+        body["createdBefore"] = created_before
+    if symbols:
+        body["instruments"] = [instrument_spec(value) for value in symbols]
+    normalized_side = _normalized_choice(side, flag="--side", choices=ORDER_SEARCH_SIDES)
+    if normalized_side is not None:
+        body["side"] = normalized_side
+    normalized_open_close = _normalized_choice(
+        open_close, flag="--open-close", choices=ORDER_SEARCH_OPEN_CLOSE
+    )
+    if normalized_open_close is not None:
+        body["openCloseIndicator"] = normalized_open_close
+    normalized_security_type = _normalized_choice(
+        security_type, flag="--security-type", choices=ORDER_SEARCH_SECURITY_TYPES
+    )
+    if normalized_security_type is not None:
+        body["securityType"] = normalized_security_type
+
+    return body
 
 
 def _apply_bracket_overrides(
@@ -1124,6 +1212,104 @@ def order_get(
 ) -> None:
     account_id = _resolve_account_id(ctx, account_id)
     result = _call(ctx, "GET", f"/userapigateway/trading/{account_id}/order/{order_id}")
+    _print(ctx, result)
+
+
+@order_app.command("search")
+def order_search(
+    ctx: typer.Context,
+    account_id: Annotated[
+        str | None,
+        typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
+    ] = None,
+    status: Annotated[
+        str | None,
+        typer.Option(
+            "--status",
+            help=(
+                "Filter by order status: NEW, PARTIALLY_FILLED, CANCELLED, QUEUED_CANCELLED, "
+                "FILLED, REJECTED, PENDING_REPLACE, PENDING_CANCEL, EXPIRED, or REPLACED."
+            ),
+        ),
+    ] = None,
+    side: Annotated[
+        str | None,
+        typer.Option("--side", help="Filter by order side: BUY or SELL."),
+    ] = None,
+    symbols: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--symbol",
+            help=(
+                "Filter by instrument, as SYMBOL or SYMBOL:TYPE (type defaults to EQUITY). "
+                "Repeat for multiple."
+            ),
+        ),
+    ] = None,
+    security_type: Annotated[
+        str | None,
+        typer.Option(
+            "--security-type",
+            help=(
+                "Filter by security type: EQUITY, OPTION, MULTI_LEG_INSTRUMENT, CRYPTO, ALT, "
+                "TREASURY, BOND, or INDEX."
+            ),
+        ),
+    ] = None,
+    open_close: Annotated[
+        str | None,
+        typer.Option("--open-close", help="Filter by open/close indicator: OPEN or CLOSE."),
+    ] = None,
+    created_after: Annotated[
+        str | None,
+        typer.Option(
+            "--created-after",
+            help="Only orders created at or after this ISO 8601 timestamp, e.g. 2026-09-01T00:00:00Z.",
+        ),
+    ] = None,
+    created_before: Annotated[
+        str | None,
+        typer.Option(
+            "--created-before",
+            help="Only orders created before this ISO 8601 timestamp.",
+        ),
+    ] = None,
+) -> None:
+    """Search orders created within the last 30 days (up to 500 results)."""
+    account_id = _resolve_account_id(ctx, account_id)
+    try:
+        body = _order_search_body(
+            status=status,
+            side=side,
+            open_close=open_close,
+            security_type=security_type,
+            created_after=created_after,
+            created_before=created_before,
+            symbols=symbols,
+        )
+    except ValueError as exc:
+        exit_with_error(str(exc))
+    result = _call(
+        ctx,
+        "POST",
+        f"/userapigateway/trading/{account_id}/order/v2",
+        json_body=body,
+    )
+    _print(ctx, result, table="orders")
+
+
+@order_app.command("get-v2")
+def order_get_v2(
+    ctx: typer.Context,
+    order_id: Annotated[str, typer.Argument()],
+    account_id: Annotated[
+        str | None,
+        typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
+    ] = None,
+) -> None:
+    """Retrieve an order from the last 30 days, including its trades and fill timestamps."""
+    account_id = _resolve_account_id(ctx, account_id)
+    result = _call(ctx, "GET", f"/userapigateway/trading/{account_id}/order/v2/{order_id}")
     _print(ctx, result)
 
 

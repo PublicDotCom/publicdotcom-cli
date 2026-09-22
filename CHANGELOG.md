@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.5] - 2026-09-22
+
+### Added
+- `public order search` command covering the new
+  `POST /userapigateway/trading/{accountId}/order/v2` endpoint: filter the last
+  30 days of orders (up to 500) by `--status`, `--side`, `--symbol` (`SYMBOL` or
+  `SYMBOL:TYPE`, repeatable), `--security-type`, `--open-close`,
+  `--created-after` and `--created-before`. Only the filters given are sent, so a
+  bare `order search` lists everything. Results render as an Orders table, or as
+  raw JSON with `--json`.
+- `public order get-v2 ORDER_ID` command covering the new
+  `GET /userapigateway/trading/{accountId}/order/v2/{orderId}` endpoint. The v2
+  order shape adds `trades`, `filledAt`, `replacedAt`, `lastModified` and
+  `equityMarketSession` to the `order get` response.
+- README "Order Search" section.
+
+### Changed
+- Regenerated `_generated/` from the updated `spec.yaml`:
+  - New `search_orders` and `get_order_v2` endpoint modules.
+  - New `ApiQueryOrdersRequest`, `GatewayOrders`, `GatewayOrderV2` and
+    `GatewayTrade` models plus their enums (16 files).
+  - `JOINT` added to both `accountType` enums (`AccountSettings` and
+    `GatewayPortfolioAccountV2`).
+  - The generator's usual unrelated churn (`typing_extensions.Self`,
+    `enum.StrEnum`, `*args: object`) was reverted across 164 files, and the new
+    files were normalized to the vendored `TypeVar` / `(str, Enum)` style so the
+    package keeps supporting Python 3.10.
+- `scripts/generate_client.py`: the `x-enum-varnames` injection now also matches
+  YAML sequences indented at the same level as their `enum:` key (PyYAML's
+  default dump style). Without it the S&P bond-rating enum collision resurfaced
+  and generation failed on the new spec.
+
 ## [1.3.4] - 2026-09-10
 
 ### Added
