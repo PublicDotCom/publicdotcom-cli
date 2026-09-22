@@ -1,10 +1,12 @@
 import re
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 from publicdotcom_cli import __version__
-from publicdotcom_cli.cli import _apply_bracket_overrides, app
+from publicdotcom_cli import cli as cli_module
+from publicdotcom_cli.cli import _apply_bracket_overrides, _order_search_body, app
 
 _ANSI_ESCAPES = re.compile(r"\x1b\[[0-9;]*m")
 
@@ -246,3 +248,225 @@ def test_bracket_overrides_accept_exit_legs_from_request_file() -> None:
 
     assert body["orderClass"] == "BRACKET"
     assert body["stopLoss"] == {"stopPrice": "210.00"}
+
+
+ORDER_V2 = {
+    "orderId": "0d2abd8d-3625-4c83-a806-98abf35567cc",
+    "instrument": {"symbol": "AAPL", "type": "EQUITY"},
+    "createdAt": "2026-09-21T14:30:00+00:00",
+    "type": "LIMIT",
+    "side": "BUY",
+    "status": "FILLED",
+    "quantity": "10",
+    "expiration": {"timeInForce": "DAY"},
+    "limitPrice": "245.00",
+    "filledQuantity": "10",
+    "averagePrice": "244.90",
+    "equityMarketSession": "REGULAR",
+    "filledAt": "2026-09-21T14:30:05+00:00",
+    "lastModified": "2026-09-21T14:30:05+00:00",
+    "trades": [
+        {
+            "instrument": {"symbol": "AAPL", "type": "EQUITY"},
+            "quantity": "10",
+            "price": "244.90",
+            "side": "BUY",
+            "tradeId": "trade-1",
+            "timestamp": "2026-09-21T14:30:05+00:00",
+        }
+    ],
+}
+
+
+def _capture_calls(monkeypatch: pytest.MonkeyPatch, response: object) -> list:
+    """Replace the HTTP helper so commands record their request instead of sending it."""
+    calls: list = []
+
+    def fake_call(ctx: object, method: str, path: str, **kwargs: object) -> object:
+        calls.append((method, path, kwargs))
+        return response
+
+    monkeypatch.setattr(cli_module, "_call", fake_call)
+    return calls
+
+
+def test_order_help_lists_search_and_get_v2() -> None:
+    result = CliRunner().invoke(app, ["order", "--help"])
+
+    assert result.exit_code == 0
+    assert "search" in result.stdout
+    assert "get-v2" in result.stdout
+
+
+def test_order_search_help_lists_filters() -> None:
+    result = CliRunner().invoke(app, ["order", "search", "--help"])
+
+    assert result.exit_code == 0
+    plain = _plain(result.stdout)
+    for flag in (
+        "--status",
+        "--side",
+        "--symbol",
+        "--security-type",
+        "--open-close",
+        "--created-after",
+        "--created-before",
+    ):
+        assert flag in plain
+
+
+def test_order_search_posts_filters_to_v2_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, {"orders": []})
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "order",
+            "search",
+            "--account-id",
+            "acct-1",
+            "--status",
+            "filled",
+            "--side",
+            "buy",
+            "--symbol",
+            "aapl",
+            "--symbol",
+            "spy:option",
+            "--security-type",
+            "equity",
+            "--open-close",
+            "open",
+            "--created-after",
+            "2026-09-01T00:00:00Z",
+            "--created-before",
+            "2026-09-22T00:00:00Z",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr
+    assert calls == [
+        (
+            "POST",
+            "/userapigateway/trading/acct-1/order/v2",
+            {
+                "json_body": {
+                    "status": "FILLED",
+                    "createdAfter": "2026-09-01T00:00:00Z",
+                    "createdBefore": "2026-09-22T00:00:00Z",
+                    "instruments": [
+                        {"symbol": "AAPL", "type": "EQUITY"},
+                        {"symbol": "SPY", "type": "OPTION"},
+                    ],
+                    "side": "BUY",
+                    "openCloseIndicator": "OPEN",
+                    "securityType": "EQUITY",
+                }
+            },
+        )
+    ]
+
+
+def test_order_search_sends_empty_body_without_filters(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, {"orders": []})
+
+    result = CliRunner().invoke(app, ["order", "search", "--account-id", "acct-1"])
+
+    assert result.exit_code == 0, result.stderr
+    assert calls[0][2] == {"json_body": {}}
+
+
+def test_order_search_rejects_invalid_status(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, {"orders": []})
+
+    result = CliRunner().invoke(
+        app, ["order", "search", "--account-id", "acct-1", "--status", "OPEN"]
+    )
+
+    assert result.exit_code == 1
+    assert "Invalid --status" in result.stderr
+    assert calls == []
+
+
+def test_order_search_rejects_malformed_symbol(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, {"orders": []})
+
+    result = CliRunner().invoke(
+        app, ["order", "search", "--account-id", "acct-1", "--symbol", ":OPTION"]
+    )
+
+    assert result.exit_code == 1
+    assert "Invalid instrument" in result.stderr
+    assert calls == []
+
+
+def test_order_search_renders_orders_table(monkeypatch: pytest.MonkeyPatch) -> None:
+    _capture_calls(monkeypatch, {"orders": [ORDER_V2]})
+
+    result = CliRunner().invoke(app, ["order", "search", "--account-id", "acct-1"])
+
+    assert result.exit_code == 0, result.stderr
+    plain = _plain(result.stdout)
+    assert "Orders" in plain
+    assert "AAPL" in plain
+    assert "FILLED" in plain
+    assert "244.90" in plain
+
+
+def test_order_search_json_flag_prints_raw_response(monkeypatch: pytest.MonkeyPatch) -> None:
+    _capture_calls(monkeypatch, {"orders": [ORDER_V2]})
+
+    result = CliRunner().invoke(app, ["--json", "order", "search", "--account-id", "acct-1"])
+
+    assert result.exit_code == 0, result.stderr
+    plain = _plain(result.stdout)
+    assert "trades" in plain
+    assert "trade-1" in plain
+    assert "Orders" not in plain
+
+
+def test_order_get_v2_uses_v2_path(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, ORDER_V2)
+
+    result = CliRunner().invoke(app, ["order", "get-v2", "ord-1", "--account-id", "acct-1"])
+
+    assert result.exit_code == 0, result.stderr
+    assert calls == [("GET", "/userapigateway/trading/acct-1/order/v2/ord-1", {})]
+    plain = _plain(result.stdout)
+    assert "filledAt" in plain
+    assert "trade-1" in plain
+
+
+def _search_body(**kwargs: object) -> dict:
+    defaults: dict[str, object] = {
+        "status": None,
+        "side": None,
+        "open_close": None,
+        "security_type": None,
+        "created_after": None,
+        "created_before": None,
+        "symbols": None,
+    }
+    defaults.update(kwargs)
+    return _order_search_body(**defaults)  # type: ignore[arg-type]
+
+
+def test_order_search_body_is_empty_without_filters() -> None:
+    assert _search_body() == {}
+
+
+def test_order_search_body_normalizes_enum_case() -> None:
+    assert _search_body(status="partially_filled", side="sell", open_close="close") == {
+        "status": "PARTIALLY_FILLED",
+        "side": "SELL",
+        "openCloseIndicator": "CLOSE",
+    }
+
+
+def test_order_search_body_defaults_symbol_type_to_equity() -> None:
+    assert _search_body(symbols=["aapl", "spy:option"]) == {
+        "instruments": [
+            {"symbol": "AAPL", "type": "EQUITY"},
+            {"symbol": "SPY", "type": "OPTION"},
+        ]
+    }

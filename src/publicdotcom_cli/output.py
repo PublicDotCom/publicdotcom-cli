@@ -72,6 +72,39 @@ def print_quotes(data: Any) -> None:
     console.print(table)
 
 
+def print_orders(data: Any) -> None:
+    orders = data.get("orders") if isinstance(data, dict) else None
+    if not orders:
+        print_json(data)
+        return
+
+    table = Table(title="Orders")
+    table.add_column("Order ID")
+    table.add_column("Symbol")
+    table.add_column("Type")
+    table.add_column("Side")
+    table.add_column("Status")
+    table.add_column("Qty / Notional", justify="right")
+    table.add_column("Filled", justify="right")
+    table.add_column("Avg Price", justify="right")
+    table.add_column("Created")
+
+    for order in orders:
+        instrument = order.get("instrument") or {}
+        table.add_row(
+            str(order.get("orderId", "")),
+            str(instrument.get("symbol", "")),
+            str(order.get("type", "")),
+            str(order.get("side", "")),
+            str(order.get("status", "")),
+            str(order.get("quantity") or order.get("notionalValue") or ""),
+            str(order.get("filledQuantity", "")),
+            str(order.get("averagePrice", "")),
+            str(order.get("createdAt", "")),
+        )
+    console.print(table)
+
+
 def exit_with_error(message: str, code: int = 1) -> None:
     print_error(message)
     raise typer.Exit(code)

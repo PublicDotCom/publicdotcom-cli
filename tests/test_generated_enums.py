@@ -10,6 +10,21 @@ from publicdotcom_cli._generated.models import (
 from publicdotcom_cli._generated.models import (
     ComHellopublicUserapigatewayApiRestOrderApiOrderRequestOrderClass as OrderClass,
 )
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestOpenCloseIndicator as QueryOrdersOpenCloseIndicator,
+)
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestSecurityType as QueryOrdersSecurityType,
+)
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestSide as QueryOrdersSide,
+)
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestOrderApiQueryOrdersRequestStatus as QueryOrdersStatus,
+)
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2Status as OrderV2Status,
+)
 from publicdotcom_cli._generated.models import SearchBondsRatingItem
 
 EXPECTED_ACCOUNT_TYPES = {
@@ -17,6 +32,7 @@ EXPECTED_ACCOUNT_TYPES = {
     "BROKERAGE",
     "ENTITY",
     "HIGH_YIELD",
+    "JOINT",
     "RIA_ASSET",
     "ROTH_IRA",
     "TRADITIONAL_IRA",
@@ -80,3 +96,44 @@ def test_order_class_parses_bracket_values() -> None:
 
 def test_order_class_matches_spec() -> None:
     assert {member.value for member in OrderClass} == EXPECTED_ORDER_CLASSES
+
+
+def test_account_type_enums_parse_joint() -> None:
+    assert PortfolioAccountType("JOINT") is PortfolioAccountType.JOINT
+    assert AccountSettingsAccountType("JOINT") is AccountSettingsAccountType.JOINT
+
+
+EXPECTED_ORDER_STATUSES = {
+    "NEW",
+    "PARTIALLY_FILLED",
+    "CANCELLED",
+    "QUEUED_CANCELLED",
+    "FILLED",
+    "REJECTED",
+    "PENDING_REPLACE",
+    "PENDING_CANCEL",
+    "EXPIRED",
+    "REPLACED",
+}
+
+EXPECTED_QUERY_SECURITY_TYPES = {
+    "EQUITY",
+    "OPTION",
+    "MULTI_LEG_INSTRUMENT",
+    "CRYPTO",
+    "ALT",
+    "TREASURY",
+    "BOND",
+    "INDEX",
+}
+
+
+def test_order_v2_status_matches_spec() -> None:
+    assert {member.value for member in OrderV2Status} == EXPECTED_ORDER_STATUSES
+
+
+def test_query_orders_enums_match_spec() -> None:
+    assert {member.value for member in QueryOrdersStatus} == EXPECTED_ORDER_STATUSES
+    assert {member.value for member in QueryOrdersSecurityType} == EXPECTED_QUERY_SECURITY_TYPES
+    assert {member.value for member in QueryOrdersSide} == {"BUY", "SELL"}
+    assert {member.value for member in QueryOrdersOpenCloseIndicator} == {"OPEN", "CLOSE"}

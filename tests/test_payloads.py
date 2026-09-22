@@ -1,4 +1,6 @@
-from publicdotcom_cli.payloads import ensure_order_id, instrument, instruments
+import pytest
+
+from publicdotcom_cli.payloads import ensure_order_id, instrument, instrument_spec, instruments
 
 
 def test_instrument_payload_uppercases_values() -> None:
@@ -23,3 +25,17 @@ def test_ensure_order_id_adds_missing_id() -> None:
     order_id = ensure_order_id(body)
     assert body["orderId"] == order_id
     assert len(order_id) == 36
+
+
+def test_instrument_spec_defaults_type_to_equity() -> None:
+    assert instrument_spec("aapl") == {"symbol": "AAPL", "type": "EQUITY"}
+
+
+def test_instrument_spec_parses_symbol_and_type() -> None:
+    assert instrument_spec("spy:option") == {"symbol": "SPY", "type": "OPTION"}
+
+
+def test_instrument_spec_rejects_missing_symbol_or_type() -> None:
+    for value in (":OPTION", "AAPL:", ""):
+        with pytest.raises(ValueError):
+            instrument_spec(value)

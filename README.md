@@ -200,6 +200,8 @@ public order place --file examples/order.single-leg.market-buy.json
 public order replace --file examples/order.replace.notional.json
 public order get ORDER_ID
 public order cancel ORDER_ID
+public order search --status FILLED --created-after 2026-09-01T00:00:00Z
+public order get-v2 ORDER_ID
 ```
 
 Trading commands prompt before submitting order placement, replacement, or cancellation
@@ -267,6 +269,28 @@ asynchronous: verify order status after submitting. See
 public order replace --file examples/order.replace.notional.json
 public order replace --file examples/order.replace.notional.json --amount 250.00
 ```
+
+### Order Search
+
+`order search` queries the last 30 days of orders (up to 500) and renders them as a
+table. Combine any of the filters, or pass none to list everything:
+
+```bash
+public order search
+public order search --status FILLED --side BUY --created-after 2026-09-01T00:00:00Z
+public order search --symbol AAPL --symbol SPY:OPTION --open-close OPEN
+public --json order search --security-type MULTI_LEG_INSTRUMENT
+```
+
+`--symbol` takes `SYMBOL` or `SYMBOL:TYPE` (the type defaults to `EQUITY`) and can be
+repeated. `--status`, `--side`, `--security-type` and `--open-close` accept the values
+from the API spec, case-insensitively; `--created-after` and `--created-before` are ISO
+8601 timestamps. Each order comes back in the v2 shape, which adds `trades` (each with
+`tradeId`, `price`, `quantity`, `side`, `timestamp`), `filledAt`, `replacedAt`,
+`lastModified` and `equityMarketSession` to the fields `order get` returns.
+
+`order get-v2 ORDER_ID` fetches a single order in that same v2 shape. Both v2 commands
+only cover orders created within the last 30 days.
 
 ## Tax Lots
 
