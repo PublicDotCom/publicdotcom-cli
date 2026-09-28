@@ -1,3 +1,4 @@
+from publicdotcom_cli._generated.api.order_placement import get_order, search_orders
 from publicdotcom_cli._generated.models import (
     BarsResponse,
     ComHellopublicUserapigatewayApiRestOrderApiCancelReplaceOrderRequest as CancelReplaceOrderRequest,
@@ -13,6 +14,8 @@ from publicdotcom_cli._generated.models import (
     ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2 as GatewayOrderV2,
     ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2EquityMarketSession as OrderV2EquityMarketSession,
     ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade as GatewayTrade,
+    EventContractChart,
+    EventContractChartsResponse,
     LeadingFill,
 )
 
@@ -231,3 +234,90 @@ def test_query_orders_request_round_trips_all_filters() -> None:
 
 def test_query_orders_request_is_empty_without_filters() -> None:
     assert QueryOrdersRequest.from_dict({}).to_dict() == {}
+
+
+def test_search_orders_module_targets_search_path() -> None:
+    kwargs = search_orders._get_kwargs("acct-1", body=QueryOrdersRequest.from_dict({}))
+
+    assert kwargs["method"] == "post"
+    assert kwargs["url"] == "/userapigateway/trading/acct-1/order/search"
+
+
+def test_get_order_module_parses_v2_order_shape() -> None:
+    import httpx
+
+    payload = {
+        "orderId": "0d2abd8d-3625-4c83-a806-98abf35567cc",
+        "status": "FILLED",
+        "equityMarketSession": "REGULAR",
+        "filledAt": "2026-09-21T14:30:05+00:00",
+        "trades": [{"tradeId": "trade-1", "side": "BUY", "quantity": "10", "price": "244.90"}],
+    }
+    response = httpx.Response(200, json=payload)
+
+    parsed = get_order._parse_response(client=None, response=response)  # type: ignore[arg-type]
+
+    assert isinstance(parsed, GatewayOrderV2)
+    assert parsed.equity_market_session is OrderV2EquityMarketSession.REGULAR
+    assert isinstance(parsed.trades[0], GatewayTrade)
+    assert parsed.trades[0].trade_id == "trade-1"
+
+
+def test_get_order_v2_module_was_removed() -> None:
+    import importlib.util
+
+    assert (
+        importlib.util.find_spec("publicdotcom_cli._generated.api.order_placement.get_order_v2")
+        is None
+    )
+
+
+EVENT_CONTRACT_CHARTS = {
+    "period": "WEEK",
+    "charts": [
+        {
+            "symbol": "KALSHI.KXBALANCESHEET-EO26-6.6.Y-EVENTCONTRACT",
+            "previousClosePrice": "0.41",
+            "currentPrice": "0.47",
+            "totalGainLoss": "0.06",
+            "totalGainLossPercentage": "14.63",
+            "bars": [
+                {
+                    "timestamp": "2026-09-28T00:00:00Z",
+                    "open": "0.45",
+                    "close": "0.47",
+                    "high": "0.48",
+                    "low": "0.44",
+                    "value": "0.47",
+                    "volume": 900,
+                }
+            ],
+        }
+    ],
+}
+
+
+def test_event_contract_charts_response_round_trips() -> None:
+    response = EventContractChartsResponse.from_dict(EVENT_CONTRACT_CHARTS)
+
+    assert response.period == "WEEK"
+    assert isinstance(response.charts[0], EventContractChart)
+    assert response.charts[0].current_price == "0.47"
+    assert response.charts[0].bars[0].close == "0.47"
+    assert response.to_dict() == EVENT_CONTRACT_CHARTS
+
+
+def test_event_contract_chart_keeps_null_prices() -> None:
+    chart = EventContractChart.from_dict(
+        {
+            "symbol": "KALSHI.X-1.N-EVENTCONTRACT",
+            "previousClosePrice": None,
+            "currentPrice": None,
+            "totalGainLoss": None,
+            "totalGainLossPercentage": None,
+            "bars": [],
+        }
+    )
+
+    assert chart.current_price is None
+    assert chart.to_dict()["currentPrice"] is None

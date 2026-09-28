@@ -105,6 +105,38 @@ def print_orders(data: Any) -> None:
     console.print(table)
 
 
+def print_event_contract_charts(data: Any) -> None:
+    charts = data.get("charts") if isinstance(data, dict) else None
+    if not charts:
+        print_json(data)
+        return
+
+    period = data.get("period")
+    table = Table(title=f"Event Contract Charts ({period})" if period else "Event Contract Charts")
+    table.add_column("Symbol")
+    table.add_column("Current", justify="right")
+    table.add_column("Prev Close", justify="right")
+    table.add_column("Gain/Loss", justify="right")
+    table.add_column("Gain/Loss %", justify="right")
+    table.add_column("Bars", justify="right")
+    table.add_column("First Bar")
+    table.add_column("Last Bar")
+
+    for chart in charts:
+        bars = chart.get("bars") or []
+        table.add_row(
+            str(chart.get("symbol", "")),
+            str(chart.get("currentPrice") or ""),
+            str(chart.get("previousClosePrice") or ""),
+            str(chart.get("totalGainLoss") or ""),
+            str(chart.get("totalGainLossPercentage") or ""),
+            str(len(bars)),
+            str(bars[0].get("timestamp", "")) if bars else "",
+            str(bars[-1].get("timestamp", "")) if bars else "",
+        )
+    console.print(table)
+
+
 def exit_with_error(message: str, code: int = 1) -> None:
     print_error(message)
     raise typer.Exit(code)

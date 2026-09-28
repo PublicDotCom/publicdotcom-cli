@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.6] - 2026-09-28
+
+### Added
+- `public historicdata event-contract-bars EVENT_ID PERIOD --symbol SYMBOL` command
+  covering the new
+  `GET /userapigateway/historicdata/event-contracts/{eventId}/bars/{period}` endpoint:
+  chart bars for up to 8 `-EVENTCONTRACT` symbols of one `-EVENT` (`--symbol` is
+  repeatable or comma-separated; `PERIOD` is `DAY`, `WEEK`, `MONTH` or `ALL`, both
+  validated client-side). Renders an Event Contract Charts table, or raw JSON with
+  `--json`.
+- `EVENTCONTRACT` accepted by `order search --security-type` and documented for
+  `historicdata bars`.
+- README "Event Contract Charts" section.
+
+### Changed
+- `public order search` now calls `POST /userapigateway/trading/{accountId}/order/search`
+  (the API moved it from `.../order/v2`). Flags and output are unchanged.
+- `public order get` now returns the v2 order shape (`trades`, `filledAt`,
+  `replacedAt`, `lastModified`, `equityMarketSession`) — the API's
+  `GET .../order/{orderId}` now serves it. Like `order search`, it only covers orders
+  created within the last 30 days.
+- Regenerated `_generated/` from the updated `spec.yaml`:
+  - New `get_event_contract_bars` endpoint module and `EventContractChart`,
+    `EventContractChartsResponse` and `GetEventContractBarsPeriod` models.
+  - `search_orders` targets `/order/search`; `get_order` parses `GatewayOrderV2`.
+  - `EVENTCONTRACT` added to the eight security-type enums that gained it.
+  - The generator's usual unrelated churn (`typing_extensions.Self`,
+    `enum.StrEnum`, formatting) was reverted, and the new files were normalized to
+    the vendored `TypeVar` / `(str, Enum)` style so the package keeps supporting
+    Python 3.10.
+
+### Deprecated
+- `public order get-v2` is now a hidden alias for `order get` that prints a
+  deprecation notice to stderr; its `GET .../order/v2/{orderId}` endpoint was removed
+  from the API. It will be removed in a future release.
+
+### Removed
+- `_generated/api/order_placement/get_order_v2.py` (endpoint removed from the spec).
+
 ## [1.3.5] - 2026-09-22
 
 ### Added

@@ -1,3 +1,5 @@
+import pytest
+
 from publicdotcom_cli._generated.models import (
     ComHellopublicHstier2ServiceTaxlotsApiOutOfDateStatusType as OutOfDateStatusType,
 )
@@ -25,7 +27,23 @@ from publicdotcom_cli._generated.models import (
 from publicdotcom_cli._generated.models import (
     ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2Status as OrderV2Status,
 )
-from publicdotcom_cli._generated.models import SearchBondsRatingItem
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryTransactionSecurityType as HistorySecurityType,
+)
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrumentType as OrderInstrumentType,
+)
+from publicdotcom_cli._generated.models import (
+    ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioInstrumentType as PortfolioInstrumentType,
+)
+from publicdotcom_cli._generated.models import (
+    GetAllInstrumentsTypeFilterItem,
+    GetBarsV2Type,
+    GetBarsV2WithAggregationType,
+    GetEventContractBarsPeriod,
+    GetInstrumentType,
+    SearchBondsRatingItem,
+)
 
 EXPECTED_ACCOUNT_TYPES = {
     "BOND_ACCOUNT",
@@ -125,6 +143,7 @@ EXPECTED_QUERY_SECURITY_TYPES = {
     "TREASURY",
     "BOND",
     "INDEX",
+    "EVENTCONTRACT",
 }
 
 
@@ -137,3 +156,29 @@ def test_query_orders_enums_match_spec() -> None:
     assert {member.value for member in QueryOrdersSecurityType} == EXPECTED_QUERY_SECURITY_TYPES
     assert {member.value for member in QueryOrdersSide} == {"BUY", "SELL"}
     assert {member.value for member in QueryOrdersOpenCloseIndicator} == {"OPEN", "CLOSE"}
+
+
+EVENTCONTRACT_ENUMS = (
+    HistorySecurityType,
+    OrderInstrumentType,
+    PortfolioInstrumentType,
+    QueryOrdersSecurityType,
+    GetAllInstrumentsTypeFilterItem,
+    GetInstrumentType,
+    GetBarsV2Type,
+    GetBarsV2WithAggregationType,
+)
+
+
+@pytest.mark.parametrize("enum_cls", EVENTCONTRACT_ENUMS, ids=lambda cls: cls.__name__)
+def test_security_type_enums_parse_event_contract(enum_cls: type) -> None:
+    assert enum_cls("EVENTCONTRACT").value == "EVENTCONTRACT"
+
+
+def test_event_contract_bars_period_matches_spec() -> None:
+    assert {member.value for member in GetEventContractBarsPeriod} == {
+        "DAY",
+        "WEEK",
+        "MONTH",
+        "ALL",
+    }

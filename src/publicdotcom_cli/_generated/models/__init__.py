@@ -444,6 +444,8 @@ from .com_matadorapp_shared_customerordergateway_dto_strategy_quote_dto_debit_cr
 from .com_matadorapp_shared_customerordergateway_dto_strategy_quote_request import (
     ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteRequest,
 )
+from .event_contract_chart import EventContractChart
+from .event_contract_charts_response import EventContractChartsResponse
 from .get_all_instruments_fractional_trading_filter_item import (
     GetAllInstrumentsFractionalTradingFilterItem,
 )
@@ -462,6 +464,7 @@ from .get_bars_v2_with_aggregation_trading_session_toggle import (
     GetBarsV2WithAggregationTradingSessionToggle,
 )
 from .get_bars_v2_with_aggregation_type import GetBarsV2WithAggregationType
+from .get_event_contract_bars_period import GetEventContractBarsPeriod
 from .get_instrument_type import GetInstrumentType
 from .last_session_close import LastSessionClose
 from .leading_fill import LeadingFill
@@ -633,6 +636,8 @@ __all__ = (
     "ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteDto",
     "ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteDtoDebitCredit",
     "ComMatadorappSharedCustomerordergatewayDtoStrategyQuoteRequest",
+    "EventContractChart",
+    "EventContractChartsResponse",
     "GetAllInstrumentsFractionalTradingFilterItem",
     "GetAllInstrumentsOptionSpreadTradingFilterItem",
     "GetAllInstrumentsOptionTradingFilterItem",
@@ -645,6 +650,7 @@ __all__ = (
     "GetBarsV2WithAggregationPeriod",
     "GetBarsV2WithAggregationTradingSessionToggle",
     "GetBarsV2WithAggregationType",
+    "GetEventContractBarsPeriod",
     "GetInstrumentType",
     "LastSessionClose",
     "LeadingFill",
