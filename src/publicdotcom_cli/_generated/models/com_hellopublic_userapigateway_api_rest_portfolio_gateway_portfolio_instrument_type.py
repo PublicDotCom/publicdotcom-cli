@@ -6,6 +6,7 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayPortfolioInstrumentType
     BOND = "BOND"
     CRYPTO = "CRYPTO"
     EQUITY = "EQUITY"
+    EVENTCONTRACT = "EVENTCONTRACT"
     INDEX = "INDEX"
     OPTION = "OPTION"
     TREASURY = "TREASURY"

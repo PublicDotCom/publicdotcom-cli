@@ -290,12 +290,12 @@ def _capture_calls(monkeypatch: pytest.MonkeyPatch, response: object) -> list:
     return calls
 
 
-def test_order_help_lists_search_and_get_v2() -> None:
+def test_order_help_lists_search_and_hides_deprecated_get_v2() -> None:
     result = CliRunner().invoke(app, ["order", "--help"])
 
     assert result.exit_code == 0
     assert "search" in result.stdout
-    assert "get-v2" in result.stdout
+    assert "get-v2" not in result.stdout
 
 
 def test_order_search_help_lists_filters() -> None:
@@ -315,7 +315,7 @@ def test_order_search_help_lists_filters() -> None:
         assert flag in plain
 
 
-def test_order_search_posts_filters_to_v2_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_order_search_posts_filters_to_search_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
     calls = _capture_calls(monkeypatch, {"orders": []})
 
     result = CliRunner().invoke(
@@ -348,7 +348,7 @@ def test_order_search_posts_filters_to_v2_endpoint(monkeypatch: pytest.MonkeyPat
     assert calls == [
         (
             "POST",
-            "/userapigateway/trading/acct-1/order/v2",
+            "/userapigateway/trading/acct-1/order/search",
             {
                 "json_body": {
                     "status": "FILLED",
@@ -425,16 +425,232 @@ def test_order_search_json_flag_prints_raw_response(monkeypatch: pytest.MonkeyPa
     assert "Orders" not in plain
 
 
-def test_order_get_v2_uses_v2_path(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_order_search_accepts_event_contract_security_type(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = _capture_calls(monkeypatch, {"orders": []})
+
+    result = CliRunner().invoke(
+        app,
+        ["order", "search", "--account-id", "acct-1", "--security-type", "eventcontract"],
+    )
+
+    assert result.exit_code == 0, result.stderr
+    assert calls[0][2] == {"json_body": {"securityType": "EVENTCONTRACT"}}
+
+
+def test_order_get_prints_v2_order_fields(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, ORDER_V2)
+
+    result = CliRunner().invoke(app, ["order", "get", "ord-1", "--account-id", "acct-1"])
+
+    assert result.exit_code == 0, result.stderr
+    assert calls == [("GET", "/userapigateway/trading/acct-1/order/ord-1", {})]
+    plain = _plain(result.stdout)
+    for field in ("filledAt", "equityMarketSession", "lastModified", "trade-1"):
+        assert field in plain
+
+
+def test_order_get_v2_is_deprecated_alias_for_order_get(monkeypatch: pytest.MonkeyPatch) -> None:
     calls = _capture_calls(monkeypatch, ORDER_V2)
 
     result = CliRunner().invoke(app, ["order", "get-v2", "ord-1", "--account-id", "acct-1"])
 
     assert result.exit_code == 0, result.stderr
-    assert calls == [("GET", "/userapigateway/trading/acct-1/order/v2/ord-1", {})]
+    assert calls == [("GET", "/userapigateway/trading/acct-1/order/ord-1", {})]
+    assert "deprecated" in _plain(result.stderr)
+    assert "order get" in _plain(result.stderr)
     plain = _plain(result.stdout)
     assert "filledAt" in plain
     assert "trade-1" in plain
+
+
+EVENT_ID = "KALSHI.KXBALANCESHEET-EO26-EVENT"
+YES_SYMBOL = "KALSHI.KXBALANCESHEET-EO26-6.6.Y-EVENTCONTRACT"
+NO_SYMBOL = "KALSHI.KXBALANCESHEET-EO26-6.6.N-EVENTCONTRACT"
+
+EVENT_CONTRACT_CHARTS = {
+    "period": "WEEK",
+    "charts": [
+        {
+            "symbol": YES_SYMBOL,
+            "previousClosePrice": "0.41",
+            "currentPrice": "0.47",
+            "totalGainLoss": "0.06",
+            "totalGainLossPercentage": "14.63",
+            "bars": [
+                {
+                    "timestamp": "2026-09-21T00:00:00Z",
+                    "open": "0.40",
+                    "close": "0.42",
+                    "high": "0.43",
+                    "low": "0.39",
+                    "value": "0.42",
+                    "volume": 1200,
+                },
+                {
+                    "timestamp": "2026-09-28T00:00:00Z",
+                    "open": "0.45",
+                    "close": "0.47",
+                    "high": "0.48",
+                    "low": "0.44",
+                    "value": "0.47",
+                    "volume": 900,
+                },
+            ],
+        }
+    ],
+}
+
+
+def test_historicdata_help_lists_event_contract_bars() -> None:
+    result = CliRunner().invoke(app, ["historicdata", "--help"])
+
+    assert result.exit_code == 0
+    assert "event-contract-bars" in result.stdout
+
+
+def test_historicdata_bars_help_lists_event_contract_type() -> None:
+    result = CliRunner().invoke(app, ["historicdata", "bars", "--help"])
+
+    assert result.exit_code == 0
+    assert "EVENTCONTRACT" in _plain(result.stdout)
+
+
+def test_event_contract_bars_calls_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, EVENT_CONTRACT_CHARTS)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "historicdata",
+            "event-contract-bars",
+            EVENT_ID,
+            "week",
+            "--symbol",
+            YES_SYMBOL.lower(),
+            "--symbol",
+            NO_SYMBOL,
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr
+    assert calls == [
+        (
+            "GET",
+            f"/userapigateway/historicdata/event-contracts/{EVENT_ID}/bars/WEEK",
+            {"params": {"symbols": f"{YES_SYMBOL},{NO_SYMBOL}"}},
+        )
+    ]
+
+
+def test_event_contract_bars_splits_comma_separated_symbols(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = _capture_calls(monkeypatch, EVENT_CONTRACT_CHARTS)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "historicdata",
+            "event-contract-bars",
+            EVENT_ID,
+            "ALL",
+            "--symbol",
+            f"{YES_SYMBOL}, {NO_SYMBOL}",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr
+    assert calls[0][2] == {"params": {"symbols": f"{YES_SYMBOL},{NO_SYMBOL}"}}
+
+
+def test_event_contract_bars_rejects_more_than_eight_symbols(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = _capture_calls(monkeypatch, EVENT_CONTRACT_CHARTS)
+    args = ["historicdata", "event-contract-bars", EVENT_ID, "DAY"]
+    for index in range(9):
+        args += ["--symbol", f"KALSHI.X-{index}.Y-EVENTCONTRACT"]
+
+    result = CliRunner().invoke(app, args)
+
+    assert result.exit_code == 1
+    assert "at most 8" in _plain(result.stderr)
+    assert calls == []
+
+
+def test_event_contract_bars_rejects_invalid_period(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, EVENT_CONTRACT_CHARTS)
+
+    result = CliRunner().invoke(
+        app,
+        ["historicdata", "event-contract-bars", EVENT_ID, "YEAR", "--symbol", YES_SYMBOL],
+    )
+
+    assert result.exit_code == 1
+    assert "Invalid period" in _plain(result.stderr)
+    assert calls == []
+
+
+def test_event_contract_bars_requires_a_symbol(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, EVENT_CONTRACT_CHARTS)
+
+    result = CliRunner().invoke(app, ["historicdata", "event-contract-bars", EVENT_ID, "DAY"])
+
+    assert result.exit_code != 0
+    assert calls == []
+
+
+def test_event_contract_bars_rejects_blank_symbols(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _capture_calls(monkeypatch, EVENT_CONTRACT_CHARTS)
+
+    result = CliRunner().invoke(
+        app, ["historicdata", "event-contract-bars", EVENT_ID, "DAY", "--symbol", " , "]
+    )
+
+    assert result.exit_code == 1
+    assert "at least one --symbol" in _plain(result.stderr)
+    assert calls == []
+
+
+def test_event_contract_bars_renders_charts_table(monkeypatch: pytest.MonkeyPatch) -> None:
+    _capture_calls(monkeypatch, EVENT_CONTRACT_CHARTS)
+
+    result = CliRunner().invoke(
+        app,
+        ["historicdata", "event-contract-bars", EVENT_ID, "WEEK", "--symbol", YES_SYMBOL],
+    )
+
+    assert result.exit_code == 0, result.stderr
+    plain = _plain(result.stdout)
+    assert "Event Contract Charts" in plain
+    assert "0.47" in plain
+    assert "14.63" in plain
+
+
+def test_event_contract_bars_json_flag_prints_raw_response(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _capture_calls(monkeypatch, EVENT_CONTRACT_CHARTS)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "--json",
+            "historicdata",
+            "event-contract-bars",
+            EVENT_ID,
+            "WEEK",
+            "--symbol",
+            YES_SYMBOL,
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr
+    plain = _plain(result.stdout)
+    assert '"bars"' in plain
+    assert "Event Contract Charts" not in plain
 
 
 def _search_body(**kwargs: object) -> dict:

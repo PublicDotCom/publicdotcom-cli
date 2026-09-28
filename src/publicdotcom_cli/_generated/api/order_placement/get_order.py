@@ -7,8 +7,8 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.com_hellopublic_userapigateway_api_rest_order_gateway_order import (
-    ComHellopublicUserapigatewayApiRestOrderGatewayOrder,
+from ...models.com_hellopublic_userapigateway_api_rest_order_v2_gateway_order_v2 import (
+    ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2,
 )
 from ...types import Response
 
@@ -31,9 +31,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder | None:
+) -> Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2 | None:
     if response.status_code == 200:
-        response_200 = ComHellopublicUserapigatewayApiRestOrderGatewayOrder.from_dict(
+        response_200 = ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2.from_dict(
             response.json()
         )
 
@@ -51,7 +51,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder]:
+) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -65,15 +65,11 @@ def sync_detailed(
     order_id: UUID,
     *,
     client: AuthenticatedClient | Client,
-) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder]:
+) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2]:
     """Retrieve order details
 
      Fetches the status and details of a specific order for the given account.
-
-    Note: Order placement is asynchronous. This endpoint may return HTTP 404 if the order has not yet
-    been indexed for retrieval.
-    In some cases, the order may already be active in the market but momentarily not yet visible through
-    this API due to eventual consistency.
+    Works only for orders created within last 30 days.
 
     Args:
         account_id (str):
@@ -84,7 +80,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder]
+        Response[Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2]
     """
 
     kwargs = _get_kwargs(
@@ -104,15 +100,11 @@ def sync(
     order_id: UUID,
     *,
     client: AuthenticatedClient | Client,
-) -> Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder | None:
+) -> Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2 | None:
     """Retrieve order details
 
      Fetches the status and details of a specific order for the given account.
-
-    Note: Order placement is asynchronous. This endpoint may return HTTP 404 if the order has not yet
-    been indexed for retrieval.
-    In some cases, the order may already be active in the market but momentarily not yet visible through
-    this API due to eventual consistency.
+    Works only for orders created within last 30 days.
 
     Args:
         account_id (str):
@@ -123,7 +115,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder
+        Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2
     """
 
     return sync_detailed(
@@ -138,15 +130,11 @@ async def asyncio_detailed(
     order_id: UUID,
     *,
     client: AuthenticatedClient | Client,
-) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder]:
+) -> Response[Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2]:
     """Retrieve order details
 
      Fetches the status and details of a specific order for the given account.
-
-    Note: Order placement is asynchronous. This endpoint may return HTTP 404 if the order has not yet
-    been indexed for retrieval.
-    In some cases, the order may already be active in the market but momentarily not yet visible through
-    this API due to eventual consistency.
+    Works only for orders created within last 30 days.
 
     Args:
         account_id (str):
@@ -157,7 +145,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder]
+        Response[Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2]
     """
 
     kwargs = _get_kwargs(
@@ -175,15 +163,11 @@ async def asyncio(
     order_id: UUID,
     *,
     client: AuthenticatedClient | Client,
-) -> Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder | None:
+) -> Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2 | None:
     """Retrieve order details
 
      Fetches the status and details of a specific order for the given account.
-
-    Note: Order placement is asynchronous. This endpoint may return HTTP 404 if the order has not yet
-    been indexed for retrieval.
-    In some cases, the order may already be active in the market but momentarily not yet visible through
-    this API due to eventual consistency.
+    Works only for orders created within last 30 days.
 
     Args:
         account_id (str):
@@ -194,7 +178,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Any | ComHellopublicUserapigatewayApiRestOrderGatewayOrder
+        Any | ComHellopublicUserapigatewayApiRestOrderV2GatewayOrderV2
     """
 
     return (

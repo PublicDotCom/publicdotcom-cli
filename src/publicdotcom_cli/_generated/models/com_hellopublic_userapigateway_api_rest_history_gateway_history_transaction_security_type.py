@@ -6,6 +6,7 @@ class ComHellopublicUserapigatewayApiRestHistoryGatewayHistoryTransactionSecurit
     BOND = "BOND"
     CRYPTO = "CRYPTO"
     EQUITY = "EQUITY"
+    EVENTCONTRACT = "EVENTCONTRACT"
     OPTION = "OPTION"
     TREASURY = "TREASURY"
 

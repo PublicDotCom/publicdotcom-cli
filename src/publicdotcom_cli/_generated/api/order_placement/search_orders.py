@@ -24,7 +24,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/userapigateway/trading/{account_id}/order/v2".format(
+        "url": "/userapigateway/trading/{account_id}/order/search".format(
             account_id=quote(str(account_id), safe=""),
         ),
     }

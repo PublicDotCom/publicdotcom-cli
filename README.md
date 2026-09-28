@@ -155,6 +155,7 @@ public historicdata bars EQUITY AAPL YEAR
 public historicdata bars EQUITY AAPL DAY --aggregation FIVE_MINUTES
 public historicdata bars EQUITY AAPL SINCE_PURCHASE --purchase-date 2024-01-15
 public historicdata bars EQUITY RDDT FIVE_YEARS --ipo-date 2024-03-21
+public historicdata event-contract-bars KALSHI.KXBALANCESHEET-EO26-EVENT WEEK --symbol KALSHI.KXBALANCESHEET-EO26-6.6.Y-EVENTCONTRACT
 public taxlots list
 public taxlots symbol AAPL
 public taxlots csv --output taxlots.csv
@@ -162,7 +163,7 @@ public taxlots csv --output taxlots.csv
 
 ## Historic Bar Data
 
-Fetch OHLCV bar data for a symbol over a given time period. The first argument is the instrument type (`EQUITY`, `CRYPTO`, `OPTION`, or `INDEX`):
+Fetch OHLCV bar data for a symbol over a given time period. The first argument is the instrument type (`EQUITY`, `CRYPTO`, `OPTION`, `INDEX`, or `EVENTCONTRACT`):
 
 ```bash
 public historicdata bars EQUITY AAPL YEAR
@@ -192,6 +193,27 @@ For recently listed assets, pass the IPO / first-trade date with `--ipo-date`. W
 public historicdata bars EQUITY RDDT FIVE_YEARS --ipo-date 2024-03-21
 ```
 
+### Event Contract Charts
+
+`historicdata event-contract-bars EVENT_ID PERIOD` fetches chart bars for up to 8
+prediction-market contracts belonging to one event. `EVENT_ID` is the `-EVENT` grouping
+id; pass each `-EVENTCONTRACT` symbol with `--symbol` (repeat it, or comma-separate).
+`PERIOD` is `DAY`, `WEEK`, `MONTH`, or `ALL`:
+
+```bash
+public historicdata event-contract-bars KALSHI.KXBALANCESHEET-EO26-EVENT WEEK \
+  --symbol KALSHI.KXBALANCESHEET-EO26-6.6.Y-EVENTCONTRACT \
+  --symbol KALSHI.KXBALANCESHEET-EO26-6.6.N-EVENTCONTRACT
+```
+
+The table shows each symbol's current and previous-close price, total gain/loss, bar
+count and first/last bar timestamps; use `--json` for the bars themselves. Prices are
+dollars from `0.00` to `1.00` for the side the symbol names (a `.N` symbol carries the NO
+prices), i.e. the implied probability — multiply by 100 for cents or percent. Periods
+are measured back from now, or from the event's close time once it has stopped trading.
+Bars start at the first period with a price, so align charts by timestamp rather than
+index; symbols with no data in the period are omitted from the response.
+
 Trading requests use JSON files so the exact payload is visible before submission:
 
 ```bash
@@ -201,7 +223,6 @@ public order replace --file examples/order.replace.notional.json
 public order get ORDER_ID
 public order cancel ORDER_ID
 public order search --status FILLED --created-after 2026-09-01T00:00:00Z
-public order get-v2 ORDER_ID
 ```
 
 Trading commands prompt before submitting order placement, replacement, or cancellation
@@ -283,14 +304,16 @@ public --json order search --security-type MULTI_LEG_INSTRUMENT
 ```
 
 `--symbol` takes `SYMBOL` or `SYMBOL:TYPE` (the type defaults to `EQUITY`) and can be
-repeated. `--status`, `--side`, `--security-type` and `--open-close` accept the values
-from the API spec, case-insensitively; `--created-after` and `--created-before` are ISO
-8601 timestamps. Each order comes back in the v2 shape, which adds `trades` (each with
-`tradeId`, `price`, `quantity`, `side`, `timestamp`), `filledAt`, `replacedAt`,
-`lastModified` and `equityMarketSession` to the fields `order get` returns.
+repeated. `--status`, `--side`, `--security-type` (including `EVENTCONTRACT`) and
+`--open-close` accept the values from the API spec, case-insensitively;
+`--created-after` and `--created-before` are ISO 8601 timestamps. Each order includes
+`trades` (each with `tradeId`, `price`, `quantity`, `side`, `timestamp`), `filledAt`,
+`replacedAt`, `lastModified` and `equityMarketSession`.
 
-`order get-v2 ORDER_ID` fetches a single order in that same v2 shape. Both v2 commands
-only cover orders created within the last 30 days.
+`order get ORDER_ID` returns a single order in that same shape. Both commands only cover
+orders created within the last 30 days. The 1.3.5 `order get-v2` command is now a
+deprecated, hidden alias for `order get` (the separate v2 endpoints were removed from the
+API) and will be dropped in a future release.
 
 ## Tax Lots
 

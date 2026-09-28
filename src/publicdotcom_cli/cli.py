@@ -34,6 +34,7 @@ from publicdotcom_cli.output import (
     exit_with_error,
     print_accounts,
     print_error,
+    print_event_contract_charts,
     print_json,
     print_orders,
     print_quotes,
@@ -168,6 +169,8 @@ def _print(ctx: typer.Context, data: Any, *, table: str | None = None) -> None:
         print_quotes(data)
     elif table == "orders":
         print_orders(data)
+    elif table == "event_contract_charts":
+        print_event_contract_charts(data)
     else:
         print_json(data)
 
@@ -225,7 +228,11 @@ ORDER_SEARCH_SECURITY_TYPES = (
     "TREASURY",
     "BOND",
     "INDEX",
+    "EVENTCONTRACT",
 )
+
+EVENT_CONTRACT_PERIODS = ("DAY", "WEEK", "MONTH", "ALL")
+EVENT_CONTRACT_MAX_SYMBOLS = 8
 
 
 def _normalized_choice(value: str | None, *, flag: str, choices: tuple[str, ...]) -> str | None:
@@ -1210,6 +1217,7 @@ def order_get(
         typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
     ] = None,
 ) -> None:
+    """Retrieve an order from the last 30 days, including its trades and fill timestamps."""
     account_id = _resolve_account_id(ctx, account_id)
     result = _call(ctx, "GET", f"/userapigateway/trading/{account_id}/order/{order_id}")
     _print(ctx, result)
@@ -1252,7 +1260,7 @@ def order_search(
             "--security-type",
             help=(
                 "Filter by security type: EQUITY, OPTION, MULTI_LEG_INSTRUMENT, CRYPTO, ALT, "
-                "TREASURY, BOND, or INDEX."
+                "TREASURY, BOND, INDEX, or EVENTCONTRACT."
             ),
         ),
     ] = None,
@@ -1292,13 +1300,13 @@ def order_search(
     result = _call(
         ctx,
         "POST",
-        f"/userapigateway/trading/{account_id}/order/v2",
+        f"/userapigateway/trading/{account_id}/order/search",
         json_body=body,
     )
     _print(ctx, result, table="orders")
 
 
-@order_app.command("get-v2")
+@order_app.command("get-v2", hidden=True)
 def order_get_v2(
     ctx: typer.Context,
     order_id: Annotated[str, typer.Argument()],
@@ -1307,10 +1315,9 @@ def order_get_v2(
         typer.Option("--account-id", "-a", help="Account ID. Defaults to configured account."),
     ] = None,
 ) -> None:
-    """Retrieve an order from the last 30 days, including its trades and fill timestamps."""
-    account_id = _resolve_account_id(ctx, account_id)
-    result = _call(ctx, "GET", f"/userapigateway/trading/{account_id}/order/v2/{order_id}")
-    _print(ctx, result)
+    """Deprecated alias for `order get`, which now returns the same order shape."""
+    print_error("`order get-v2` is deprecated and will be removed; use `order get` instead.")
+    order_get(ctx, order_id=order_id, account_id=account_id)
 
 
 @order_app.command("cancel")
@@ -1338,7 +1345,7 @@ def historicdata_bars(
     ctx: typer.Context,
     security_type: Annotated[
         str,
-        typer.Argument(help="Instrument type: EQUITY, CRYPTO, OPTION, INDEX."),
+        typer.Argument(help="Instrument type: EQUITY, CRYPTO, OPTION, INDEX, EVENTCONTRACT."),
     ],
     symbol: Annotated[str, typer.Argument(help="Ticker symbol, e.g. AAPL.")],
     period: Annotated[
@@ -1379,6 +1386,54 @@ def historicdata_bars(
     path = f"{base}/{aggregation.upper()}" if aggregation else base
     result = _call(ctx, "GET", path, params={"purchaseDate": purchase_date, "ipoDate": ipo_date})
     _print(ctx, result)
+
+
+def _event_contract_symbols(values: list[str]) -> str:
+    """Join repeated and/or comma-separated --symbol values into the API's `symbols` param."""
+    symbols = [part.strip().upper() for value in values for part in value.split(",")]
+    symbols = [symbol for symbol in symbols if symbol]
+    if not symbols:
+        exit_with_error("Pass at least one --symbol.")
+    if len(symbols) > EVENT_CONTRACT_MAX_SYMBOLS:
+        exit_with_error(
+            f"Too many symbols ({len(symbols)}); the API accepts at most "
+            f"{EVENT_CONTRACT_MAX_SYMBOLS} per request."
+        )
+    return ",".join(symbols)
+
+
+@historicdata_app.command("event-contract-bars")
+def historicdata_event_contract_bars(
+    ctx: typer.Context,
+    event_id: Annotated[
+        str,
+        typer.Argument(help="The -EVENT grouping id, e.g. KALSHI.KXBALANCESHEET-EO26-EVENT."),
+    ],
+    period: Annotated[
+        str,
+        typer.Argument(help="Time period: DAY, WEEK, MONTH, or ALL."),
+    ],
+    symbols: Annotated[
+        list[str],
+        typer.Option(
+            "--symbol",
+            help=(
+                "An -EVENTCONTRACT symbol belonging to the event. Repeat (or comma-separate) "
+                f"for up to {EVENT_CONTRACT_MAX_SYMBOLS}."
+            ),
+        ),
+    ],
+) -> None:
+    """Fetch chart bars for up to 8 contracts of one event (prices are 0.00-1.00 probabilities)."""
+    normalized_period = _normalized_choice(period, flag="period", choices=EVENT_CONTRACT_PERIODS)
+    symbols_param = _event_contract_symbols(symbols)
+    result = _call(
+        ctx,
+        "GET",
+        f"/userapigateway/historicdata/event-contracts/{event_id.upper()}/bars/{normalized_period}",
+        params={"symbols": symbols_param},
+    )
+    _print(ctx, result, table="event_contract_charts")
 
 
 @taxlots_app.command("list")
