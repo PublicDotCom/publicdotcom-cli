@@ -137,6 +137,124 @@ def print_event_contract_charts(data: Any) -> None:
     console.print(table)
 
 
+def print_event_categories(data: Any) -> None:
+    categories = data.get("categories") if isinstance(data, dict) else None
+    if not categories:
+        print_json(data)
+        return
+
+    table = Table(title="Event Categories")
+    table.add_column("Category")
+    table.add_column("Subcategories")
+    table.add_column("Frequencies")
+
+    for category in categories:
+        frequency = category.get("eventFrequency") or {}
+        table.add_row(
+            str(category.get("category", "")),
+            ", ".join(str(item) for item in category.get("subcategories") or []),
+            ", ".join(str(item) for item in frequency.get("frequencies") or []),
+        )
+    console.print(table)
+
+
+def _event_status(event: dict[str, Any]) -> str:
+    if event.get("resolved"):
+        return "RESOLVED"
+    if event.get("halted"):
+        return "HALTED"
+    return "OPEN"
+
+
+def print_event_summaries(data: Any) -> None:
+    events = data.get("content") if isinstance(data, dict) else None
+    if not events:
+        print_json(data)
+        return
+
+    table = Table(title="Events")
+    table.add_column("Event Symbol")
+    table.add_column("Title")
+    table.add_column("Category")
+    table.add_column("Volume", justify="right")
+    table.add_column("Resolution Time")
+    table.add_column("Status")
+    table.add_column("Contracts", justify="right")
+
+    for event in events:
+        table.add_row(
+            str(event.get("eventSymbol", "")),
+            str(event.get("title", "")),
+            str(event.get("category", "")),
+            str(event.get("volume", "")),
+            str(event.get("resolutionTime") or ""),
+            _event_status(event),
+            str(len(event.get("symbols") or [])),
+        )
+    console.print(table)
+
+    next_token = data.get("nextToken")
+    if next_token:
+        console.print(f"More results: pass --next-token {next_token}")
+
+
+def _contract_by_side(outcome: dict[str, Any], side: str) -> dict[str, Any]:
+    for contract in outcome.get("contracts") or []:
+        if contract.get("predictedOutcome") == side:
+            return contract
+    return {}
+
+
+def print_event_details(data: Any) -> None:
+    outcomes = data.get("outcomes") if isinstance(data, dict) else None
+    if not isinstance(data, dict) or "eventSymbol" not in data:
+        print_json(data)
+        return
+
+    console.print(
+        f"[bold]{data.get('title', '')}[/bold] ({data.get('eventSymbol', '')})\n"
+        f"Exchange: {data.get('exchange', '')}  Category: {data.get('category', '')}  "
+        f"Volume: {data.get('volume', '')}  Status: {_event_status(data)}  "
+        f"Outcomes: {len(outcomes or [])} of {data.get('outcomeCount', '')}"
+    )
+    cftc = data.get("cftcContract") or {}
+    if cftc.get("contractTermsUrl"):
+        console.print(f"Contract terms: {cftc['contractTermsUrl']}")
+
+    if not outcomes:
+        return
+
+    table = Table(title="Outcomes")
+    table.add_column("Outcome")
+    table.add_column("State")
+    table.add_column("Trading")
+    table.add_column("Probability", justify="right")
+    table.add_column("YES Bid", justify="right")
+    table.add_column("YES Ask", justify="right")
+    table.add_column("NO Bid", justify="right")
+    table.add_column("NO Ask", justify="right")
+    table.add_column("Volume", justify="right")
+    table.add_column("Close Time")
+
+    for outcome in outcomes:
+        yes = _contract_by_side(outcome, "YES")
+        no = _contract_by_side(outcome, "NO")
+        timeline = outcome.get("timeline") or {}
+        table.add_row(
+            str(outcome.get("title", "")),
+            str(outcome.get("state", "")),
+            str(outcome.get("trading", "")),
+            str(yes.get("probability") or ""),
+            str(yes.get("bid") or ""),
+            str(yes.get("ask") or ""),
+            str(no.get("bid") or ""),
+            str(no.get("ask") or ""),
+            str(outcome.get("volume", "")),
+            str(timeline.get("closeTime", "")),
+        )
+    console.print(table)
+
+
 def exit_with_error(message: str, code: int = 1) -> None:
     print_error(message)
     raise typer.Exit(code)

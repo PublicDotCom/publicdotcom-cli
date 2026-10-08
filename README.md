@@ -156,6 +156,9 @@ public historicdata bars EQUITY AAPL DAY --aggregation FIVE_MINUTES
 public historicdata bars EQUITY AAPL SINCE_PURCHASE --purchase-date 2024-01-15
 public historicdata bars EQUITY RDDT FIVE_YEARS --ipo-date 2024-03-21
 public historicdata event-contract-bars KALSHI.KXBALANCESHEET-EO26-EVENT WEEK --symbol KALSHI.KXBALANCESHEET-EO26-6.6.Y-EVENTCONTRACT
+public event-contracts categories
+public event-contracts summary --category Economics --sort EXPIRATION
+public event-contracts details KALSHI.KXBALANCESHEET-EO26
 public taxlots list
 public taxlots symbol AAPL
 public taxlots csv --output taxlots.csv
@@ -213,6 +216,8 @@ prices), i.e. the implied probability — multiply by 100 for cents or percent. 
 are measured back from now, or from the event's close time once it has stopped trading.
 Bars start at the first period with a price, so align charts by timestamp rather than
 index; symbols with no data in the period are omitted from the response.
+
+To find events and their contract symbols, see [Event Contracts](#event-contracts).
 
 Trading requests use JSON files so the exact payload is visible before submission:
 
@@ -314,6 +319,44 @@ repeated. `--status`, `--side`, `--security-type` (including `EVENTCONTRACT`) an
 orders created within the last 30 days. The 1.3.5 `order get-v2` command is now a
 deprecated, hidden alias for `order get` (the separate v2 endpoints were removed from the
 API) and will be dropped in a future release.
+
+## Event Contracts
+
+Browse prediction-market events and their YES/NO contracts. Start with the categories,
+list events, then drill into one:
+
+```bash
+public event-contracts categories
+public event-contracts summary --category Economics --sort EXPIRATION
+public event-contracts details KALSHI.KXBALANCESHEET-EO26
+```
+
+`event-contracts categories` lists each category with its subcategories and the
+frequency filters it supports. Use a category value with `summary --category`.
+
+`event-contracts summary` returns up to 100 events per page, showing each event's
+`eventSymbol`, title, category, volume, resolution time and status. Options:
+
+- `--sort` — `VOLUME` (default), `EXPIRATION`, or `RECENTLY_ADDED`.
+- `--category`, `--subcategory` — limit to a category or subcategory.
+- `--include-resolved` / `--no-include-resolved` — include or exclude resolved events.
+- `--created-within-days N` — only events created within the last N days.
+- `--event-symbol SYMBOL` — only these events (repeat, or comma-separate).
+- `--frequency FREQ` — `ALL`, `ONCE`, `FIFTEEN_MINUTES`, `ONE_HOUR`, `ONE_DAY`,
+  `ONE_WEEK`, `ONE_MONTH`, or `ONE_YEAR` (repeatable).
+- `--resolution-start`, `--resolution-end` — ISO 8601 resolution-time window.
+- `--next-token TOKEN` — fetch the next page; the token is printed under the table (and
+  is `nextToken` in `--json` output).
+
+The API requires both an event-symbol list and a frequency list whenever any of the
+`--event-symbol`, `--frequency`, `--resolution-start` or `--resolution-end` filters is
+used, so the CLI fills in the missing one with no symbols or with `ALL` frequencies.
+
+`event-contracts details EVENT_SYMBOL` shows the event's exchange, category, volume and
+CFTC contract-terms link, then one row per outcome with its state, trading mode, YES
+probability, YES/NO bid and ask, volume and close time. Pass `--no-all-outcomes` for a
+short list of up to 8 outcomes; use `--json` for the full payload (rules, timeline,
+settlement, resolution sources). An unknown `EVENT_SYMBOL` returns HTTP 400 (code `7004`).
 
 ## Tax Lots
 
