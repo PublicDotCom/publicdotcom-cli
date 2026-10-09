@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.7] - 2026-10-08
+
+### Added
+- `public event-contracts` command group covering the three new event-contract
+  discovery endpoints:
+  - `event-contracts categories` — `GET /userapigateway/eventcontract/summary/categories`;
+    renders an Event Categories table (category, subcategories, frequencies).
+  - `event-contracts summary` — `POST /userapigateway/eventcontract/summary`, with
+    `--sort` (`VOLUME` default, `EXPIRATION`, `RECENTLY_ADDED`), `--category`,
+    `--subcategory`, `--next-token`, `--include-resolved/--no-include-resolved`,
+    `--created-within-days`, repeatable `--event-symbol` and `--frequency`, and
+    `--resolution-start` / `--resolution-end`. Sort and frequency values are validated
+    client-side. When any filter flag is given the `filters` object is sent with both of
+    its spec-required lists (a missing one defaults to `eventSymbols: []` or
+    `frequencies: ["ALL"]`). Renders an Events table plus the `nextToken` to page with.
+  - `event-contracts details EVENT_SYMBOL [--no-all-outcomes]` —
+    `GET /userapigateway/eventcontract/details/{eventSymbol}`; prints the event header
+    and an Outcomes table with YES/NO bid/ask and probability.
+  - All three print raw JSON with `--json`.
+- README "Event Contracts" section.
+
+### Changed
+- Regenerated `_generated/` from the updated `spec.yaml`:
+  - New `api/event_contracts` package (`get_event_summary`, `get_event_categories`,
+    `get_event_details`) and 21 `ComHellopublicHoldingsystemEventcontractservice…`
+    models/enums.
+  - The generator's unrelated churn (`typing_extensions.Self`, `enum.StrEnum`) was
+    reverted, and the new files were normalized to the vendored `TypeVar` /
+    `(str, Enum)` style so the package keeps supporting Python 3.10.
+
 ## [1.3.6] - 2026-09-28
 
 ### Added

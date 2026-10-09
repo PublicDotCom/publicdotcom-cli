@@ -34,7 +34,10 @@ from publicdotcom_cli.output import (
     exit_with_error,
     print_accounts,
     print_error,
+    print_event_categories,
     print_event_contract_charts,
+    print_event_details,
+    print_event_summaries,
     print_json,
     print_orders,
     print_quotes,
@@ -58,6 +61,7 @@ options_app = typer.Typer(help="Option details commands.")
 order_app = typer.Typer(help="Order and preflight commands.")
 historicdata_app = typer.Typer(help="Historic bar data commands.")
 taxlots_app = typer.Typer(help="Unrealized tax lot commands.")
+event_contracts_app = typer.Typer(help="Event contract (prediction market) discovery commands.")
 
 app.add_typer(auth_app, name="auth")
 app.add_typer(accounts_app, name="accounts")
@@ -69,6 +73,7 @@ app.add_typer(options_app, name="options")
 app.add_typer(order_app, name="order")
 app.add_typer(historicdata_app, name="historicdata")
 app.add_typer(taxlots_app, name="taxlots")
+app.add_typer(event_contracts_app, name="event-contracts")
 
 
 @dataclass
@@ -171,6 +176,12 @@ def _print(ctx: typer.Context, data: Any, *, table: str | None = None) -> None:
         print_orders(data)
     elif table == "event_contract_charts":
         print_event_contract_charts(data)
+    elif table == "event_categories":
+        print_event_categories(data)
+    elif table == "event_summaries":
+        print_event_summaries(data)
+    elif table == "event_details":
+        print_event_details(data)
     else:
         print_json(data)
 
@@ -233,6 +244,18 @@ ORDER_SEARCH_SECURITY_TYPES = (
 
 EVENT_CONTRACT_PERIODS = ("DAY", "WEEK", "MONTH", "ALL")
 EVENT_CONTRACT_MAX_SYMBOLS = 8
+
+EVENT_SORTING_MODES = ("VOLUME", "EXPIRATION", "RECENTLY_ADDED")
+EVENT_FREQUENCIES = (
+    "ALL",
+    "ONCE",
+    "FIFTEEN_MINUTES",
+    "ONE_HOUR",
+    "ONE_DAY",
+    "ONE_WEEK",
+    "ONE_MONTH",
+    "ONE_YEAR",
+)
 
 
 def _normalized_choice(value: str | None, *, flag: str, choices: tuple[str, ...]) -> str | None:
@@ -1434,6 +1457,172 @@ def historicdata_event_contract_bars(
         params={"symbols": symbols_param},
     )
     _print(ctx, result, table="event_contract_charts")
+
+
+def _event_summary_body(
+    *,
+    sort: str,
+    category: str | None,
+    subcategory: str | None,
+    next_token: str | None,
+    include_resolved: bool | None,
+    created_within_days: int | None,
+    event_symbols: list[str] | None,
+    frequencies: list[str] | None,
+    resolution_start: str | None,
+    resolution_end: str | None,
+) -> dict[str, Any]:
+    """Build the event-summary request body from the command flags.
+
+    `sortingMode` is always sent (the spec requires it). The `filters` object is only
+    sent when a filter flag is given; because the spec marks both of its lists as
+    required, an omitted list defaults to `eventSymbols: []` / `frequencies: ["ALL"]`.
+    """
+    body: dict[str, Any] = {
+        "sortingMode": _normalized_choice(sort, flag="--sort", choices=EVENT_SORTING_MODES)
+    }
+    if category is not None:
+        body["category"] = category
+    if subcategory is not None:
+        body["subcategory"] = subcategory
+    if next_token is not None:
+        body["nextToken"] = next_token
+    if include_resolved is not None:
+        body["displayResolvedEvents"] = include_resolved
+    if created_within_days is not None:
+        body["createdWithinDays"] = created_within_days
+
+    symbols = [part.strip().upper() for value in event_symbols or [] for part in value.split(",")]
+    symbols = [symbol for symbol in symbols if symbol]
+    normalized_frequencies = [
+        _normalized_choice(value, flag="--frequency", choices=EVENT_FREQUENCIES)
+        for value in frequencies or []
+    ]
+    if symbols or normalized_frequencies or resolution_start or resolution_end:
+        filters: dict[str, Any] = {
+            "eventSymbols": symbols,
+            "frequencies": normalized_frequencies or ["ALL"],
+        }
+        if resolution_start is not None:
+            filters["resolutionTimeStart"] = resolution_start
+        if resolution_end is not None:
+            filters["resolutionTimeEnd"] = resolution_end
+        body["filters"] = filters
+
+    return body
+
+
+@event_contracts_app.command("categories")
+def event_contracts_categories(ctx: typer.Context) -> None:
+    """List event categories, their subcategories, and supported frequency filters."""
+    result = _call(ctx, "GET", "/userapigateway/eventcontract/summary/categories")
+    _print(ctx, result, table="event_categories")
+
+
+@event_contracts_app.command("summary")
+def event_contracts_summary(
+    ctx: typer.Context,
+    sort: Annotated[
+        str,
+        typer.Option("--sort", help="Sort order: VOLUME, EXPIRATION, or RECENTLY_ADDED."),
+    ] = "VOLUME",
+    category: Annotated[
+        str | None,
+        typer.Option("--category", help="Limit to a category from `event-contracts categories`."),
+    ] = None,
+    subcategory: Annotated[
+        str | None,
+        typer.Option("--subcategory", help="Limit to a subcategory."),
+    ] = None,
+    next_token: Annotated[
+        str | None,
+        typer.Option(
+            "--next-token", help="nextToken from a previous response, to fetch the next page."
+        ),
+    ] = None,
+    include_resolved: Annotated[
+        bool | None,
+        typer.Option(
+            "--include-resolved/--no-include-resolved",
+            help="Include or exclude resolved events (sends displayResolvedEvents).",
+        ),
+    ] = None,
+    created_within_days: Annotated[
+        int | None,
+        typer.Option("--created-within-days", help="Only events created within the last N days."),
+    ] = None,
+    event_symbols: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--event-symbol",
+            help="Only these events, e.g. KALSHI.KXBALANCESHEET-EO26. Repeat or comma-separate.",
+        ),
+    ] = None,
+    frequencies: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--frequency",
+            help=(
+                "Event frequency filter: ALL, ONCE, FIFTEEN_MINUTES, ONE_HOUR, ONE_DAY, "
+                "ONE_WEEK, ONE_MONTH, ONE_YEAR. Repeat for multiple."
+            ),
+        ),
+    ] = None,
+    resolution_start: Annotated[
+        str | None,
+        typer.Option(
+            "--resolution-start", help="Only events resolving at or after this ISO 8601 time."
+        ),
+    ] = None,
+    resolution_end: Annotated[
+        str | None,
+        typer.Option(
+            "--resolution-end", help="Only events resolving at or before this ISO 8601 time."
+        ),
+    ] = None,
+) -> None:
+    """List event summaries (up to 100 per page; page with --next-token)."""
+    body = _event_summary_body(
+        sort=sort,
+        category=category,
+        subcategory=subcategory,
+        next_token=next_token,
+        include_resolved=include_resolved,
+        created_within_days=created_within_days,
+        event_symbols=event_symbols,
+        frequencies=frequencies,
+        resolution_start=resolution_start,
+        resolution_end=resolution_end,
+    )
+    result = _call(ctx, "POST", "/userapigateway/eventcontract/summary", json_body=body)
+    _print(ctx, result, table="event_summaries")
+
+
+@event_contracts_app.command("details")
+def event_contracts_details(
+    ctx: typer.Context,
+    event_symbol: Annotated[
+        str,
+        typer.Argument(
+            help="The eventSymbol from `event-contracts summary`, e.g. KALSHI.KXBALANCESHEET-EO26."
+        ),
+    ],
+    all_outcomes: Annotated[
+        bool,
+        typer.Option(
+            "--all-outcomes/--no-all-outcomes",
+            help="Return every outcome (default) or only a short list of up to 8.",
+        ),
+    ] = True,
+) -> None:
+    """Show an event's outcomes, YES/NO contract prices, timeline, and CFTC terms."""
+    result = _call(
+        ctx,
+        "GET",
+        f"/userapigateway/eventcontract/details/{event_symbol.strip().upper()}",
+        params={"includeAllOutcomes": all_outcomes},
+    )
+    _print(ctx, result, table="event_details")
 
 
 @taxlots_app.command("list")
