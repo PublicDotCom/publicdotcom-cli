@@ -31,6 +31,7 @@ class ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade:
         side (ComHellopublicUserapigatewayApiRestOrderV2GatewayTradeSide | Unset):
         trade_id (str | Unset):
         timestamp (datetime.datetime | Unset):
+        market_identification_code (str | Unset):
     """
 
     instrument: ComHellopublicUserapigatewayApiRestOrderGatewayOrderInstrument | Unset = UNSET
@@ -39,6 +40,7 @@ class ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade:
     side: ComHellopublicUserapigatewayApiRestOrderV2GatewayTradeSide | Unset = UNSET
     trade_id: str | Unset = UNSET
     timestamp: datetime.datetime | Unset = UNSET
+    market_identification_code: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -60,6 +62,8 @@ class ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade:
         if not isinstance(self.timestamp, Unset):
             timestamp = self.timestamp.isoformat()
 
+        market_identification_code = self.market_identification_code
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -75,6 +79,8 @@ class ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade:
             field_dict["tradeId"] = trade_id
         if timestamp is not UNSET:
             field_dict["timestamp"] = timestamp
+        if market_identification_code is not UNSET:
+            field_dict["marketIdentificationCode"] = market_identification_code
 
         return field_dict
 
@@ -114,6 +120,8 @@ class ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade:
         else:
             timestamp = datetime.datetime.fromisoformat(_timestamp)
 
+        market_identification_code = d.pop("marketIdentificationCode", UNSET)
+
         com_hellopublic_userapigateway_api_rest_order_v2_gateway_trade = cls(
             instrument=instrument,
             quantity=quantity,
@@ -121,6 +129,7 @@ class ComHellopublicUserapigatewayApiRestOrderV2GatewayTrade:
             side=side,
             trade_id=trade_id,
             timestamp=timestamp,
+            market_identification_code=market_identification_code,
         )
 
         com_hellopublic_userapigateway_api_rest_order_v2_gateway_trade.additional_properties = d

@@ -164,6 +164,12 @@ public taxlots symbol AAPL
 public taxlots csv --output taxlots.csv
 ```
 
+`portfolio show` prints the account's portfolio as JSON. Its `buyingPower` object carries
+`buyingPower`, `cashOnlyBuyingPower`, `optionsBuyingPower` and `dayTradeBuyingPower`
+(buying power available for day trading; equal to `buyingPower` when the account is not
+enabled for day-trade buying power). The CLI treats `dayTradeBuyingPower` as optional, so
+responses that omit it still parse.
+
 ## Historic Bar Data
 
 Fetch OHLCV bar data for a symbol over a given time period. The first argument is the instrument type (`EQUITY`, `CRYPTO`, `OPTION`, `INDEX`, or `EVENTCONTRACT`):
@@ -234,6 +240,16 @@ Trading commands prompt before submitting order placement, replacement, or cance
 requests. Use `--yes` only when your automation has already performed equivalent
 validation and approval.
 
+`orderType` accepts `MARKET`, `LIMIT`, `STOP`, `STOP_LIMIT`, `MARKET_ON_CLOSE` and
+`LIMIT_ON_CLOSE` in `order place`, `order place-multileg`, `order replace` and both
+preflight commands. `LIMIT_ON_CLOSE` takes a `limitPrice` like `LIMIT`. The CLI passes
+`orderType` through as written and the API validates it. See `examples/order.single-leg.limit-on-close.json` for a sample.
+
+```bash
+public order preflight-single --file examples/order.single-leg.limit-on-close.json
+public order place --file examples/order.single-leg.limit-on-close.json
+```
+
 Order payloads accept optional fields beyond the basics shown above. For example,
 `useMargin` controls buying power on `order place` and `order place-multileg`: set it to
 `false` to evaluate the order against cash-only buying power instead of margin. When
@@ -265,7 +281,9 @@ public order place --file examples/order.single-leg.market-buy.json \
 `--order-class`, `--take-profit-limit`, `--stop-loss-stop` and `--stop-loss-limit`
 override `orderClass`, `takeProfit` and `stopLoss` in the request file. A bracket class
 needs at least one exit leg, and exit legs need a bracket class — the CLI checks both
-before submitting.
+before submitting. `--stop-loss-limit` requires `--stop-loss-stop`: the spec now marks
+`stopLoss.stopPrice` as optional for trailing stop-losses, but the spec does not yet
+define the trailing fields, so the CLI only supports price-based stop-losses.
 
 | Class | Meaning |
 |---|---|
@@ -312,8 +330,10 @@ public --json order search --security-type MULTI_LEG_INSTRUMENT
 repeated. `--status`, `--side`, `--security-type` (including `EVENTCONTRACT`) and
 `--open-close` accept the values from the API spec, case-insensitively;
 `--created-after` and `--created-before` are ISO 8601 timestamps. Each order includes
-`trades` (each with `tradeId`, `price`, `quantity`, `side`, `timestamp`), `filledAt`,
-`replacedAt`, `lastModified` and `equityMarketSession`.
+`trades` (each with `tradeId`, `price`, `quantity`, `side`, `timestamp` and, when
+reported, `marketIdentificationCode`), `filledAt`,
+`replacedAt`, `lastModified` and `equityMarketSession`. An account ID the API does not
+recognize returns HTTP 400 (`Invalid account ID.`) from both commands.
 
 `order get ORDER_ID` returns a single order in that same shape. Both commands only cover
 orders created within the last 30 days. The 1.3.5 `order get-v2` command is now a
@@ -354,7 +374,8 @@ used, so the CLI fills in the missing one with no symbols or with `ALL` frequenc
 
 `event-contracts details EVENT_SYMBOL` shows the event's exchange, category, volume and
 CFTC contract-terms link, then one row per outcome with its state, trading mode, YES
-probability, YES/NO bid and ask, volume and close time. Pass `--no-all-outcomes` for a
+probability, YES/NO bid and ask, volume and close time. A Floor Strike column is added
+when any outcome reports a `floorStrike`. Pass `--no-all-outcomes` for a
 short list of up to 8 outcomes; use `--json` for the full payload (rules, timeline,
 settlement, resolution sources). An unknown `EVENT_SYMBOL` returns HTTP 400 (code `7004`).
 

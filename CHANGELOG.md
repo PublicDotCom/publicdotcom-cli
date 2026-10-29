@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.8] - 2026-10-29
+
+### Added
+- `MARKET_ON_CLOSE` and `LIMIT_ON_CLOSE` order types. `orderType` is passed through
+  from the request file, so `order place`, `order place-multileg`, `order replace`,
+  `order preflight-single` and `order preflight-multi` accept them as-is. New sample
+  `examples/order.single-leg.limit-on-close.json`.
+- `dayTradeBuyingPower` in the `portfolio show` buying-power object.
+- `marketIdentificationCode` on each trade returned by `order get` / `order search`.
+- `event-contracts details` adds a Floor Strike column when any outcome reports a
+  `floorStrike`.
+
+### Changed
+- Regenerated `_generated/` from the updated `spec.yaml`:
+  - The seven order-type enums gain `MARKET_ON_CLOSE` and `LIMIT_ON_CLOSE`.
+  - `GatewayStopLoss.stop_price` is now optional (the spec makes it required unless the
+    stop-loss is trailing). The CLI still requires `--stop-loss-stop` for a flag-built
+    stop-loss: trailing stop-losses are not exposed until the spec adds the trailing
+    fields.
+  - `GatewayBuyingPower.day_trade_buying_power` is added. The spec marks it required,
+    but the vendored model treats it as optional so responses that omit it still parse.
+  - New optional `GatewayTrade.market_identification_code` and
+    `EventOutcomeApiGatewayDto.floor_strike`.
+  - `get_order` and `search_orders` handle the documented `400 Invalid account ID.`
+    response.
+  - The generator's unrelated churn (`typing_extensions.Self`, `enum.StrEnum`) was
+    reverted, and the changed files were kept in the vendored `TypeVar` /
+    `(str, Enum)` style so the package keeps supporting Python 3.10.
+
 ## [1.3.7] - 2026-10-08
 
 ### Added
