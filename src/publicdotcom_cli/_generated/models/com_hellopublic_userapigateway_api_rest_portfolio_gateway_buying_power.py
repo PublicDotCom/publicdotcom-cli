@@ -6,6 +6,8 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..types import UNSET, Unset
+
 T = TypeVar("T", bound="ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower")
 
 
@@ -16,11 +18,14 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower:
         cash_only_buying_power (str): Buying power available for trading on cash only without taking loans.
         buying_power (str): Buying power available for trading marginable assets.
         options_buying_power (str): Buying power available for trading options.
+        day_trade_buying_power (str | Unset): Buying power available for day trading. Equal to <code>buyingPower</code> when
+            the account is not enabled for day trade buying power.
     """
 
     cash_only_buying_power: str
     buying_power: str
     options_buying_power: str
+    day_trade_buying_power: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -29,6 +34,8 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower:
         buying_power = self.buying_power
 
         options_buying_power = self.options_buying_power
+
+        day_trade_buying_power = self.day_trade_buying_power
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -39,6 +46,8 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower:
                 "optionsBuyingPower": options_buying_power,
             }
         )
+        if day_trade_buying_power is not UNSET:
+            field_dict["dayTradeBuyingPower"] = day_trade_buying_power
 
         return field_dict
 
@@ -51,10 +60,13 @@ class ComHellopublicUserapigatewayApiRestPortfolioGatewayBuyingPower:
 
         options_buying_power = d.pop("optionsBuyingPower")
 
+        day_trade_buying_power = d.pop("dayTradeBuyingPower", UNSET)
+
         com_hellopublic_userapigateway_api_rest_portfolio_gateway_buying_power = cls(
             cash_only_buying_power=cash_only_buying_power,
             buying_power=buying_power,
             options_buying_power=options_buying_power,
+            day_trade_buying_power=day_trade_buying_power,
         )
 
         com_hellopublic_userapigateway_api_rest_portfolio_gateway_buying_power.additional_properties = d

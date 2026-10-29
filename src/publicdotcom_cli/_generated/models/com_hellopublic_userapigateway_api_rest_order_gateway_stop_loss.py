@@ -17,11 +17,12 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss:
     STOP_LIMIT order when `limitPrice` is also present.
 
         Attributes:
-            stop_price (str): the stop price that activates the stop-loss order
+            stop_price (str | Unset): the stop price that activates the stop-loss order, required unless the stop-loss is
+                trailing
             limit_price (str | Unset): optional limit price; when present the stop-loss is placed as a STOP_LIMIT order
     """
 
-    stop_price: str
+    stop_price: str | Unset = UNSET
     limit_price: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -32,11 +33,9 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss:
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "stopPrice": stop_price,
-            }
-        )
+        field_dict.update({})
+        if stop_price is not UNSET:
+            field_dict["stopPrice"] = stop_price
         if limit_price is not UNSET:
             field_dict["limitPrice"] = limit_price
 
@@ -45,7 +44,7 @@ class ComHellopublicUserapigatewayApiRestOrderGatewayStopLoss:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        stop_price = d.pop("stopPrice")
+        stop_price = d.pop("stopPrice", UNSET)
 
         limit_price = d.pop("limitPrice", UNSET)
 

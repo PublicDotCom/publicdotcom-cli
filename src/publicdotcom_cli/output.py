@@ -224,8 +224,14 @@ def print_event_details(data: Any) -> None:
     if not outcomes:
         return
 
+    # floorStrike is optional in the spec, so the column is shown only when at least
+    # one outcome carries it.
+    show_floor_strike = any(outcome.get("floorStrike") for outcome in outcomes)
+
     table = Table(title="Outcomes")
     table.add_column("Outcome")
+    if show_floor_strike:
+        table.add_column("Floor Strike", justify="right")
     table.add_column("State")
     table.add_column("Trading")
     table.add_column("Probability", justify="right")
@@ -240,8 +246,10 @@ def print_event_details(data: Any) -> None:
         yes = _contract_by_side(outcome, "YES")
         no = _contract_by_side(outcome, "NO")
         timeline = outcome.get("timeline") or {}
+        floor_strike = [str(outcome.get("floorStrike") or "")] if show_floor_strike else []
         table.add_row(
             str(outcome.get("title", "")),
+            *floor_strike,
             str(outcome.get("state", "")),
             str(outcome.get("trading", "")),
             str(yes.get("probability") or ""),

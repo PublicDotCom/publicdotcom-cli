@@ -15,6 +15,7 @@ from ..models.com_hellopublic_holdingsystem_eventcontractservice_api_dto_respons
 from ..models.com_hellopublic_holdingsystem_eventcontractservice_api_dto_response_apigateway_event_outcome_api_gateway_dto_trading import (
     ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEventOutcomeApiGatewayDtoTrading,
 )
+from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.com_hellopublic_holdingsystem_eventcontractservice_api_dto_response_apigateway_event_contract_api_gateway_dto import (
@@ -49,6 +50,7 @@ class ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEve
         contracts
             (list[ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEventContractApiGatewayDto]): the
             YES and NO event contracts within the outcome.
+        floor_strike (str | Unset):
     """
 
     outcome_id: str
@@ -62,6 +64,7 @@ class ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEve
     contracts: list[
         ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEventContractApiGatewayDto
     ]
+    floor_strike: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -86,6 +89,8 @@ class ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEve
             contracts_item = contracts_item_data.to_dict()
             contracts.append(contracts_item)
 
+        floor_strike = self.floor_strike
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -101,6 +106,8 @@ class ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEve
                 "contracts": contracts,
             }
         )
+        if floor_strike is not UNSET:
+            field_dict["floorStrike"] = floor_strike
 
         return field_dict
 
@@ -147,6 +154,8 @@ class ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEve
 
             contracts.append(contracts_item)
 
+        floor_strike = d.pop("floorStrike", UNSET)
+
         com_hellopublic_holdingsystem_eventcontractservice_api_dto_response_apigateway_event_outcome_api_gateway_dto = cls(
             outcome_id=outcome_id,
             title=title,
@@ -157,6 +166,7 @@ class ComHellopublicHoldingsystemEventcontractserviceApiDtoResponseApigatewayEve
             settled_outcome=settled_outcome,
             trading=trading,
             contracts=contracts,
+            floor_strike=floor_strike,
         )
 
         com_hellopublic_holdingsystem_eventcontractservice_api_dto_response_apigateway_event_outcome_api_gateway_dto.additional_properties = d
